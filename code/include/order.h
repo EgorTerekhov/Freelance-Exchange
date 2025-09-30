@@ -31,6 +31,9 @@ class Order {
     status = OrderStatus::Complete;
   }
 
+  OrderStatus GetStatus() {
+    return this->status;
+  }
   void AddPotPerformer(Performer* p) {
     PotPerformers.push_back(p);
   }
@@ -39,5 +42,8 @@ class Order {
     PotPerformers.push_back(p);
   }
 
+  Customer* GetCustomer() {
+    return this->customer;
+  }
   // надо сделать методов по изменению отзыва
 };

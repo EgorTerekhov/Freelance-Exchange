@@ -5,8 +5,7 @@
 #include "user.h"
 #include "order.h"
 #include "review.h"
-#include "admin.h"
-
+#include "storage.h"
 
 class Performer : public User {
  private:
@@ -15,7 +14,8 @@ class Performer : public User {
   std::string doc_path = "";
   std::string occupation;
   std::vector<std::shared_ptr<Order>> CompleteOrders;
-  std::vector<Order*> InProgressOrders;
+  std::vector<std::weak_ptr<Order>> InProgressOrders;
+  std::vector<std::weak_ptr<Order>> PotOrders;
   std::vector<Review> reviews;
   double rate;
 
@@ -30,6 +30,7 @@ class Performer : public User {
            phone(phone_),
            rate(0) {
   }
+
   Performer(const User& u, const std::string& email_, const std::string& phone_)
            : User(u), email(email_), phone(phone_), rate(0) {
   }
@@ -44,6 +45,10 @@ class Performer : public User {
     return it;
   }
 
+  std::string GetClass() {
+    return "performer";
+  }
+
   void CompleteOrder(std::shared_ptr<Order>& o) {
     auto it = FindInProgressOrder(o);
     if (it != InProgressOrders.end()) {
@@ -53,9 +58,33 @@ class Performer : public User {
     }
   }
 
+  void AddInProgressOrder(std::shared_ptr<Order> o) {
+    InProgressOrders.emplace_back(o);
+    auto it = std::find(PotOrders.begin(), PotOrders.end(), o);
+    if (it != PotOrders.end()) {
+      PotOrders.erase(it);
+    }
+  }
+
   void RespondToOrder(std::shared_ptr<Order> o) {
     o->AddPotPerformer(this);
+    PotOrders.emplace_back(o);
   }
+
+  void DelPotOrders() {
+    for (auto it = PotOrders.begin(); it != PotOrders.end(); ) {
+      if (auto o = it->lock()) {
+        if (o->GetStatus() == OrderStatus::Complete) {
+          it = PotOrders.erase(it);
+          continue;
+        }
+      }
+    ++it;
+    }
+  }
+  // Нужно как-то настроить тригер на то, чтобы order удалялся из potorder в случае, если проект завершен
+  // То есть проект, который уже ведется каким-то другим челом, может висеть у нашего performer, но должен удаляться, если он завершен
+
 
   void LoadDoc(const std::string& doc) {
     doc_path = doc;
@@ -64,9 +93,7 @@ class Performer : public User {
   void MakeReview(std::shared_ptr<Order> o, const std::string& descrip) {
     auto it = FindCompleteOrder(o);
     if (it != CompleteOrders.end()) {
-      // o->customer->reviews.emplace_back(this, o->customer, o, descrip);
-      
+      all_review.emplace_back(this, o->GetCustomer(), o, descrip);
     }
   }
-  // отзывы через админа должны проходить
 };

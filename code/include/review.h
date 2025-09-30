@@ -8,6 +8,8 @@ class Review {
   User* u_to;
   Order* o;
   std::string descrip;
+
+  friend class Admin;
  public:
   
   Review(User* u_from_, User* u_to_, Order* o_, std::string& d_)

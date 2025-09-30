@@ -14,6 +14,10 @@ class User {
 	User(const std::string& name_, const std::string& login_, const std::string& password_) : name(name_), login(login_), password(password_) {
 	}
 
+	virtual std::string GetClass() const {
+		return "User";
+	}
+
 	virtual ~User() = default;
 
 };
