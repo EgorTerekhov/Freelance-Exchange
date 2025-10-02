@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "user.h"
-#include "order.h"
+#include "user.hpp"
+#include "order.hpp"
 
 class Review {
   User* u_from;
@@ -10,10 +10,9 @@ class Review {
   std::string descrip;
 
   friend class Admin;
+
  public:
-  
-  Review(User* u_from_, User* u_to_, Order* o_, std::string& d_)
-        : u_from(u_from_), u_to(u_to_), o(o_), descrip(d_) {
+  Review(User* u_from_, User* u_to_, Order* o_, std::string& d_) : u_from(u_from_), u_to(u_to_), o(o_), descrip(d_) {
   }
 
   void ReDescrip(const std::string& d) {

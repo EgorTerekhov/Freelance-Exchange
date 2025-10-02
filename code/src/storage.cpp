@@ -1,6 +1,6 @@
-#include "../include/storage.h"
+#pragma once
+#include <vector>
+#include <memory>
+#include "review.hpp"
 
-std::vector<Review> all_review;
-
-// сюда можно скидывать все глобальные хранилища, возможно, в будущем, здесь можно будет сделать буфер паролей и логинов
-// надо же как-то людям в систему заходить
+extern std::vector<Review> all_review;

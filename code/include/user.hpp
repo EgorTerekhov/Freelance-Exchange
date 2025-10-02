@@ -15,9 +15,7 @@ class User {
 	}
 
 	virtual std::string GetClass() const {
-		return "User";
 	}
 
 	virtual ~User() = default;
-
 };

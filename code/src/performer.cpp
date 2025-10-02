@@ -2,10 +2,11 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "user.h"
-#include "order.h"
-#include "review.h"
-#include "storage.h"
+
+#include "user.hpp"
+#include "order.hpp"
+#include "review.hpp"
+#include "storage.hpp"
 
 class Performer : public User {
  private:
@@ -22,17 +23,13 @@ class Performer : public User {
   friend class Admin;
 
  public:
-  Performer(const std::string name_, const std::string login_,
-           const std::string password_, std::string email_,
-           const std::string phone_) :
-           User(name_, login_, password_),
-           email(email_),
-           phone(phone_),
-           rate(0) {
+  Performer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
+            const std::string phone_)
+      : User(name_, login_, password_), email(email_), phone(phone_), rate(0) {
   }
 
   Performer(const User& u, const std::string& email_, const std::string& phone_)
-           : User(u), email(email_), phone(phone_), rate(0) {
+      : User(u), email(email_), phone(phone_), rate(0) {
   }
 
   auto FindInProgressOrder(std::shared_ptr<Order>& o) {
@@ -72,19 +69,19 @@ class Performer : public User {
   }
 
   void DelPotOrders() {
-    for (auto it = PotOrders.begin(); it != PotOrders.end(); ) {
+    for (auto it = PotOrders.begin(); it != PotOrders.end();) {
       if (auto o = it->lock()) {
         if (o->GetStatus() == OrderStatus::Complete) {
           it = PotOrders.erase(it);
           continue;
         }
       }
-    ++it;
+      ++it;
     }
   }
   // Нужно как-то настроить тригер на то, чтобы order удалялся из potorder в случае, если проект завершен
-  // То есть проект, который уже ведется каким-то другим челом, может висеть у нашего performer, но должен удаляться, если он завершен
-
+  // То есть проект, который уже ведется каким-то другим челом, может висеть у нашего performer, но должен удаляться,
+  // если он завершен
 
   void LoadDoc(const std::string& doc) {
     doc_path = doc;

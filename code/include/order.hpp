@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "customer.h"
-#include "performer.h"
+#include "customer.hpp"
+#include "performer.hpp"
 
 enum class OrderStatus { Created, InProgress, Complete };
 
@@ -28,22 +28,16 @@ class Order {
   }
 
   void CompleteOrder() {
-    status = OrderStatus::Complete;
   }
 
   OrderStatus GetStatus() {
-    return this->status;
   }
   void AddPotPerformer(Performer* p) {
-    PotPerformers.push_back(p);
   }
 
   void AddMainPerformer(Performer* p) {
-    PotPerformers.push_back(p);
   }
 
   Customer* GetCustomer() {
-    return this->customer;
   }
-  // надо сделать методов по изменению отзыва
 };
