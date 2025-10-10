@@ -1,21 +1,18 @@
-#pragma once 
+#pragma once
 
 #include <string>
 
+class Review;
 
+namespace classes {
 class User {
- protected:
-	std::string name;
- 	std::string login;
- 	std::string password;
-
+  std::string login_;
+  std::string password_;
+  std::string name_; //access rights нахуй не надо тк это в методох будет прописано
  public:
-
-	User(const std::string& name_, const std::string& login_, const std::string& password_) : name(name_), login(login_), password(password_) {
-	}
-
-	virtual std::string GetClass() const {
-	}
-
-	virtual ~User() = default;
+  virtual void CreateProfile(std::string name_, std::string login_, std::string password_) = 0;
+  virtual void Login(std::string login_, std::string password_) = 0;
+  virtual void HandleReview(std::shared_ptr<Review> review) = 0;
+  virtual std::vector<std::string> GetOptions() = 0; // будем выводить список действий, которые может сделать конкретный класс
 };
+}  // namespace classes

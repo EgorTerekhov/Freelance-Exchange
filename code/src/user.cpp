@@ -1,21 +1,21 @@
 #pragma once
-
+#include <string>
+#include "../include/user.hpp"
+#include "../include/order.hpp"
 #include <string>
 
-class User {
- protected:
-  std::string name;
-  std::string login;
-  std::string password;
+namespace classes {
 
- public:
-  User(const std::string& name_, const std::string& login_, const std::string& password_)
-      : name(name_), login(login_), password(password_) {
-  }
+//Поля:
+// std::string name;
+// std::string login;
+// std::string password;
 
-  virtual std::string GetClass() const {
-    return "User";
-  }
+User::User(const std::string& name_, const std::string& login_, const std::string& password_)
+    : name(name_), login(login_), password(password_) {
+}
 
-  virtual ~User() = default;
-};
+std::string User::GetClass() const {
+  return "User";
+}
+}  // namespace classes

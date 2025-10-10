@@ -7,6 +7,7 @@
 #include "user.hpp"
 #include "order.hpp"
 
+namespace classes {
 class Customer : public User {
  private:
   std::vector<std::shared_ptr<Order>> orders;
@@ -19,34 +20,23 @@ class Customer : public User {
 
  public:
   Customer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
-           const std::string phone_)
-      : User(name_, login_, password_), email(email_), phone(phone_), rate(0) {
-  }
-  Customer(const User& u, const std::string& email_, const std::string& phone_)
-      : User(u), email(email_), phone(phone_), rate(0) {
-  }
+           const std::string phone_);
+  Customer(const User& u, const std::string& email_, const std::string& phone_);
 
-  auto FindOrder(std::shared_ptr<Order> o) {
-  }
+  std::vector<std::shared_ptr<Order>>::iterator FindOrder(Order* o);
 
-  std::shared_ptr<Order> releaseOrder(Order* o) {
-  }
+  std::shared_ptr<Order> releaseOrder(std::shared_ptr<Order> o);
 
-  void AddOrder(std::string name, std::string discript, std::string price, std::string date_create, std::string term) {
-  }
+  void AddOrder(std::string name, std::string discript, std::string price, std::string date_create, std::string term);
 
-  void RemoveOrder(Order* o) {
-  }
+  void RemoveOrder(Order* o);
 
-  std::string GetClass() {
-  }
+  std::string GetClass();
 
-  std::vector<Performer*>& GetPotPerformers(Order* o) {
-  }
+  std::vector<Performer*>& GetPotPerformers(std::shared_ptr<Order> o);
 
-  void ChoosePerformers(std::vector<Performer*> performers, Order* o) {
-  }
+  void ChoosePerformers(std::vector<Performer*> performers, std::shared_ptr<Order> o);
 
-  void MakeReview(std::shared_ptr<Order> o, const std::string& descrip) {
-  }
+  void MakeReview(std::vector<Review> all_review, Order* o, const std::string& descrip);
 };
+}  // namespace classes

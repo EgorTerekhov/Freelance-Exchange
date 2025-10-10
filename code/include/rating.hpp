@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-
+namespace classes {
 class Review;  // forward declaration
 
 class Rating {
@@ -25,3 +25,4 @@ class Rating {
   // Сбросить рейтинг
   void reset();
 };
+}  // namespace classes

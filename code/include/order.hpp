@@ -2,6 +2,7 @@
 #include <string>
 #include "customer.hpp"
 #include "performer.hpp"
+namespace classes {
 
 enum class OrderStatus { Created, InProgress, Complete };
 
@@ -21,23 +22,16 @@ class Order {
   friend class Admin;
 
  public:
-  
-  Order(const std::string& name_, Customer* c_, const std::string& p, const std::string& disc,
-        const std::string& d_c, const std::string& term_)
-        : name(name_), price(p), discript(disc), date_create(d_c), term(term_), customer(c_) { 
-  }
+  Order(const std::string& name_, Customer* c_, const std::string& p, const std::string& disc, const std::string& d_c,
+        const std::string& term_);
 
-  void CompleteOrder() {
-  }
+  void CompleteOrder();
 
-  OrderStatus GetStatus() {
-  }
-  void AddPotPerformer(Performer* p) {
-  }
+  OrderStatus GetStatus();
+  void AddPotPerformer(Performer* p);
 
-  void AddMainPerformer(Performer* p) {
-  }
+  void AddMainPerformer(Performer* p);
 
-  Customer* GetCustomer() {
-  }
+  Customer* GetCustomer();
 };
+}  // namespace classes
