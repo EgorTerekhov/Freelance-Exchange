@@ -10,33 +10,25 @@
 namespace classes {
 class Customer : public User {
  private:
-  std::vector<std::shared_ptr<Order>> orders;
+  std::vector<Order*> orders;
   std::string email;
   std::string phone;
-  std::vector<Review> reviews;
+  std::vector<Review*> reviews;
   double rate;
 
-  friend class Admin;
-
  public:
-  Customer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
+  Customer(const std::string login_, const std::string password_, const std::string name_, std::string email_,
            const std::string phone_);
-  Customer(const User& u, const std::string& email_, const std::string& phone_);
+  Customer(const User& u, const std::string name_, const std::string& email_, const std::string& phone_);
 
-  std::vector<std::shared_ptr<Order>>::iterator FindOrder(Order* o);
+  void CreateProfile(const std::string login_, const std::string password_, const std::string name_, std::string email_,
+                     const std::string phone_);
 
-  std::shared_ptr<Order> releaseOrder(std::shared_ptr<Order> o);
+  Order* PlaceAnOrder(const std::string& name, Customer* c, const std::string& p, const std::string& disc, const std::string& d_c,
+        const std::string& term);
 
-  void AddOrder(std::string name, std::string discript, std::string price, std::string date_create, std::string term);
+  void RemoveOrder(Order*);
 
-  void RemoveOrder(Order* o);
-
-  std::string GetClass();
-
-  std::vector<Performer*>& GetPotPerformers(std::shared_ptr<Order> o);
-
-  void ChoosePerformers(std::vector<Performer*> performers, std::shared_ptr<Order> o);
-
-  void MakeReview(std::vector<Review> all_review, Order* o, const std::string& descrip);
+  void MakeReview(User* u_from_, User* u_to_, Order* o_, std::string& d_);
 };
 }  // namespace classes
