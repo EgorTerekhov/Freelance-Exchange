@@ -5,21 +5,23 @@
 
 namespace classes {
 class Review {
-  User* u_from;
-  User* u_to;
-  Order* o;
-  std::string descrip;
-  int grade;
-
-  friend class Admin;
+  int id_;
+  User* u_from_;
+  User* u_to_;
+  Order* o_;
+  std::string description_;
+  int grade_;
 
  public:
-  Review(User* u_from_, User* u_to_, Order* o_, std::string& d_);
+  Review(int id, User* u_from, User* u_to, Order* o, std::string& d);
 
-  void ReDescrip(const std::string& d);
+  User* GetFrom() const {
+  }
+  
+  User* GetTo() const {
+  }
 
   int GetScore() {
-    return this->grade;
   }
 };
 }  // namespace classes

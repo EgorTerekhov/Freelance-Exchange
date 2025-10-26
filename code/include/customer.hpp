@@ -10,25 +10,24 @@
 namespace classes {
 class Customer : public User {
  private:
-  std::vector<Order*> orders;
-  std::string email;
-  std::string phone;
-  std::vector<Review*> reviews;
-  double rate;
+  std::string name_;
+  std::string email_;
+  std::string phone_;
+  std::vector<Order*> orders_;
+  std::vector<Review*> reviews_;  // отзывы которые он оставил
+  double rate_;
 
  public:
-  Customer(const std::string login_, const std::string password_, const std::string name_, std::string email_,
-           const std::string phone_);
-  Customer(const User& u, const std::string name_, const std::string& email_, const std::string& phone_);
+  Customer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
+           const std::string& phone, const std::vector<Order*>& orders, const std::vector<Review*>& reviews);
+  Customer(const User& u, const std::string& name, const std::string& email, const std::string& phone,
+           const std::vector<Order*>& orders, const std::vector<Review*>& reviews);
 
-  void CreateProfile(const std::string login_, const std::string password_, const std::string name_, std::string email_,
-                     const std::string phone_);
-
-  Order* PlaceAnOrder(const std::string& name, Customer* c, const std::string& p, const std::string& disc, const std::string& d_c,
-        const std::string& term);
+  Order* CreateOrder(const std::string& name, std::string status, std::string price, std::string description,
+                      Customer* customer, Performer* performer);
 
   void RemoveOrder(Order*);
 
-  void MakeReview(User* u_from_, User* u_to_, Order* o_, std::string& d_);
+  void HandleReview(Review* review) override;
 };
 }  // namespace classes

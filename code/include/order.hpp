@@ -4,34 +4,28 @@
 #include "performer.hpp"
 namespace classes {
 
-enum class OrderStatus { Created, InProgress, Complete };
-
 class Order {
  private:
-  std::string name;
-  std::string price;
-  std::string discript;
-  std::string date_create;
-  std::string term;
-  Customer* customer;
-  OrderStatus status = OrderStatus::Created;
-  std::vector<Performer*> PotPerformers;
-  std::vector<Performer*> MainPerformers;
-
-  friend class Customer;
-  friend class Admin;
+  int id_;
+  std::string name_;
+  std::string status_;  // in_progress, completed or deleted
+  std::string price_;
+  std::string description_;
+  Customer* customer_;
+  Performer* performer_;  //пока его никто не взял, это полу будет nullptr
 
  public:
-  Order(const std::string& name_, Customer* c_, const std::string& p, const std::string& disc, const std::string& d_c,
-        const std::string& term_);
+  Order(int id, const std::string& name, std::string status, std::string price, std::string description, Customer* customer,
+        Performer* performer);
 
   void CompleteOrder();
 
-  OrderStatus GetStatus();
-  void AddPotPerformer(Performer* p);
-
-  void AddMainPerformer(Performer* p);
+  std::string GetStatus();
 
   Customer* GetCustomer();
+
+  Performer* GetPerformer();
+
+  void AddPerformerToOrder(Performer* p);
 };
 }  // namespace classes

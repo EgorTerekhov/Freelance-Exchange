@@ -10,45 +10,29 @@
 namespace classes {
 class Performer : public User {
  private:
-  std::string email;
-  std::string phone;
-  std::string doc_path = "";
-  std::string occupation;
-  std::vector<std::shared_ptr<Order>> CompleteOrders;
-  std::vector<std::weak_ptr<Order>> InProgressOrders;
-  std::vector<std::weak_ptr<Order>> PotOrders;
-  std::vector<Review> reviews;
-  double rate;
-
-  friend class Admin;
+  std::string name_;
+  std::string email_;
+  std::string phone_;
+  std::vector<Order*> complete_orders_;  //при вызове метода удаления от пользоваетля мы под капотом вызовем метод бд и                                     //освободим память переданного указателя
+  std::vector<Order*> in_progress_orders_;
+  std::vector<Review> reviews_;
+  double rate_;
 
  public:
-  Performer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
-            const std::string phone_);
+  Performer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
+            const std::string& phone, const std::vector<Order*>& complete_orders,
+            const std::vector<Order*>& in_progress_orders, const std::vector<Review>& reviews, double rate);
 
-  Performer(const User& u, const std::string& email_, const std::string& phone_);
+  Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone,
+            const std::vector<Order*>& complete_orders, const std::vector<Order*>& in_progress_orders,
+            const std::vector<Review>& reviews, double rate);
 
-  std::vector<std::weak_ptr<Order>>::iterator FindInProgressOrder(std::shared_ptr<Order>& o);
+  void CompleteOrder(Order* o);
 
-  std::vector<std::shared_ptr<Order>>::iterator FindCompleteOrder(std::shared_ptr<Order>& o);
+  void AddInProgressOrder(Order* o); // закинуть какой то заказ в массив заказов, которые он делает
 
-  std::string GetClass();
+  void RespondToOrder(Order* o);
 
-  void CompleteOrder(std::shared_ptr<Order>& o);
-
-  void AddInProgressOrder(std::shared_ptr<Order> o);
-
-  void RespondToOrder(std::shared_ptr<Order> o);
-
-  void DelPotOrders();
-  // Нужно как-то настроить тригер на то, чтобы order удалялся из potorder в случае, если проект завершен
-  // То есть проект, который уже ведется каким-то другим челом, может висеть у нашего performer, но должен удаляться,
-  // если он завершен
-
-  void LoadDoc(const std::string& doc) {
-    doc_path = doc;
-  }
-
-  void MakeReview(std::vector<Review> all_review, std::shared_ptr<Order> o, const std::string& descrip);
+  void HandleReview(Review* review) override;
 };
 }  // namespace classes
