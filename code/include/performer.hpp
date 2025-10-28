@@ -42,9 +42,12 @@ class Performer : public User {
   void ChangeId(int id) { id_ = id; }
 
   void HandleReview(Review* review) override;
-  int GetId() const { return this->id_; };
+  int GetId() const { return id_; };
   const std::string& GetLogin() const { return this->login_; };
   const std::string& GetPass() const { return this->password_; };
+  const std::string& GetName() const { return this->name; };
+  const std::string& GetEmail() const { return this->email_; };
+  const std::string& GetPhone() const { return this->phone_; };
 
   static Performer* FromJsonRaw(const nlohmann::json& j);
   static std::unique_ptr<Performer> FromJson(const nlohmann::json& j);

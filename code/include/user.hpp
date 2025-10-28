@@ -2,8 +2,6 @@
 
 #include <string>
 
-class Review;
-
 namespace classes {
 class User {
  protected:

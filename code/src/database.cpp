@@ -3,7 +3,7 @@
 
 using json = nlohmann::json;
 template<class T>
-void BinSearchDelete(int id, std::vector<std::pair<int, std::unique_ptr<T>>>& vec) {
+void BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
   if (vec.size() == 0) {
     return nullptr;
   }
@@ -11,15 +11,15 @@ void BinSearchDelete(int id, std::vector<std::pair<int, std::unique_ptr<T>>>& ve
   int r = vec.size();
   while (l < r - 1) {
     int m = (l + r) / 2;
-    if (id < vec[m].first) {
+    if (id < vec[m].GetId()) {
       r = m;
-    } else if (id > vec[m].first) {
+    } else if (id > vec[m].GetId()) {
       l = m;
     } else {
       return vec[m].erase();
     }
   }
-  if (vec[l].first == id) {
+  if (vec[l].GetId() == id) {
     return vec[l].erase();
   }
 }
@@ -36,9 +36,9 @@ namespace classes {
     BinSearchDelete(id, customers_);
     orders_.erase(
       std::remove_if(orders_.begin(), orders_.end(), 
-                    [id](std::pair<int, std::unique_ptr<Order>>& s) {
-                      return s.second->GetCustomer() == id && s.second->GetStatus() == OrderStatus::WORK ||
-                              s.second->GetStatus() == OrderStatus::REJECTED;
+                    [id](const std::unique_ptr<Order>& s) {
+                      return s->GetCustomer() == id && s->GetStatus() == OrderStatus::WORK ||
+                              s->GetStatus() == OrderStatus::REJECTED;
                       }
                     ), orders_.end()
                  ); // сортированность вроде сохраняется при такой операции
@@ -47,8 +47,8 @@ namespace classes {
   void Database::DeletePerformer(int id) {
     BinSearchDelete(id, performers_);
     for (size_t i = 0; i < orders_.size(); ++i) {
-      if (orders_[i].second->GetPerformer() == id && orders_[i].second->GetStatus() == OrderStatus::WORK) {
-        orders_[i].second->ChangePerformer(0);
+      if (orders_[i]->GetPerformer() == id && orders_[i]->GetStatus() == OrderStatus::WORK) {
+        orders_[i]->ChangePerformer(0);
       }
     }
   }
@@ -68,42 +68,42 @@ namespace classes {
   void Database::CreateCustomer(const std::unique_ptr<Customer> c) {
     int id = ++customer_id_;
     c->ChangeId(id);
-    customers_.emplace_back(id, std::move(c));
+    customers_.emplace_back(std::move(c));
     SortById(customers_);
   }
 
   void Database::CreatePerformer(const std::unique_ptr<Performer> c) {
     int id = ++performer_id_;
     c->ChangeId(id);
-    performers_.emplace_back(id, std::move(c));
+    performers_.emplace_back(std::move(c));
     SortById(performers_);
   }
 
   void Database::CreateOrder(const std::unique_ptr<Order> c) {
     int id = ++order_id_;
     c->ChangeId(id);
-    orders_.emplace_back(id, std::move(c));
+    orders_.emplace_back(std::move(c));
     SortById(orders_);
   }
 
   void Database::CreateReview(const std::unique_ptr<Review> c) {
     int id = ++review_id_;
     c->ChangeId(id);
-    reviews_.emplace_back(id, std::move(c));
+    reviews_.emplace_back(std::move(c));
     SortById(reviews_);
   }
 
   void Database::CreateAdmin(const std::unique_ptr<Admin> a) {
     int id = ++admin_id_;
     a->ChangeId(id);
-    admins_.emplace_back(id, std::move(a));
+    admins_.emplace_back(std::move(a));
     SortById(admins_);
   }
 
-  void Database::FromSingleJsonPerformerCustomer(const json& j) {
-    if (!j.is_null()) {
+  std::unique_ptr<Admin> Database::FromSingleJsonPerformerCustomer(const json& j) {
+    if (j.is_null()) {
       std::cout << "Json is not NULL"
-      return;
+      return nullptr;
     }
 
     if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("name") || !j.contains("email") || !j.contains("phone")) {
@@ -124,9 +124,9 @@ namespace classes {
         j["id"].get<int>(),
         j["login"].get<std::string>(),
         j["password"].get<std::string>(),
-        j["name"].get<std::string(),
-        j["email"].get<std::string(),
-        j["phone"].get<std::string()
+        j["name"].get<std::string>(),
+        j["email"].get<std::string>(),
+        j["phone"].get<std::string>()
       );
     } catch (const std::exception& e) {
       throw std::runtime_error(std::string("Failed to create Admin from JSON: ") + e.what());
@@ -232,9 +232,94 @@ namespace classes {
   }
 
 
-  void Database::ToJsonAdmin() const {
-    
+  json Database::ToJsonAdmin() const {
+    json j;
+    json admin_array = json::array();
+    for (const auto& admin : admins_) {
+      if (admin) {
+        admin_array.push_back(admin->ToJson(admin));
+      }
+    }
+    j["admins"] = admin_array;
+    return j;
   }
+
+  json Database::ToJsonPerformer() const {
+    json j;
+    json performer_array = json::array();
+    for (const auto& performer : performers_) {
+      if (performer) {
+        json k;
+        performer_array.push_back(ToJsonPerformerCustomer(k, performer));
+      }
+    }
+    j["performers"] = performer_array;
+    return j;
+  }
+
+  json Database::ToJsonCustomer() const {
+    json j;
+    json customer_array = json::array();
+    for (const auto& customer : customers_) {
+      if (performer) {
+        json k;
+        customer_array.push_back(ToJsonPerformerCustomer(k, customer));
+      }
+    }
+    j["customers"] = customer_array;
+    return j;
+  }
+
+  json Database::ToJsonReview() const {
+    json j;
+    json review_array = json::array();
+    for (const auto& review : reviews_) {
+      if (review) {
+        json k;
+        review_array.push_back(review->ToJson(k, review));
+      }
+    }
+    j["customers"] = review_array;
+    return j;
+  }
+
+  json Database::ToJsonOrder() const {
+    json j;
+    json order_array = json::array();
+    for (const auto& order : orders_) {
+      if (order) {
+        json k;
+        order_array.push_back(order->ToJson(k, order));
+      }
+    }
+    j["orders"] = review_array;
+    return j;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

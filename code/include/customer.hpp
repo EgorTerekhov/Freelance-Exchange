@@ -7,6 +7,9 @@
 #include "user.hpp"
 #include "order.hpp"
 
+namespace nlohmann {
+  class json;
+}
 namespace classes {
 class Customer : public User {
  private:
@@ -39,9 +42,13 @@ class Customer : public User {
   int ChangeId(int id) { id_ = id;}
   const std::string& GetLogin() const { return this->login_; };
   const std::string& GetPass() const { return this->password_; };
+  const std::string& GetName() const { return this->name; };
+  const std::string& GetEmail() const { return this->email_; };
+  const std::string& GetPhone() const { return this->phone_; };
 
   static Customer* FromJsonRaw(const nlohmann::json& j);
   static std::unique_ptr<Customer> FromJson(const nlohmann::json& j);
+
 
 };
 }  // namespace classes

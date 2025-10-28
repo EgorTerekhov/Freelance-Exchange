@@ -35,4 +35,11 @@ namespace classes {
     }
   }
 
-}  // namespace classes
+  json& Admin::ToJson(const Admin& a) {
+    json j = {
+      {"id", p`.GetId()},
+      {"login", p.GetLogin()},
+      {"password", p.GetPass()}
+    };
+  }
+}
