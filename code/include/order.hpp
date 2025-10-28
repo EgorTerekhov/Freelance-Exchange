@@ -2,6 +2,13 @@
 #include <string>
 #include "customer.hpp"
 #include "performer.hpp"
+
+enum class OrderStatus {
+    WORK,
+    DONE,
+    REJECTED
+};
+
 namespace classes {
 
 class Order {
@@ -11,20 +18,27 @@ class Order {
   std::string status_;  // in_progress, completed or deleted
   std::string price_;
   std::string description_;
-  Customer* customer_;
-  Performer* performer_;  //пока его никто не взял, это полу будет nullptr
-
+  int customer_id_;
+  OrderStatus status_;
+  int performer_id_;  //пока его никто не взял, это полу будет nullptr
+  int id_;
  public:
   Order(int id, const std::string& name, std::string status, std::string price, std::string description, Customer* customer,
         Performer* performer);
 
   void CompleteOrder();
 
-  std::string GetStatus();
+  OrderStatus GetStatus();
 
-  Customer* GetCustomer();
+  int GetCustomer();
 
-  Performer* GetPerformer();
+  void ChangeId(int id) { id_ = id; }
+
+  int GetPerformer();
+
+  void ChangePerformer(int i) {
+    performer_id_ = i;
+  }
 
   void AddPerformerToOrder(Performer* p);
 };

@@ -6,6 +6,7 @@ class Review;
 
 namespace classes {
 class User {
+ protected:
   int id_;
   std::string login_;
   std::string password_;

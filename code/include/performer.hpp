@@ -7,15 +7,21 @@
 #include "order.hpp"
 #include "review.hpp"
 
+namespace nlohmann {
+  class json;
+}
+
+
 namespace classes {
 class Performer : public User {
  private:
   std::string name_;
   std::string email_;
   std::string phone_;
-  std::vector<Order*> complete_orders_;  //при вызове метода удаления от пользоваетля мы под капотом вызовем метод бд и                                     //освободим память переданного указателя
-  std::vector<Order*> in_progress_orders_;
-  std::vector<Review> reviews_;
+  // std::vector<Order*> complete_orders_;  //при вызове метода удаления от пользоваетля мы под капотом вызовем метод бд и                                     //освободим память переданного указателя
+  // std::vector<Order*> in_progress_orders_;
+  // std::vector<Review> reviews_;
+  int id_;
   double rate_;
 
  public:
@@ -33,6 +39,14 @@ class Performer : public User {
 
   void RespondToOrder(Order* o);
 
+  void ChangeId(int id) { id_ = id; }
+
   void HandleReview(Review* review) override;
+  int GetId() const { return this->id_; };
+  const std::string& GetLogin() const { return this->login_; };
+  const std::string& GetPass() const { return this->password_; };
+
+  static Performer* FromJsonRaw(const nlohmann::json& j);
+  static std::unique_ptr<Performer> FromJson(const nlohmann::json& j);
 };
 }  // namespace classes

@@ -1,27 +1,38 @@
 #include <string>
-#include "admin.hpp"
+#include "../include/admin.hpp"
+#include <stdexcept>
+#include "../include/database.hpp"
 namespace classes {
 
-Admin::Admin(const std::string& name_, const std::string& login_, const std::string& password_)
-    : User(name_, login_, password_) {
-}
-Admin::Admin(const User& u) : User(u) {
-}
+  Admin::Admin(int id, const std::string& login_, const std::string& password_)
+      : User(id, login_, password_) {}
+  Admin::Admin(const User& u) : User(u) {}
 
-void Admin::CheckReview(std::vector<Review> all_review, Review* r) {
-  auto it = std::find(all_review.begin(), all_review.end(), r);
-  if (it != all_review.end()) {
-    // if (какая-то интересная проверка отзыва на корректность)
-    if (r->u_from->GetClass() == "Performer") {
-      Customer* c = dynamic_cast<Customer*>(r->u_to);
-      c->reviews.emplace_back(r);
-      all_review.erase(it);
-    } else if (r->u_from->GetClass() == "Customer") {
-      Performer* p = dynamic_cast<Performer*>(r->u_to);
-      p->reviews.emplace_back(r);
-      all_review.erase(it);
+  std::unique_ptr<Admin> Admin::CreateFromJson(const nlohmann::json& j) {
+    if (!j.is_object()) {
+      throw std::invalid_argument("JSON must be an object for Admin deserialization");
+    }
+
+    if (!j.contains("id") || !j.contains("login") || !j.contains("password")) {
+      throw std::invalid_argument("JSON for Admin must contain id, login, and password");
+    }
+
+    // Извлекаем значения с проверкой типа
+    if (!j["id"].is_number_integer() || 
+        !j["login"].is_string() || 
+        !j["password"].is_string()) {
+      throw std::invalid_argument("Invalid types in JSON for Admin");
+    }
+
+    try {
+      return std::make_unique<Admin>(
+        j["id"].get<int>(),
+        j["login"].get<std::string>(),
+        j["password"].get<std::string>()
+      );
+    } catch (const std::exception& e) {
+      throw std::runtime_error(std::string("Failed to create Admin from JSON: ") + e.what());
     }
   }
-}
 
 }  // namespace classes

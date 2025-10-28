@@ -13,8 +13,9 @@ class Customer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  std::vector<Order*> orders_;
-  std::vector<Review*> reviews_;  // отзывы которые он оставил
+  int id_ = 0;
+  // std::vector<Order*> orders_;
+  // std::vector<Review*> reviews_;  // отзывы которые он оставил
   double rate_;
 
  public:
@@ -29,5 +30,18 @@ class Customer : public User {
   void RemoveOrder(Order*);
 
   void HandleReview(Review* review) override;
+
+  void CompleteOrder(std::unique_ptr<Order>);
+  void AddPerformerToOrder(std::unique_ptr<Performer>);
+  
+
+  int GetId() const { return this->id_; };
+  int ChangeId(int id) { id_ = id;}
+  const std::string& GetLogin() const { return this->login_; };
+  const std::string& GetPass() const { return this->password_; };
+
+  static Customer* FromJsonRaw(const nlohmann::json& j);
+  static std::unique_ptr<Customer> FromJson(const nlohmann::json& j);
+
 };
 }  // namespace classes
