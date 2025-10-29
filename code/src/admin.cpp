@@ -2,11 +2,28 @@
 #include "../include/admin.hpp"
 #include <stdexcept>
 #include "../include/database.hpp"
+#include "../include/review.hpp"
 namespace classes {
 
   Admin::Admin(int id, const std::string& login_, const std::string& password_)
       : User(id, login_, password_) {}
   Admin::Admin(const User& u) : User(u) {}
+
+  void Admin::HandleReview(Review*& review) {
+    if (!review) {
+      throw std::invalid_argument("Review pointer is null");
+    }
+    Database& db = Database::getInstance();
+    auto it = std::find_if(db.reviews_.begin(), db.reviews_.end(),
+                          [review](const auto& ptr) {
+                            return ptr.get() == review;
+                          });
+    if (it != db.reviews_.end()) {
+      Review* temp = it->release();
+      db.reviews_.erase(it);
+      review = temp;
+    }
+  }
 
   std::unique_ptr<Admin> Admin::CreateFromJson(const nlohmann::json& j) {
     if (!j.is_object()) {

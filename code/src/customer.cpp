@@ -70,10 +70,55 @@ void Customer::ChoosePerformers(std::vector<Performer*> performers, std::shared_
   }
 }
 
-void Customer::MakeReview(std::vector<Review> all_review, Order* o, const std::string& descrip) {
-  auto it = FindOrder(o);
-  if (it != orders.end()) {
-    all_review.emplace_back(this, o->GetCustomer(), o, descrip);
+  void Customer::MakeReview(std::vector<Review> all_review, Order* o, const std::string& descrip) {
+    auto it = FindOrder(o);
+    if (it != orders.end()) {
+      all_review.emplace_back(this, o->GetCustomer(), o, descrip);
+    }
   }
-}
+
+    void Customer::HandleReview(Review* review) { // сделаем пока так, что при вызове функции он должен все поля переопределять, если же не хочет менять - enter
+    if (!review || review->GetStatus() != ReviewStatus::APPROVED) {
+      return;
+    }
+    std::string input;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Current id: " << review->id_ << " | Enter new id (or press Enter to keep current): ";
+    std::getline(std::cin, input);
+    if (!input.empty()) {
+      try {
+        review->id_ = std::stoi(input);
+      } catch (std::exception& e) {
+        std::cout << "Invalid input for id. Keeping current value." << std::endl;
+      }
+    }
+
+    std::cout << "Current u_to: " << review->u_to_ << " | Enter new u_to (or press Enter to keep current): ";
+    std::getline(std::cin, input);
+    if (!input.empty()) {
+      try {
+        review->u_to_ = std::stoi(input);
+      } catch (const std::exception& e) {
+        std::cout << "Invalid input for u_to. Keeping current value." << std::endl;
+      }
+    }
+    
+    std::cout << "Current description: " << review->description_ << " | Enter new description (or press Enter to keep current): ";
+    std::getline(std::cin, input);
+    if (!input.empty()) {
+        review->description_ = input;
+    }
+
+    std::cout << "Current grade: " << review->grade_ << " | Enter new grade (or press Enter to keep current): ";
+    std::getline(std::cin, input);
+    if (!input.empty()) {
+      try {
+          review->grade_ = std::stoi(input);
+      } catch (const std::exception& e) {
+          std::cout << "Invalid input for grade. Keeping current value." << std::endl;
+      }
+    }
+    std::cout << "Review updated successfully!" << std::endl;
+  }
+
 }  // namespace classes

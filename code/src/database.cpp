@@ -205,19 +205,19 @@ namespace classes {
         else if (type == "customer" && j.contains("customers") && j["customers"].is_array()) {
           const auto& customers_array = j["customers"];
           for (size_t i = 0; i < customers_array.size(); ++i) {
-              try {
-                  const auto& customer_json = customers_array[i];
-                  if (customer_json.is_null()) {
-                      std::cout << "Warning: null customer at index " << i << ", skipping" << std::endl;
-                      continue;
-                  }
-                  auto customer = FromSingleJsonPerformerCustomer(customer_json);
-                  if (customer) {
-                      CreateCustomer(std::move(customer));  // Исправлено на CreateCustomer
-                  }
-              } catch (const std::exception& e) {
-                  throw std::runtime_error("Failed parse customer at index: " + std::to_string(i) + " - " + e.what());
-              }
+            try {
+                const auto& customer_json = customers_array[i];
+                if (customer_json.is_null()) {
+                    std::cout << "Warning: null customer at index " << i << ", skipping" << std::endl;
+                    continue;
+                }
+                auto customer = FromSingleJsonPerformerCustomer(customer_json);
+                if (customer) {
+                    CreateCustomer(std::move(customer));  // Исправлено на CreateCustomer
+                }
+            } catch (const std::exception& e) {
+                throw std::runtime_error("Failed parse customer at index: " + std::to_string(i) + " - " + e.what());
+            }
           }
         }
         else {

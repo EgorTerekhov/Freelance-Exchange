@@ -4,6 +4,7 @@
 
 #include "user.hpp"
 #include "review.hpp"
+#include "database.hpp"
 
 namespace nlohmann {
   class json;
@@ -14,6 +15,7 @@ namespace classes {
   public:
     Admin(int id, const std::string& login, const std::string& password);
     Admin(const User& u);
+    void HandleReview(Review* review) override;
 
     // void DeleteCustomer(const Customer* c);
     // void DeletePerformer(const Performer* p);
@@ -35,7 +37,6 @@ namespace classes {
     //деструктор не переопределял тк нет доп. полей
 
     int GetId() { return id_};
-    void ChangeId(int id);
     static json& ToJson(const Admin& a);
     const std::string& GetLogin() const { return this->login_; };
     const std::string& GetPass() const { return this->password_; };

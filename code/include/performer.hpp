@@ -48,6 +48,8 @@ class Performer : public User {
   const std::string& GetName() const { return this->name; };
   const std::string& GetEmail() const { return this->email_; };
   const std::string& GetPhone() const { return this->phone_; };
+  void HandleReview(Review* review) override;
+  void DeleteReview(Review* review);
 
   static Performer* FromJsonRaw(const nlohmann::json& j);
   static std::unique_ptr<Performer> FromJson(const nlohmann::json& j);

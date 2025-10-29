@@ -45,6 +45,7 @@ class Customer : public User {
   const std::string& GetName() const { return this->name; };
   const std::string& GetEmail() const { return this->email_; };
   const std::string& GetPhone() const { return this->phone_; };
+  void HandleReview(Review* review) override;
 
   static Customer* FromJsonRaw(const nlohmann::json& j);
   static std::unique_ptr<Customer> FromJson(const nlohmann::json& j);

@@ -5,10 +5,10 @@
 #include "../include/review.hpp"
 
 namespace classes {
-  Review::Review(User* u_from_, User* u_to_, Order* o_, std::string& d_)
-      : u_from(u_from_), u_to(u_to_), o(o_), descrip(d_) {
-  }
+  Review::Review(int id , int u_to_, int o_, int o_, std::string& d_)
+      : id_(id), u_from(u_from_), u_to(u_to_), order_id(o_), descrip(d_) {}
 
+  
   void Review::ReDescrip(const std::string& d) {
     descrip = d;
   }
@@ -32,5 +32,4 @@ namespace classes {
     };
     return j;
   }
-  
 }  // namespace classes

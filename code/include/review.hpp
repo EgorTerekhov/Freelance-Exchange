@@ -18,16 +18,13 @@ class Review {
   int id_;
   int u_to_;
   int u_from_;
+  int order_id;
   std::string description_;
   ReviewStatus status_;
   int grade_;
 
  public:
-  Review(int id, User* u_from, User* u_to, Order* o, std::string& d);
-
-  User* GetFrom() const;
-  
-  User* GetTo() const;
+  Review(int id, int u_from, int u_to, int order_id, std::string& d);
 
   void ChangeId(int id) { id_ = id; }
   const int GetId() const { return this->name; };
@@ -39,4 +36,4 @@ class Review {
   static json& ToJson(json& j, const Review& r);
 
 };
-}  // namespace classes
+ // namespace classes

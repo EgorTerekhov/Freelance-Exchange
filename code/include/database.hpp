@@ -2,6 +2,7 @@
 #include "customer.hpp"
 #include "performer.hpp"
 #include "order.hpp"
+#include <vector>
 #include "review.hpp"
 #include "admin.hpp"
 #include <algorithm>
@@ -32,11 +33,13 @@ class Database {
   static int order_id_;
   static int review_id_;
   static int admin_id_;
+
+  friend class Admin;
   // singltone
  public:
   //тут короче все методы для создания и удаления сущностей
   static Database& getInstance();
-  
+
   void DeleteCustomer(int id);
   void DeletePerformer(int id);
   void DeleteAdmin(int id);
