@@ -15,7 +15,6 @@ namespace classes {
   public:
     Admin(int id, const std::string& login, const std::string& password);
     Admin(const User& u);
-    void HandleReview(Review* review) override;
 
     // void DeleteCustomer(const Customer* c);
     // void DeletePerformer(const Performer* p);

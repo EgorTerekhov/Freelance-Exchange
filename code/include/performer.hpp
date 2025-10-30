@@ -11,47 +11,31 @@ namespace nlohmann {
   class json;
 }
 
-
 namespace classes {
 class Performer : public User {
  private:
   std::string name_;
   std::string email_;
   std::string phone_;
-  // std::vector<Order*> complete_orders_;  //при вызове метода удаления от пользоваетля мы под капотом вызовем метод бд и                                     //освободим память переданного указателя
-  // std::vector<Order*> in_progress_orders_;
-  // std::vector<Review> reviews_;
-  int id_;
   double rate_;
 
  public:
   Performer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
-            const std::string& phone, const std::vector<Order*>& complete_orders,
-            const std::vector<Order*>& in_progress_orders, const std::vector<Review>& reviews, double rate);
+            const std::string& phone, double rate);
 
-  Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone,
-            const std::vector<Order*>& complete_orders, const std::vector<Order*>& in_progress_orders,
-            const std::vector<Review>& reviews, double rate);
-
-  void CompleteOrder(Order* o);
-
-  void AddInProgressOrder(Order* o); // закинуть какой то заказ в массив заказов, которые он делает
-
-  void RespondToOrder(Order* o);
+  Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone, 
+            double rate);
 
   void ChangeId(int id) { id_ = id; }
 
-  void HandleReview(Review* review) override;
+  void HandleReview(Review* review);
   int GetId() const { return id_; };
   const std::string& GetLogin() const { return this->login_; };
   const std::string& GetPass() const { return this->password_; };
-  const std::string& GetName() const { return this->name; };
+  const std::string& GetName() const { return this->name_; };
   const std::string& GetEmail() const { return this->email_; };
   const std::string& GetPhone() const { return this->phone_; };
-  void HandleReview(Review* review) override;
-  void DeleteReview(Review* review);
 
-  static Performer* FromJsonRaw(const nlohmann::json& j);
-  static std::unique_ptr<Performer> FromJson(const nlohmann::json& j);
+  //static std::unique_ptr<Performer> FromJson(const json& j);
 };
 }  // namespace classes

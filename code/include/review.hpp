@@ -18,22 +18,22 @@ class Review {
   int id_;
   int u_to_;
   int u_from_;
-  int order_id;
+  int order_id_;
   std::string description_;
-  ReviewStatus status_;
   int grade_;
+  ReviewStatus status_;
 
  public:
-  Review(int id, int u_from, int u_to, int order_id, std::string& d);
+  Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade_, ReviewStatus s = ReviewStatus::PENDING);
 
   void ChangeId(int id) { id_ = id; }
-  const int GetId() const { return this->name; };
-  const int GetUFrom() const { return this->u_from_; };
-  const int GetUTo() const { return this->u_to_; };
-  const std::string& GetDescription() const { return this->description_; };
-  const int GetGrade() const { return this->grade_; };
-  ReviewStatus GetStatus() const { return this->status_ };
+  int& GetId() { return this->name; };
+  int& GetUFrom() { return this->u_from_; };
+  int& GetUTo() { return this->u_to_; };
+  std::string& GetDescription() { return this->description_; };
+  int& GetGrade() { return this->grade_; };
+  ReviewStatus GetStatus() { return this->status_ };
   static json& ToJson(json& j, const Review& r);
-
+  bool operator==(const Review* other);
 };
  // namespace classes

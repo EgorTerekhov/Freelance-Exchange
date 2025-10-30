@@ -15,11 +15,11 @@ namespace classes {
 class Database {
  private:
   // нужно сортировать по порядку возрастания id каждый раз
-  std::vector<std::unique_ptr<Customer>> customers_;
-  std::vector<std::unique_ptr<Performer>> performers_;
-  std::vector<std::unique_ptr<Order>> orders_;
-  std::vector<std::unique_ptr<Review>> reviews_;
-  std::vector<std::unique_ptr<Admin>> admins_;
+  static std::vector<std::unique_ptr<Customer>> customers_;
+  static std::vector<std::unique_ptr<Performer>> performers_;
+  static std::vector<std::unique_ptr<Order>> orders_;
+  static std::vector<std::unique_ptr<Review>> reviews_;
+  static std::vector<std::unique_ptr<Admin>> admins_;
 
   Database() = default;
   static std::unique_ptr<Database> instance_;
@@ -46,12 +46,22 @@ class Database {
   void DeleteOrder(int id);
   void DeleteReview(int id);
 
+  template <class T>
+  void BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec);
+
+  template <class W>
+  void BinSearchFind(int id, std::vector<std::unique_ptr<T>>& vec);
   void CreateCustomer(const std::unique_ptr<Customer> c);
   void CreatePerformer(const std::unique_ptr<Performer> p);
   void CreateOrder(const std::unique_ptr<Order> o);
   void CreateReview(const std::unique_ptr<Review> r);
   void CreateAdmin(const std::unique_ptr<Admin> a);
 
+  std::vector<std::unique_ptr<Customer>>& GetCustomerArr() { return customers_;}
+  std::vector<std::unique_ptr<Performer>>& GetPerformerArr() { return performers_;}
+  std::vector<std::unique_ptr<Admin>>& GetAdminArr() { return admins_;}
+  std::vector<std::unique_ptr<Order>>& GetOrderArr() { return orders_;}
+  std::vector<std::unique_ptr<Review>>& GetReviewArr() { return reviews_;}
   void FromSingleJsonAdmin(const json& j);
   void FromSingleJsonPerformerCustomer(const json& j);
   void FromJsonAdminPerformerCustomer(const nlohmann::json& j);
@@ -61,23 +71,28 @@ class Database {
   json ToJsonReview() const;
   json ToJsonOrder() const;
   
+  template<class G>
+  std::vector<std::unique_ptr<G>> GetArr() {
+    
+  }
   template<class W>
   json ToJsonPerformerCustomer(json& j, const W& temp) const {
     j = {
-    {"id", temp.GetId()},
-    {"login", temp.GetLogin()},
-    {"password", temp.GetPass()},
-    {"name", temp.GetName()},
-    {"email", temp.GetEmail()},
-    {"phone", temp.GetPhone()}
+      {"id", temp.GetId()},
+      {"login", temp.GetLogin()},
+      {"password", temp.GetPass()},
+      {"name", temp.GetName()},
+      {"email", temp.GetEmail()},
+      {"phone", temp.GetPhone()}
     };
     return j;
   }
 
   template<class T>
-  void SortById(std::vector<std::pair<int, std::unique_ptr<T>>>& vec) {
+  void SortById(std::vector<std::unique_ptr<T>>& vec) {
     std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
-      return a.first < b.first;
+      if (!a || !b) return false;
+      return a->GetId() < b->GetId();
     });
   }
 

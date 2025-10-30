@@ -9,7 +9,7 @@ namespace classes {
       : User(id, login_, password_) {}
   Admin::Admin(const User& u) : User(u) {}
 
-  void Admin::HandleReview(Review*& review) {
+  void Admin::DeleteReview(Review*& review) {
     if (!review) {
       throw std::invalid_argument("Review pointer is null");
     }

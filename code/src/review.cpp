@@ -5,8 +5,8 @@
 #include "../include/review.hpp"
 
 namespace classes {
-  Review::Review(int id , int u_to_, int o_, int o_, std::string& d_)
-      : id_(id), u_from(u_from_), u_to(u_to_), order_id(o_), descrip(d_) {}
+  Review::Review(int id , int u_from, int u_to, int order_id, std::string& d, int grade, ReviewStatus s = ReviewStatus::PENDING)
+      : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade), status_(s) {}
 
   
   void Review::ReDescrip(const std::string& d) {
@@ -31,5 +31,9 @@ namespace classes {
       {"grade", r.GetGrade()}
     };
     return j;
+  }
+
+  bool Review::operator==(const Review* other) {
+    return id_
   }
 }  // namespace classes

@@ -7,41 +7,27 @@
 
 #include "../include/performer.hpp"
 #include "../include/review.hpp"
+#include "../include/database.hpp"
+#include "../include/admin.hpp"
+
+namespace nlohmann {
+  class json;
+}
 
 namespace classes {
-  //Поля:
-  // std::string email;
-  // std::string phone;
-  // std::string doc_path = "";
-  // std::string occupation;
-  // std::vector<std::shared_ptr<Order>> CompleteOrders;
-  // std::vector<std::weak_ptr<Order>> InProgressOrders;
-  // std::vector<std::weak_ptr<Order>> PotOrders;
-  // std::vector<Review> reviews;
-  // double rate;
 
-  Performer::Performer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
-                      const std::string phone_)
-      : User(name_, login_, password_), email(email_), phone(phone_), rate(0) {
-  }
+  Performer::Performer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
+            const std::string& phone, double rate = 0) :
+            User(id, login, password), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-  Performer::Performer(const User& u, const std::string& email_, const std::string& phone_)
-      : User(u), email(email_), phone(phone_), rate(0) {
-  }
-
-  std::vector<std::weak_ptr<Order>>::iterator Performer::FindInProgressOrder(std::shared_ptr<Order>& o) {
-    auto it = std::find(InProgressOrders.begin(), InProgressOrders.end(), o);
-    return it;
-  }
-
-  std::vector<std::shared_ptr<Order>>::iterator Performer::FindCompleteOrder(std::shared_ptr<Order>& o) {
-    auto it = std::find(CompleteOrders.begin(), CompleteOrders.end(), o);
-    return it;
-  }
+  Performer::Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate = 0)
+                       : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
   std::string Performer::GetClass() {
-    return "performer";
+    return "Performer";
   }
+  
+  
 
   void Performer::HandleReview(Review* review) { // сделаем пока так, что при вызове функции он должен все поля переопределять, если же не хочет менять - enter
     if (!review || review->GetStatus() != ReviewStatus::APPROVED) {
@@ -97,33 +83,21 @@ namespace classes {
     }
   }
 
-  void Performer::AddInProgressOrder(std::shared_ptr<Order> o) {
-    InProgressOrders.emplace_back(o);
-    auto it = std::find(PotOrders.begin(), PotOrders.end(), o);
-    if (it != PotOrders.end()) {
-      PotOrders.erase(it);
+  void Performer::DeleteReview(Review* review) {
+    if (!review) {
+      throw std::invalid_argument("Review pointer is null");
+    }
+    Database& db = Database::getInstance();
+    auto it = std::find_if(db.reviews_.begin(), db.reviews_.end(),
+                          [review](const auto& ptr) {
+                            return ptr.get() == review;
+                          });
+    if (it != db.reviews_.end()) {
+      Review* temp = it->release();
+      db.reviews_.erase(it);
+      review = temp;
     }
   }
-
-  void Performer::RespondToOrder(std::shared_ptr<Order> o) {
-    o->AddPotPerformer(this);
-    PotOrders.emplace_back(o);
-  }
-
-  void Performer::DelPotOrders() {
-    for (auto it = PotOrders.begin(); it != PotOrders.end();) {
-      if (auto o = it->lock()) {
-        if (o->GetStatus() == OrderStatus::Complete) {
-          it = PotOrders.erase(it);
-          continue;
-        }
-      }
-      ++it;
-    }
-  }
-  // Нужно как-то настроить тригер на то, чтобы order удалялся из potorder в случае, если проект завершен
-  // То есть проект, который уже ведется каким-то другим челом, может висеть у нашего performer, но должен удаляться,
-  // если он завершен
 
   void Performer::LoadDoc(const std::string& doc) {
     doc_path = doc;
@@ -146,4 +120,26 @@ namespace classes {
       {"phone", p.GetPhone()}
     };
   }
+
+  // std::unique_ptr<Performer> Performer::FromJson(const json& j) {
+  //   if (!j.contains("id") || !j.contains("login") || !j.contains("password") ||
+  //       !j.contains("name") || !j.contains("email") || !j.contains("phone") || !j.contains("rate"))) {
+  //         throw std::invalid_argument("Missing required fields in JSON");
+  //       }
+    
+  //   try {
+  //     int id = j.at("id").get<int>();
+  //     std::string login = j.at("login").get<std::string>();
+  //     std::string password = j.at("password").get<std::string>();
+  //     std::string name = j.at("name").get<std::string>();
+  //     std::string email = j.at("email").get<std::string>();
+  //     std::string phone = j.at("phone").get<std::string>();
+  //     double rate = j.at("rate").get<double>();
+
+  //     return std::make_unique<Performer>(id, login, password, name, email, phone, rate);
+  //   } catch (const json::exception& a) {
+  //     throw std::invalid_argument("Invalid JSON format: " + std::string(e.what()));
+  //   }
+  // }
+
 }  // namespace classes

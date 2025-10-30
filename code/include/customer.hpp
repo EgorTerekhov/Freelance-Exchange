@@ -11,45 +11,35 @@ namespace nlohmann {
   class json;
 }
 namespace classes {
-class Customer : public User {
- private:
-  std::string name_;
-  std::string email_;
-  std::string phone_;
-  int id_ = 0;
-  // std::vector<Order*> orders_;
-  // std::vector<Review*> reviews_;  // отзывы которые он оставил
-  double rate_;
+  class Customer : public User {
+  private:
+    std::string name_;
+    std::string email_;
+    std::string phone_;
+    double rate_;
 
- public:
-  Customer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
-           const std::string& phone, const std::vector<Order*>& orders, const std::vector<Review*>& reviews);
-  Customer(const User& u, const std::string& name, const std::string& email, const std::string& phone,
-           const std::vector<Order*>& orders, const std::vector<Review*>& reviews);
+  public:
+    Customer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email, const std::string& phone, double rate);
+    Customer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate);
 
-  Order* CreateOrder(const std::string& name, std::string status, std::string price, std::string description,
-                      Customer* customer, Performer* performer);
+    void CreateOrder(int id, const std::string& name, std::string status, std::string price, std::string description,
+                        int customer, int performer);
 
-  void RemoveOrder(Order*);
+    void CreateReview(int id, const int u_to, int order_id, std::string& description, ReviewStatus status, int grade);
+    void RemoveOrder(int id);
 
-  void HandleReview(Review* review) override;
+    void CompleteOrder(int id);
+    void WorkOrder(int id);
+    
 
-  void CompleteOrder(std::unique_ptr<Order>);
-  void AddPerformerToOrder(std::unique_ptr<Performer>);
-  
-
-  int GetId() const { return this->id_; };
-  int ChangeId(int id) { id_ = id;}
-  const std::string& GetLogin() const { return this->login_; };
-  const std::string& GetPass() const { return this->password_; };
-  const std::string& GetName() const { return this->name; };
-  const std::string& GetEmail() const { return this->email_; };
-  const std::string& GetPhone() const { return this->phone_; };
-  void HandleReview(Review* review) override;
-
-  static Customer* FromJsonRaw(const nlohmann::json& j);
-  static std::unique_ptr<Customer> FromJson(const nlohmann::json& j);
-
-
-};
+    int GetId() const { return this->id_; };
+    int ChangeId(int id) { id_ = id;}
+    const std::string& GetLogin() const { return this->login_; };
+    const std::string& GetPass() const { return this->password_; };
+    const std::string& GetName() const { return this->name; };
+    const std::string& GetEmail() const { return this->email_; };
+    const std::string& GetPhone() const { return this->phone_; };
+    void HandleReview(int id) override;
+    void HandleOrder(int id);
+  };
 }  // namespace classes

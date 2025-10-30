@@ -3,117 +3,130 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <limits>
+#include <iostream>
 
 #include "../include/customer.hpp"
+#include "../include/database.hpp"
+#include "../include/order.hpp"
 
 namespace classes {
 
-//Поля:
-// std::vector<std::shared_ptr<Order>> orders;
-// std::string email;
-// std::string phone;
-// std::vector<Review> reviews;
-// double rate;
+Customer::Customer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
+            const std::string& phone, double rate = 0) :
+            User(id, login, password), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-Customer::Customer(const std::string name_, const std::string login_, const std::string password_, std::string email_,
-                   const std::string phone_)
-    : User(name_, login_, password_), email(email_), phone(phone_), rate(0) {
-}
-Customer::Customer(const User& u, const std::string& email_, const std::string& phone_)
-    : User(u), email(email_), phone(phone_), rate(0) {
-}
+Customer::Customer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate = 0)
+                   : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-std::vector<std::shared_ptr<Order>>::iterator Customer::FindOrder(Order* o) {
-  auto it =
-      std::find_if(orders.begin(), orders.end(), [&](const std::shared_ptr<Order>& ptr) { return ptr.get() == o; });
-  return it;
-}
 
-// std::shared_ptr<Order> releaseOrder(Order* o) {
-//   auto it = FindIt(o);
-//   if (it != orders.end()) {
-//     std::shared_ptr<Order> tmp = std::move(*it);
-//     orders.erase(it);
-//     return tmp;
-//   }
-//   return nullptr;
+// std::vector<std::shared_ptr<Order>>::iterator Customer::FindOrder(Order* o) {
+//   auto it =
+//       std::find_if(orders.begin(), orders.end(), [&](const std::shared_ptr<Order>& ptr) { return ptr.get() == o; });
+//   return it;
 // }
 
-void Customer::AddOrder(std::string name, std::string discript, std::string price, std::string date_create,
-                        std::string term) {
-  orders.push_back(std::make_unique<Order>(name, this, discript, price, date_create, term));
+ void Customer::CreateOrder(int id, const std::string& name, std::string status, std::string price, std::string description,
+                      int customer, int performer) {
+  Order o = Order(id, name, price, description, this->id_, OrderStatus::WAIT, performer);
+  Database& db = Database::getInstance();
+  db.GetOrderArr.push_back(o);
+  db.SortById()
 }
 
-void Customer::RemoveOrder(Order* o) {
-  auto it = this->FindOrder(o);
-  if (it != orders.end() && (*it)->status != OrderStatus::Complete) {
-    orders.erase(it);
+void Customer::RemoveOrder(int id) {
+  Database& db = Database::getInstance();
+  auto& arr = db.GetOrderArr();
+  int iter_search = db.BinSearchDelete(id, db.GetOrderArr);
+  if (iter_search != -1 && arr[id_search]->GetStatus != OrderStatus::DONE) {
+    arr.erase(arr.begin() + iter_search);
   }
+}
+
+void Customer::HandleOrder(int id) {
+  Database& db = Database::getInstance();
+  auto& arr = db.GetOrderArr();
+  int iter_search = db.BinSearchDelete(id, arr);
+  if (iter_search == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != ReviewStatus::WAIT) {
+    return;
+  }
+  std::string input;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  std::cout << "Current name: " << arr[iter_search]->GetName() << " | Enter new name (or press Enter to keep current): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+      arr[iter_search]->GetDescription() = input;
+  }
+
+  std::cout << "Current price: " << arr[iter_search]->GetPrice() << " | Enter new price (or press Enter to keep current): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+    try {
+      arr[iter_search]->GetPrice() = std::stod(input);
+    } catch (const std::exception& e) {
+      std::cout << "Invalid input for performer. Keeping current value." << std::endl;
+    }
+  }
+
+  std::cout << "Current description: " << arr[iter_search]->GetDescription() << " | Enter new description (or press Enter to keep current): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+      arr[iter_search]->GetDescription() = input;
+  }
+
+  //можно еще прям здесь добавить хрень, чтобы статус менять, но, мне кажется, легче отдельно сделать метод для этого.
+
+  std::cout << "Current perfomer: " << arr[iter_search]->GetPerformer() << " | Enter new perfromer (or press Enter to keep current): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+    try {
+      arr[iter_search]->GetPerformer() = std::stoi(input);
+    } catch (const std::exception& e) {
+      std::cout << "Invalid input for performer. Keeping current value." << std::endl;
+    }
+  } //нужно делать проверки на существование perfomer нового
+  
+  std::cout << "Order updated successfully!" << std::endl;
 }
 
 std::string Customer::GetClass() {
   return "customer";
 }
 
-std::vector<Performer*>& Customer::GetPotPerformers(std::shared_ptr<Order> o) {
-  return o->PotPerformers;
-}
-
-void Customer::ChoosePerformers(std::vector<Performer*> performers, std::shared_ptr<Order> o) {
-  for (Performer* p : performers) {
-    o->MainPerformers.push_back(p);
-    auto it = std::find(o->PotPerformers.begin(), o->PotPerformers.end(), p);
-    if (it != o->PotPerformers.end()) {
-      o->MainPerformers.push_back(p);
-      o->PotPerformers.erase(it);
-    }
-  }
-}
-
-  void Customer::MakeReview(std::vector<Review> all_review, Order* o, const std::string& descrip) {
-    auto it = FindOrder(o);
-    if (it != orders.end()) {
-      all_review.emplace_back(this, o->GetCustomer(), o, descrip);
-    }
-  }
-
-    void Customer::HandleReview(Review* review) { // сделаем пока так, что при вызове функции он должен все поля переопределять, если же не хочет менять - enter
-    if (!review || review->GetStatus() != ReviewStatus::APPROVED) {
+// Возможно стоит функции по изменению ордера и ревью сделать с другой сигнатурой (изначально уже известно, че меняться будет)
+// возможно стоит функции с ревью и ордером делать по указателю, но пока хз
+void Customer::HandleReview(int id) { // сделаем пока так, что при вызове функции он должен все поля переопределять, если же не хочет менять - enter
+    Database& db = Database::getInstance();
+    auto& arr = db.GetReviewArr();
+    int iter_search = db.BinSearchDelete(id, arr);
+    if (iter_search == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != ReviewStatus::PENDING) {
       return;
     }
     std::string input;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Current id: " << review->id_ << " | Enter new id (or press Enter to keep current): ";
-    std::getline(std::cin, input);
-    if (!input.empty()) {
-      try {
-        review->id_ = std::stoi(input);
-      } catch (std::exception& e) {
-        std::cout << "Invalid input for id. Keeping current value." << std::endl;
-      }
-    }
 
-    std::cout << "Current u_to: " << review->u_to_ << " | Enter new u_to (or press Enter to keep current): ";
+    std::cout << "Current u_to: " << arr[iter_search]->GetUTo() << " | Enter new u_to (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
       try {
-        review->u_to_ = std::stoi(input);
+        arr[iter_search]->GetUTo() = std::stoi(input);
       } catch (const std::exception& e) {
         std::cout << "Invalid input for u_to. Keeping current value." << std::endl;
       }
-    }
+    } //нужно делать проверки на существование u_to_ нового
     
-    std::cout << "Current description: " << review->description_ << " | Enter new description (or press Enter to keep current): ";
+    std::cout << "Current description: " << arr[iter_search]->GetDescription() << " | Enter new description (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
-        review->description_ = input;
+        arr[iter_search]->GetDescription() = input;
     }
 
-    std::cout << "Current grade: " << review->grade_ << " | Enter new grade (or press Enter to keep current): ";
+    std::cout << "Current grade: " << arr[iter_search]->GetGrade() << " | Enter new grade (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
       try {
-          review->grade_ = std::stoi(input);
+          arr[iter_search]->GetGrade() = std::stoi(input);
       } catch (const std::exception& e) {
           std::cout << "Invalid input for grade. Keeping current value." << std::endl;
       }
@@ -121,4 +134,32 @@ void Customer::ChoosePerformers(std::vector<Performer*> performers, std::shared_
     std::cout << "Review updated successfully!" << std::endl;
   }
 
+  void Customer::CompleteOrder(int id) {
+    Database& db = Database::getInstance();
+    auto& arr = db.GetReviewArr();
+    int iter_search = db.BinSearchDelete(id, arr);
+    if (iter_search == -1 || arr[iter_search]->GetStatus() != Work) {
+      return;
+    } else {
+      arr[iter_search]->GetStatus() = OrderStatus::DONE;
+    }
+  }
+
+  void Customer::WorkOrder(int id) {
+    Database& db = Database::getInstance();
+    auto& arr = db.GetReviewArr();
+    int iter_search = db.BinSearchDelete(id, arr);
+    if (iter_search == -1 || arr[iter_search]->GetStatus() != Wait) {
+      return;
+    } else {
+      arr[iter_search]->GetStatus() = OrderStatus::WORK;
+    }
+  }
+
+  void Customer::CreateReview(int id, const int u_to, int order_id, std::string& description, int grade) {
+    Order r = Order(id, this->id_, u_to, order_id, description, grade);
+    Database& db = Database::getInstance();
+    db.GetReviewArr.push_back(r);
+    db.SortById();
+  }
 }  // namespace classes

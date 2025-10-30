@@ -1,28 +1,39 @@
 #include "../include/database.hpp"
 #include <nlohmann/json.hpp>
+#include "../include/order.hpp"
+#include "../include/admin.hpp"
+#include "../include/performer.hpp"
+#include "../include/customer.hpp"
 
 using json = nlohmann::json;
 template<class T>
-void BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
-  if (vec.size() == 0) {
-    return nullptr;
+int Database::BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
+  if (vec.empty()) {
+    return -1;
   }
   int l = 0;
-  int r = vec.size();
+  int r = vec.size() - 1;
+  int found_id = -1;
   while (l < r - 1) {
-    int m = (l + r) / 2;
-    if (id < vec[m].GetId()) {
-      r = m;
-    } else if (id > vec[m].GetId()) {
-      l = m;
+    int m = m + (l - r) / 2;
+    int current_id = vec[m]->GetId();
+    if (id < current_id) {
+      r = m - 1;
+    } else if (id > current_id) {
+      l = m + 1;
     } else {
-      return vec[m].erase();
+      found_id = m;
+      break;
     }
   }
-  if (vec[l].GetId() == id) {
-    return vec[l].erase();
-  }
+  return found_id;
 }
+
+template void Database::BinSearchDelete<Customer>(int, std::vector<std::unique_ptr<Customer>>&);
+template void Database::BinSearchDelete<Performer>(int, std::vector<std::unique_ptr<Performer>>&);
+template void Database::BinSearchDelete<Order>(int, std::vector<std::unique_ptr<Order>>&);
+template void Database::BinSearchDelete<Review>(int, std::vector<std::unique_ptr<Review>>&);
+template void Database::BinSearchDelete<Admin>(int, std::vector<std::unique_ptr<Admin>>&);
 
 namespace classes {
   Database& Database::getInstance() {
@@ -33,7 +44,10 @@ namespace classes {
   }
 
   void Database::DeleteCustomer(int id) {
-    BinSearchDelete(id, customers_);
+    int id_erase = BinSearchDelete(id, customers_);
+    if (id_erase != -1) {
+      customers_.erase(customers_.begin() + id_erase);
+    }
     orders_.erase(
       std::remove_if(orders_.begin(), orders_.end(), 
                     [id](const std::unique_ptr<Order>& s) {
@@ -45,7 +59,10 @@ namespace classes {
   }
 
   void Database::DeletePerformer(int id) {
-    BinSearchDelete(id, performers_);
+    int id_erase = BinSearchDelete(id, performers_);
+    if (id_erase != -1) {
+      performers_.erase(performers_.begin() + id_erase);
+    }
     for (size_t i = 0; i < orders_.size(); ++i) {
       if (orders_[i]->GetPerformer() == id && orders_[i]->GetStatus() == OrderStatus::WORK) {
         orders_[i]->ChangePerformer(0);
@@ -54,15 +71,26 @@ namespace classes {
   }
 
   void Database::DeleteOrder(int id) {
-    BinSearchDelete(id, orders_);
+    int id_erase = BinSearchDelete(id, orders_);
+    if (id_erase != -1) {
+      orders_.erase(orders_.begin() + id_erase);
+    }
   }
 
   void Database::DeleteAdmin(int id) {
-    BinSearchDelete(id, admins_);
+      int id_erase = BinSearchDelete(id, admins_);
+    if (id_erase != -1) {
+      admins_.erase(admins_.begin() + id_erase);
+    }
+
   }
 
   void Database::DeleteReview(int id) {
-    BinSearchDelete(id, reviews_);
+    int id_erase = BinSearchDelete(id, reviews_);
+    if (id_erase != -1) {
+      reviews_.erase(reviews_.begin() + id_erase);
+    }
+
   }
 
   void Database::CreateCustomer(const std::unique_ptr<Customer> c) {

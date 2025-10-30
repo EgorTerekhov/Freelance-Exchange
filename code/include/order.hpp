@@ -20,28 +20,28 @@ class Order {
  private:
   int id_;
   std::string name_;
-  std::string price_;
+  double price_;
   std::string description_;
   int customer_id_;
-  OrderStatus status_;
   int performer_id_;  //пока его никто не взял, это полу будет nullptr
+  OrderStatus status_;
 
  public:
-  Order(int id, const std::string& name, std::string status, std::string price, std::string description, Customer* customer,
-        Performer* performer);
+  Order(int id, const std::string& name, double price,const std::string& description, int customer_id,
+        int performer_id, const OrderStatus& status = OrderStatus::WAIT);
 
   void CompleteOrder();
   void RejectOrder();
   void WorkOrder();
   void WaitOrder();
 
-  OrderStatus GetStatus() const { return this->status_};
-  const std::string& GetId() const { return this->id_; };
-  const std::string& GetName() const { return this->name; };
-  const std::string& GetPrice() const { return this->price_; };
-  const std::string& GetDescription() const { return this->description_; };
+  OrderStatus GetStatus() { return this->status_};
+  std::string& GetId() { return this->id_; };
+  std::string& GetName() { return this->name; };
+  double& GetPrice() { return this->price_; };
+  std::string& GetDescription() { return this->description_; };
   const int GetCustomer() const { return this->customer_id_; };
-  const int GetPerformer() const { return this->performer_id_; };
+  int& GetPerformer() { return this->performer_id_; };
   void ChangeId(int id) { id_ = id; }
 
   void ChangePerformer(int i) {
