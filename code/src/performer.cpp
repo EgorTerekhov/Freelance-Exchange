@@ -1,125 +1,116 @@
-#pragma once
-#include <string>
-#include <memory>
-#include <iostream>
-#include <limits>
-#include <vector>
-
 #include "../include/performer.hpp"
 #include "../include/review.hpp"
 #include "../include/database.hpp"
-#include "../include/admin.hpp"
+#include "../include/order.hpp"
+#include <iostream>
+#include <limits>
+#include <algorithm>
+#include <memory>
 
-namespace nlohmann {
-  class json;
-}
+using json = nlohmann::json;
 
 namespace classes {
 
-  Performer::Performer(int id, const std::string& login, const std::string& password, const std::string& name, const std::string& email,
-            const std::string& phone, double rate = 0) :
-            User(id, login, password), name_(name), email_(email), phone_(phone), rate_(rate) {}
+Performer::Performer(int id, const std::string& login, const std::string& password,
+                     const std::string& name, const std::string& email,
+                     const std::string& phone, double rate)
+    : User(id, login, password), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-  Performer::Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate = 0)
-                       : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
+Performer::Performer(const User& u, const std::string& name,
+                     const std::string& email, const std::string& phone, double rate)
+    : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-  std::string Performer::GetClass() {
+std::string Performer::GetClass() {
     return "Performer";
-  }
-  
-  
+}
 
-  void Performer::HandleReview(Review* review) { // сделаем пока так, что при вызове функции он должен все поля переопределять, если же не хочет менять - enter
-    if (!review || review->GetStatus() != ReviewStatus::APPROVED) {
-      return;
+// Обработка ревью
+void Performer::HandleReview(int id) {
+    if (!id) {
+        return;
     }
+
     std::string input;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Current id: " << review->id_ << " | Enter new id (or press Enter to keep current): ";
+
+    std::cout << "Current u_to: " << review->GetUTo() << " | Enter new u_to (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
-      try {
-        review->id_ = std::stoi(input);
-      } catch (std::exception& e) {
-        std::cout << "Invalid input for id. Keeping current value." << std::endl;
-      }
+        try {
+            review->GetUTo() = std::stoi(input);
+        } catch (...) {
+            std::cout << "Invalid input for u_to. Keeping current value.\n";
+        }
     }
 
-    std::cout << "Current u_to: " << review->u_to_ << " | Enter new u_to (or press Enter to keep current): ";
+    std::cout << "Current description: " << review->GetDescription()
+              << " | Enter new description (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
-      try {
-        review->u_to_ = std::stoi(input);
-      } catch (const std::exception& e) {
-        std::cout << "Invalid input for u_to. Keeping current value." << std::endl;
-      }
+        review->GetDescription() = input;
     }
-    
-    std::cout << "Current description: " << review->description_ << " | Enter new description (or press Enter to keep current): ";
+
+    std::cout << "Current grade: " << review->GetGrade()
+              << " | Enter new grade (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
-        review->description_ = input;
+        try {
+            review->GetGrade() = std::stoi(input);
+        } catch (...) {
+            std::cout << "Invalid input for grade. Keeping current value.\n";
+        }
     }
 
-    std::cout << "Current grade: " << review->grade_ << " | Enter new grade (or press Enter to keep current): ";
-    std::getline(std::cin, input);
-    if (!input.empty()) {
-      try {
-          review->grade_ = std::stoi(input);
-      } catch (const std::exception& e) {
-          std::cout << "Invalid input for grade. Keeping current value." << std::endl;
-      }
-    }
-    std::cout << "Review updated successfully!" << std::endl;
-  }
+    std::cout << "Review updated successfully!\n";
+}
 
-
-  void Performer::CompleteOrder(std::shared_ptr<Order>& o) {
-    auto it = FindInProgressOrder(o);
+// Завершение заказа
+void Performer::CompleteOrder(std::shared_ptr<Order>& o) {
+    auto it = std::find(InProgressOrders.begin(), InProgressOrders.end(), o);
     if (it != InProgressOrders.end()) {
-      InProgressOrders.erase(it);
-      CompleteOrders.push_back(o);
-      o->CompleteOrder();
+        InProgressOrders.erase(it);
+        CompleteOrders.push_back(o);
+        o->ChangeStatus(OrderStatus::DONE);
     }
-  }
+}
 
-  void Performer::DeleteReview(Review* review) {
+// Удаление ревью
+void Performer::DeleteReview(Review* review) {
     if (!review) {
-      throw std::invalid_argument("Review pointer is null");
+        throw std::invalid_argument("Review pointer is null");
     }
     Database& db = Database::getInstance();
-    auto it = std::find_if(db.reviews_.begin(), db.reviews_.end(),
-                          [review](const auto& ptr) {
-                            return ptr.get() == review;
-                          });
-    if (it != db.reviews_.end()) {
-      Review* temp = it->release();
-      db.reviews_.erase(it);
-      review = temp;
+    auto& arr = db.GetReviewArr();
+    auto it = std::find_if(arr.begin(), arr.end(), [review](const auto& ptr) { return ptr.get() == review; });
+    if (it != arr.end()) {
+        arr.erase(it);
     }
-  }
+}
 
-  void Performer::LoadDoc(const std::string& doc) {
-    doc_path = doc;
-  }
-
-  void Performer::MakeReview(std::vector<Review> all_review, std::shared_ptr<Order> o, const std::string& descrip) {
-    auto it = FindCompleteOrder(o);
+// Создание ревью
+void Performer::MakeReview(std::vector<std::unique_ptr<Review>>& all_review,
+                           std::shared_ptr<Order> o, const std::string& descrip) {
+    auto it = std::find(CompleteOrders.begin(), CompleteOrders.end(), o);
     if (it != CompleteOrders.end()) {
-      all_review.emplace_back(this, o->GetCustomer(), o, descrip);
+        all_review.push_back(std::make_unique<Review>(0, this->id_, o->GetCustomer(), o->GetId(), descrip, 0, ReviewStatus::PENDING));
     }
-  }
+}
 
-  json& Customer::ToJson(json& j, const Performer& p) {
+// Преобразование в JSON
+json& Performer::ToJson(json& j, const Performer& p) {
     j = {
-      {"id", p.GetId()},
-      {"login", p.GetLogin()},
-      {"password", p.GetPass()},
-      {"name", p.GetName()},
-      {"email", p.GetEmail()},
-      {"phone", p.GetPhone()}
+        {"id", p.GetId()},
+        {"login", p.GetLogin()},
+        {"password", p.GetPass()},
+        {"name", p.GetName()},
+        {"email", p.GetEmail()},
+        {"phone", p.GetPhone()}
     };
-  }
+    return j;
+}
+
+} // namespace classes
+
 
   // std::unique_ptr<Performer> Performer::FromJson(const json& j) {
   //   if (!j.contains("id") || !j.contains("login") || !j.contains("password") ||
@@ -141,5 +132,4 @@ namespace classes {
   //     throw std::invalid_argument("Invalid JSON format: " + std::string(e.what()));
   //   }
   // }
-
-}  // namespace classes
+  // namespace classes

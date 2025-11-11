@@ -1,16 +1,17 @@
 #pragma once
+#include <vector>
+
+#include "/usr/include/nlohmann/json.hpp"
 #include "customer.hpp"
 #include "performer.hpp"
 #include "order.hpp"
-#include <vector>
 #include "review.hpp"
 #include "admin.hpp"
 #include <algorithm>
 #include <iostream>
 
-namespace nlohmann {
-  class json;
-}
+using json = nlohmann::json;
+
 namespace classes {
 class Database {
  private:
@@ -40,62 +41,67 @@ class Database {
   //тут короче все методы для создания и удаления сущностей
   static Database& getInstance();
 
-  void DeleteCustomer(int id);
+  void DeleteCustomer(int id); // binSearchDelete шаблонный поэтому эти можно удалить
   void DeletePerformer(int id);
   void DeleteAdmin(int id);
   void DeleteOrder(int id);
   void DeleteReview(int id);
 
   template <class T>
-  void BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec);
+  int BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec);
 
   template <class W>
-  void BinSearchFind(int id, std::vector<std::unique_ptr<T>>& vec);
+  void BinSearchFind(int id, std::vector<std::unique_ptr<W>>& vec);
   void CreateCustomer(const std::unique_ptr<Customer> c);
   void CreatePerformer(const std::unique_ptr<Performer> p);
   void CreateOrder(const std::unique_ptr<Order> o);
   void CreateReview(const std::unique_ptr<Review> r);
   void CreateAdmin(const std::unique_ptr<Admin> a);
 
-  std::vector<std::unique_ptr<Customer>>& GetCustomerArr() { return customers_;}
-  std::vector<std::unique_ptr<Performer>>& GetPerformerArr() { return performers_;}
-  std::vector<std::unique_ptr<Admin>>& GetAdminArr() { return admins_;}
-  std::vector<std::unique_ptr<Order>>& GetOrderArr() { return orders_;}
-  std::vector<std::unique_ptr<Review>>& GetReviewArr() { return reviews_;}
-  void FromSingleJsonAdmin(const json& j);
-  void FromSingleJsonPerformerCustomer(const json& j);
-  void FromJsonAdminPerformerCustomer(const nlohmann::json& j);
+  std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
+    return customers_;
+  }
+  std::vector<std::unique_ptr<Performer>>& GetPerformerArr() {
+    return performers_;
+  }
+  std::vector<std::unique_ptr<Admin>>& GetAdminArr() {
+    return admins_;
+  }
+  std::vector<std::unique_ptr<Order>>& GetOrderArr() {
+    return orders_;
+  }
+  std::vector<std::unique_ptr<Review>>& GetReviewArr() {
+    return reviews_;
+  }
+  std::unique_ptr<Admin> FromSingleJsonAdmin(const json& j);
+  std::unique_ptr<Admin> FromSingleJsonPerformerCustomer(const json& j);
+  void FromJsonAdminPerformerCustomer(const json& j);
   json ToJsonPerformer() const;
   json ToJsonCustomer() const;
   json ToJsonAdmin() const;
   json ToJsonReview() const;
   json ToJsonOrder() const;
-  
-  template<class G>
+
+  template <class G>
   std::vector<std::unique_ptr<G>> GetArr() {
-    
   }
-  template<class W>
+  template <class W>
   json ToJsonPerformerCustomer(json& j, const W& temp) const {
-    j = {
-      {"id", temp.GetId()},
-      {"login", temp.GetLogin()},
-      {"password", temp.GetPass()},
-      {"name", temp.GetName()},
-      {"email", temp.GetEmail()},
-      {"phone", temp.GetPhone()}
-    };
+    j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()},
+         {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
     return j;
   }
 
-  template<class T>
+  template <class T>
   void SortById(std::vector<std::unique_ptr<T>>& vec) {
     std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
-      if (!a || !b) return false;
+      if (!a || !b)
+        return false;
       return a->GetId() < b->GetId();
     });
   }
 
-  // в json id только растет, нужно для того, чтобы при удалении потом не возникали проблемы с переопределением одного и того же id
+  // в json id только растет, нужно для того, чтобы при удалении потом не возникали проблемы с переопределением одного и
+  // того же id
 };
-}
+}  // namespace classes

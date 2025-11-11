@@ -2,36 +2,38 @@
 #include <string>
 
 #include "../include/order.hpp"
+#include "/usr/include/nlohmann/json.hpp"
 
+using json = nlohmann::json;
 namespace classes {
-  Order::Order(int id, const std::string& name, double price, const std::string& description, int customer_id, int performer_id, OrderStatus& status) 
+  Order::Order(int id, const std::string& name, double price, const std::string& description, int customer_id, int performer_id, const OrderStatus& status) 
       : id_(id), name_(name), price_(price), description_(description), customer_id_(customer_id), performer_id_(performer_id), status_(status) {}
 
   void Order::CompleteOrder() {
-    status = OrderStatus::DONE;
+    this->status_ = OrderStatus::DONE;
   }
 
   void Order::WorkOrder() {
-    status = OrderStatus::WORK;
+    this->status_ = OrderStatus::WORK;
   }
 
   void Order::RejectOrder() {
-    status = OrderStatus::REJECTED;
+    this->status_ = OrderStatus::REJECTED;
   }
 
   void Order::WaitOrder() {
-    status = OrderStatus::WAIT;
+    this->status_ = OrderStatus::WAIT;
   }
 
-  void Order::AddPotPerformer(Performer* p) {
-    PotPerformers.push_back(p);
-  }
+  //void Order::AddPotPerformer(Performer* p) {   //доп.функцинал, реализуем если время будет
+  //  PotPerformers.push_back(p);
+ // }
 
-  void Order::AddMainPerformer(Performer* p) {
-    PotPerformers.push_back(p);
-  }
+  //void Order::AddMainPerformer(Performer* p) {
+  //  PotPerformers.push_back(p);
+  //}
 
-  json& Order::ToJson(json& j, const Order& o) {
+  json& Order::ToJson(const Order& o) {
     std::string status;
     if (o.GetStatus() == OrderStatus::WORK) {
       status = "WORK";
@@ -43,7 +45,7 @@ namespace classes {
       status = "REJECTED";
     }
 
-    j = {
+    json j = {
       {"id", o.GetId()},
       {"name", o.GetName()},
       {"price", o.GetPrice()},

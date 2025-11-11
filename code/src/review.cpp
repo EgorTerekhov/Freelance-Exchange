@@ -1,39 +1,47 @@
-#pragma once
-#include <string>
+#include "../include/review.hpp"
 #include "../include/user.hpp"
 #include "../include/order.hpp"
-#include "../include/review.hpp"
+#include "/usr/include/nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 namespace classes {
-  Review::Review(int id , int u_from, int u_to, int order_id, std::string& d, int grade, ReviewStatus s = ReviewStatus::PENDING)
-      : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade), status_(s) {}
 
-  
-  void Review::ReDescrip(const std::string& d) {
-    descrip = d;
-  }
+Review::Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade, ReviewStatus s)
+    : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade), status_(s) {
+}
 
-  json& Review::ToJson(json& j, const Review& r) {
-    std::string status;
-    if (r.GetStatus() == ReviewStatus::APPROVED) {
+json& Review::ToJson(const Review& r) {
+  static json j;  // статический, т.к. функция возвращает ссылку
+  std::string status;
+
+  switch (r.GetStatus()) {
+    case ReviewStatus::APPROVED:
       status = "APPROVED";
-    } else if (r.GetStatus() == ReviewStatus::PENDING) {
+      break;
+    case ReviewStatus::PENDING:
       status = "PENDING";
-    } else {
+      break;
+    case ReviewStatus::REJECTED:
       status = "REJECTED";
-    }
-    j = {
-      {"id", r.GetId()},
-      {"to", r.GetUTo()},
-      {"from", r.GetUFrom()},
-      {"description", r.GetDescription()},
-      {"status", status},
-      {"grade", r.GetGrade()}
-    };
-    return j;
+      break;
   }
 
-  bool Review::operator==(const Review* other) {
-    return id_
-  }
+  j = {{"id", r.id_},
+       {"u_to", r.u_to_},
+       {"u_from", r.u_from_},
+       {"order_id", r.order_id_},
+       {"description", r.description_},
+       {"grade", r.grade_},
+       {"status", status}};
+
+  return j;
+}
+
+bool Review::operator==(const Review* other) {
+  if (!other)
+    return false;
+  return this->id_ == other->id_;
+}
+
 }  // namespace classes

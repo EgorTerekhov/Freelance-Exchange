@@ -40,6 +40,25 @@
     "ostream": "cpp",
     "stdexcept": "cpp",
     "streambuf": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "bitset": "cpp",
+    "ctime": "cpp",
+    "regex": "cpp",
+    "fstream": "cpp",
+    "sstream": "cpp",
+    "any": "cpp",
+    "codecvt": "cpp",
+    "cstring": "cpp",
+    "forward_list": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "optional": "cpp",
+    "ratio": "cpp",
+    "iomanip": "cpp",
+    "ranges": "cpp",
+    "span": "cpp",
+    "valarray": "cpp"
   }
 }
