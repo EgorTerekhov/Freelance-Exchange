@@ -47,3 +47,28 @@
 * Арбитраж и система споров.
 * Более сложная модель рейтинга.
 * Поддержка разных типов заказов и дополнительных ролей.
+
+--
+
+## Запуск
+* Создаем папку для сборки
+mkdir build
+cd build
+
+* Конфигурируем проект
+cmake ..
+
+* Собираем
+make
+
+* Запускаем
+./freelance_exchange
+
+* Для дебага нужно запускать так
+
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_CXX_FLAGS="-fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3" \
+      ..
+make
