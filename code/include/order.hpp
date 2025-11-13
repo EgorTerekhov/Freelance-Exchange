@@ -26,44 +26,44 @@ class Order {
   void WorkOrder();  // зачем эти два
   void WaitOrder();
 
-  std::string ChangeName(std::string name) {
+  void ChangeName(std::string name) {
     name_ = name;
   }
 
-  std::string ChangePrice(double price) {
+  void ChangePrice(double price) {
     price_ = price;
   }
 
-  std::string ChangeDescription(std::string description) {
+  void ChangeDescription(std::string description) {
     description_ = description;
   }
 
-  OrderStatus ChangeStatus(OrderStatus status) {
+  void ChangeStatus(OrderStatus status) {
     status_ = status;
   }
 
-  OrderStatus GetStatus() const {
+  OrderStatus GetStatus() {
     return this->status_;
   }
-  const int& GetId() const {
+  int& GetId() {
     return this->id_;
   };
-  const std::string& GetName() const {
+  std::string& GetName() {
     return this->name_;
   };
-  const double& GetPrice() const {
+  double& GetPrice() {
     return this->price_;
   };
-  const std::string& GetDescription() const {
+  std::string& GetDescription() {
     return this->description_;
   };
-  const int GetCustomer() const {
+  int GetCustomer() {
     return this->customer_id_;
   };
-  const int& GetPerformer() const {
+  int& GetPerformer() {
     return this->performer_id_;
   };
-  const int& GetCustomerId() const {
+  int& GetCustomerId() {
     return this->customer_id_;
   };
   void ChangeId(int id) {

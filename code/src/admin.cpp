@@ -10,9 +10,9 @@
 using json = nlohmann::json;
 namespace classes {
 
-Admin::Admin(int id, const std::string& login_, const std::string& password_) : User(id, login_, password_) {
+Admin::Admin(int id, std::string login, std::string password) : User(id, std::move(login), std::move(password)) {
 }
-Admin::Admin(const User& u) : User(u) {
+Admin::Admin(User&& u) : User(std::move(u)) {
 }
 
 void Admin::HandleReview(int id) {  // Удаление отзыва

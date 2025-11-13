@@ -19,12 +19,12 @@ class Customer : public User {
   double rate_;
 
  public:
-  Customer(int id, const std::string& login, const std::string& password, const std::string& name,
-           const std::string& email, const std::string& phone, double rate);
-  Customer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate);
+  Customer(int id, std::string login, std::string password, std::string name,
+           std::string email, std::string phone, double rate = 0.0);
+  Customer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
 
-  void CreateOrder(int id, const std::string& name, const OrderStatus& status, double price,
-                           const std::string description, int customer_id, int performer_id);
+  void CreateOrder(int id, std::string& name, OrderStatus& status, double price,
+                           std::string description, int customer_id, int performer_id);
 
   void CreateReview(int id, const int u_to, int order_id, std::string& description, ReviewStatus status, int grade);
   void RemoveOrder(int id);
@@ -35,8 +35,14 @@ class Customer : public User {
     return this->id_;
   };
   
-  int ChangeId(int id) {
+  void ChangeId(int id) {
     id_ = id;
+  }
+
+  std::vector<std::string> GetOptions() override {
+    std::vector<std::string> a;
+    a.push_back("");
+    return a;
   }
   
   const std::string& GetLogin() const {

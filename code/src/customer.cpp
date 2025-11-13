@@ -12,17 +12,17 @@ using json = nlohmann::json;
 
 namespace classes {
 
-Customer::Customer(int id, const std::string& login, const std::string& password,
-                   const std::string& name, const std::string& email,
-                   const std::string& phone, double rate)
-    : User(id, login, password), name_(name), email_(email), phone_(phone), rate_(rate) {}
+Customer::Customer(int id, std::string login, std::string password,
+                   std::string name, std::string email,
+                   std::string phone, double rate)
+    : User(id, std::move(login), std::move(password)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
 
-Customer::Customer(const User& u, const std::string& name,
-                   const std::string& email, const std::string& phone, double rate)
-    : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
+Customer::Customer(User&& u, std::string name,
+                   std::string email, std::string phone, double rate)
+    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
 
-void Customer::CreateOrder(int id, const std::string& name, const OrderStatus& status,
-                           double price, const std::string description,
+void Customer::CreateOrder(int id, std::string& name, OrderStatus& status,
+                           double price, std::string description,
                            int customer_id, int performer_id) {
   auto order = std::make_unique<Order>(id, name, price, description, customer_id, performer_id, status);
   Database& db = Database::getInstance();
@@ -34,7 +34,7 @@ void Customer::RemoveOrder(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetOrderArr();
   int id_search = db.BinSearchDelete(id, arr);
-  if (id_search != -1 && arr[id_search]->GetStatus() != OrderStatus::DONE) {
+  if (id_search != -1 && arr[static_cast<size_t>(id_search)]->GetStatus() != OrderStatus::DONE) {
     arr.erase(arr.begin() + id_search);
   }
 }
@@ -42,8 +42,8 @@ void Customer::RemoveOrder(int id) {
 void Customer::HandleOrder(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetOrderArr();
-  int iter_search = db.BinSearchDelete(id, arr);
-  if (iter_search == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != OrderStatus::WAIT) {
+  size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
+  if (static_cast<int>(iter_search) == -1 || !arr[static_cast<size_t>(iter_search)] || arr[static_cast<size_t>(iter_search)]->GetStatus() != OrderStatus::WAIT) {
     return;
   }
 
@@ -95,8 +95,8 @@ void Customer::HandleOrder(int id) {
 void Customer::HandleReview(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetReviewArr();
-  int iter_search = db.BinSearchDelete(id, arr);
-  if (iter_search == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != ReviewStatus::PENDING) {
+  size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
+  if (static_cast<int>(iter_search) == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != ReviewStatus::PENDING) {
     return;
   }
 
@@ -140,8 +140,8 @@ void Customer::HandleReview(int id) {
 void Customer::CompleteOrder(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetOrderArr();
-  int iter_search = db.BinSearchDelete(id, arr);
-  if (iter_search == -1 || arr[iter_search]->GetStatus() != OrderStatus::WORK) {
+  size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
+  if (static_cast<int>(iter_search) == -1 || arr[iter_search]->GetStatus() != OrderStatus::WORK) {
     return;
   }
   arr[iter_search]->ChangeStatus(OrderStatus::DONE);
@@ -150,8 +150,8 @@ void Customer::CompleteOrder(int id) {
 void Customer::WorkOrder(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetOrderArr();
-  int iter_search = db.BinSearchDelete(id, arr);
-  if (iter_search == -1 || arr[iter_search]->GetStatus() != OrderStatus::WAIT) {
+  size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
+  if (static_cast<int>(iter_search) == -1 || arr[iter_search]->GetStatus() != OrderStatus::WAIT) {
     return;
   }
   arr[iter_search]->ChangeStatus(OrderStatus::WORK);

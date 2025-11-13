@@ -8,6 +8,7 @@ namespace classes {
 class User {
  protected:
   int id_;
+  // при создании performer, admin, customer присваивается id_ = -1, затем вызывается функция из database (std::move(item) делаем там) и там уже корректный id присваивается
   std::string login_;
   std::string password_;
 

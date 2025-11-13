@@ -14,11 +14,9 @@ std::vector<std::unique_ptr<Order>> Database::orders_;
 std::vector<std::unique_ptr<Review>> Database::reviews_;
 std::vector<std::unique_ptr<Admin>> Database::admins_;
 std::unique_ptr<Database> Database::instance_ = nullptr;
-int Database::customer_id_ = 0;
-int Database::performer_id_ = 0;
+int Database::user_id_ = 0;
 int Database::order_id_ = 0;
 int Database::review_id_ = 0;
-int Database::admin_id_ = 0;
 
 // ====== Singleton ======
 Database& Database::getInstance() {
@@ -29,8 +27,8 @@ Database& Database::getInstance() {
 }
 
 // ====== Методы создания сущностей ======
-void Database::CreateCustomer(std::unique_ptr<Customer> c) {
-  c->ChangeId(++customer_id_);
+void Database::CreateCustomer(std::unique_ptr<Customer>&& c) {
+  c->ChangeId(++user_id_);
   customers_.push_back(std::move(c));
   SortById(customers_);
 }
@@ -39,26 +37,26 @@ void Database::CreateCustomer(std::unique_ptr<Customer> c) {
  // ✅        ✅     ✅✅✅
 //✅  ✅    ✅       ✅  ✅
 
-void Database::CreatePerformer(std::unique_ptr<Performer> p) {
-  p->ChangeId(++performer_id_);
+void Database::CreatePerformer(std::unique_ptr<Performer>&& p) {
+  p->ChangeId(++user_id_);
   performers_.push_back(std::move(p));
   SortById(performers_);
 }
 
-void Database::CreateOrder(std::unique_ptr<Order> o) {
+void Database::CreateOrder(std::unique_ptr<Order>&& o) {
   o->ChangeId(++order_id_);
   orders_.push_back(std::move(o));
   SortById(orders_);
 }
 
-void Database::CreateReview(std::unique_ptr<Review> r) {
+void Database::CreateReview(std::unique_ptr<Review>&& r) {
   r->ChangeId(++review_id_);
   reviews_.push_back(std::move(r));
   SortById(reviews_);
 }
 
-void Database::CreateAdmin(std::unique_ptr<Admin> a) {
-  a->ChangeId(++admin_id_);
+void Database::CreateAdmin(std::unique_ptr<Admin>&& a) {
+  a->ChangeId(++user_id_);
   admins_.push_back(std::move(a));
   SortById(admins_);
 }

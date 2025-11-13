@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "user.hpp";
+#include "user.hpp"
 #include "order.hpp"
 #include "review.hpp"
 #include "../nlohmann/json.hpp"
@@ -18,10 +18,10 @@ class Performer : public User {
   double rate_;
 
  public:
-  Performer(int id, const std::string& login, const std::string& password, const std::string& name,
-            const std::string& email, const std::string& phone, double rate);
+  Performer(int id, std::string login, std::string password, std::string name,
+            std::string email, std::string phone, double rate = 0.0);
 
-  Performer(const User& u, const std::string& name, const std::string& email, const std::string& phone, double rate);
+  Performer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
 
   void ChangeId(int id) {
     id_ = id;
@@ -29,15 +29,22 @@ class Performer : public User {
 
   void HandleReview(int id) override;
 
+  std::vector<std::string> GetOptions() override {
+    std::vector<std::string> a;
+    a.push_back("");
+    return a;
+  }
+
   int GetId() const {
     return id_;
   };
   const std::string& GetLogin() const {
     return this->login_;
   };
-  const std::string& GetClass() const {
-    return "Performer";
-  };
+  // const std::string& GetClass() const {
+  //   std::string a = "Performer";
+  //   return a;
+  // };
   const std::string& GetPass() const { // нахай баааля
     return this->password_;
   };

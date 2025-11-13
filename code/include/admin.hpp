@@ -12,8 +12,8 @@ class Customer;
 class Performer;
 class Admin : public User {
  public:
-  Admin(int id, const std::string& login, const std::string& password);
-  Admin(const User& u);
+  Admin(int id, std::string login, std::string password);
+  Admin(User&& u);
 
   void DeleteCustomer(const Customer* c);
   void DeletePerformer(const Performer* p);
