@@ -33,7 +33,7 @@ namespace classes {
   //  PotPerformers.push_back(p);
   //}
 
-  json& Order::ToJson(const Order& o) {
+  json Order::ToJson(const Order& o) {
     std::string status;
     if (o.GetStatus() == OrderStatus::WORK) {
       status = "WORK";

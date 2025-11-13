@@ -6,6 +6,7 @@
 #include "../include/review.hpp"
 #include "/usr/include/nlohmann/json.hpp"
 
+
 using json = nlohmann::json;
 namespace classes {
 
@@ -43,7 +44,8 @@ std::unique_ptr<Admin> Admin::CreateFromJson(const json& j) {
   }
 }
 
-json& Admin::ToJson(const Admin& a) {
+json Admin::ToJson(const Admin& a) {
   json j = {{"id", a.GetId()}, {"login", a.GetLogin()}, {"password", a.GetPass()}};
+  return j;
 }
 }  // namespace classes

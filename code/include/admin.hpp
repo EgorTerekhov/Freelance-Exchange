@@ -2,12 +2,14 @@
 #include <string>
 #include <memory>
 
-#include "/usr/include/nlohmann/json.hpp"
 #include "user.hpp"
-#include "review.hpp"
-#include "database.hpp"
+#include "../nlohmann/json.hpp"
+using json = nlohmann::json;
+
 
 namespace classes {
+class Customer;
+class Performer;
 class Admin : public User {
  public:
   Admin(int id, const std::string& login, const std::string& password);
@@ -22,17 +24,16 @@ class Admin : public User {
   int GetId() const {
     return this->id_;
   };
+  const std::string& GetLogin() const {
+    return this->login_;
+  }
+  const std::string& GetPass() const {
+    return this->password_;
+  }
 
   void ChangeId(int id) {
     id_ = id;
   }
-
-  const std::string& GetLogin() const {
-    return this->login_;
-  };
-  const std::string& GetPass() const {
-    return this->password_;
-  };
 
   static std::unique_ptr<Admin> CreateFromJson(const json& j);
   void LoadFromJson(const json& j);
@@ -40,16 +41,6 @@ class Admin : public User {
 
   static Admin* CreateFromJsonRaw(const nlohmann::json& j);
 
-  int GetId() {
-    return id_;
-  }
-  static json& ToJson(const Admin& a);
-  
-  const std::string& GetLogin() const {
-    return this->login_;
-  }
-  const std::string& GetPass() const {
-    return this->password_;
-  }
+  static json ToJson(const Admin& a);
 };
 }  // namespace classes

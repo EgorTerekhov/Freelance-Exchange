@@ -3,10 +3,11 @@
 #include <memory>
 #include <vector>
 
-#include "/usr/include/nlohmann/json.hpp"
-#include "user.hpp"
+#include "user.hpp";
 #include "order.hpp"
 #include "review.hpp"
+#include "../nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace classes {
 class Performer : public User {
@@ -34,6 +35,9 @@ class Performer : public User {
   const std::string& GetLogin() const {
     return this->login_;
   };
+  const std::string& GetClass() const {
+    return "Performer";
+  };
   const std::string& GetPass() const { // нахай баааля
     return this->password_;
   };
@@ -47,6 +51,9 @@ class Performer : public User {
     return this->phone_;
   };
 
+  json& ToJson(json& j, const Performer& p);
+
+  void DeleteReview(int id);
   // static std::unique_ptr<Performer> FromJson(const json& j);
 };
 }  // namespace classes

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include "../nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace classes {
 class User {
@@ -10,7 +12,7 @@ class User {
   std::string password_;
 
  public:
-  User(int id, std::string login, std::string password){};
+  User(int id, std::string login, std::string password);
   // убрал create profile тк он у всех одинаковый будет и смысла нет в наследовании, а админу он вообще не нужен
   virtual void HandleReview(int id) = 0;
   virtual std::vector<std::string> GetOptions() = 0;  // будем выводить список действий, которые может сделать конкретный класс

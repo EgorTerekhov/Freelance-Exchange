@@ -20,42 +20,42 @@ Performer::Performer(const User& u, const std::string& name,
                      const std::string& email, const std::string& phone, double rate)
     : User(u), name_(name), email_(email), phone_(phone), rate_(rate) {}
 
-std::string Performer::GetClass() {
-    return "Performer";
-}
 
 // Обработка ревью
 void Performer::HandleReview(int id) {
     if (!id) {
         return;
     }
+    Database& db = Database::getInstance();
+    auto& arr = db.GetReviewArr();
+    int iter_search = db.BinSearchDelete(id, arr);
 
     std::string input;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << "Current u_to: " << review->GetUTo() << " | Enter new u_to (or press Enter to keep current): ";
+    std::cout << "Current u_to: " << arr[iter_search]->GetUTo() << " | Enter new u_to (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
         try {
-            review->GetUTo() = std::stoi(input);
+            arr[iter_search]->GetUTo() = std::stoi(input);
         } catch (...) {
             std::cout << "Invalid input for u_to. Keeping current value.\n";
         }
     }
 
-    std::cout << "Current description: " << review->GetDescription()
+    std::cout << "Current description: " << arr[iter_search]->GetDescription()
               << " | Enter new description (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
-        review->GetDescription() = input;
+        arr[iter_search]->GetDescription() = input;
     }
 
-    std::cout << "Current grade: " << review->GetGrade()
+    std::cout << "Current grade: " << arr[iter_search]->GetGrade()
               << " | Enter new grade (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (!input.empty()) {
         try {
-            review->GetGrade() = std::stoi(input);
+            arr[iter_search]->GetGrade() = std::stoi(input);
         } catch (...) {
             std::cout << "Invalid input for grade. Keeping current value.\n";
         }
@@ -64,36 +64,12 @@ void Performer::HandleReview(int id) {
     std::cout << "Review updated successfully!\n";
 }
 
-// Завершение заказа
-void Performer::CompleteOrder(std::shared_ptr<Order>& o) {
-    auto it = std::find(InProgressOrders.begin(), InProgressOrders.end(), o);
-    if (it != InProgressOrders.end()) {
-        InProgressOrders.erase(it);
-        CompleteOrders.push_back(o);
-        o->ChangeStatus(OrderStatus::DONE);
+void Performer::DeleteReview(int id) {
+    if (!id) {
+        throw std::invalid_argument("Id is null!");
     }
-}
-
-// Удаление ревью
-void Performer::DeleteReview(Review* review) {
-    if (!review) {
-        throw std::invalid_argument("Review pointer is null");
-    }
-    Database& db = Database::getInstance();
-    auto& arr = db.GetReviewArr();
-    auto it = std::find_if(arr.begin(), arr.end(), [review](const auto& ptr) { return ptr.get() == review; });
-    if (it != arr.end()) {
-        arr.erase(it);
-    }
-}
-
-// Создание ревью
-void Performer::MakeReview(std::vector<std::unique_ptr<Review>>& all_review,
-                           std::shared_ptr<Order> o, const std::string& descrip) {
-    auto it = std::find(CompleteOrders.begin(), CompleteOrders.end(), o);
-    if (it != CompleteOrders.end()) {
-        all_review.push_back(std::make_unique<Review>(0, this->id_, o->GetCustomer(), o->GetId(), descrip, 0, ReviewStatus::PENDING));
-    }
+    Database& db = Database::getInstance(); 
+    db.DeleteReview(id);
 }
 
 // Преобразование в JSON

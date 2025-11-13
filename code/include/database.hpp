@@ -1,14 +1,14 @@
 #pragma once
 #include <vector>
+#include <algorithm>
+#include <iostream>
 
-#include "/usr/include/nlohmann/json.hpp"
+#include "../nlohmann/json.hpp"
 #include "customer.hpp"
 #include "performer.hpp"
 #include "order.hpp"
 #include "review.hpp"
 #include "admin.hpp"
-#include <algorithm>
-#include <iostream>
 
 using json = nlohmann::json;
 
@@ -21,10 +21,11 @@ class Database {
   static std::vector<std::unique_ptr<Order>> orders_;
   static std::vector<std::unique_ptr<Review>> reviews_;
   static std::vector<std::unique_ptr<Admin>> admins_;
-
-  Database() = default;
   static std::unique_ptr<Database> instance_;
+
+
   ~Database();
+  Database() = default;
   Database(const Database&) = delete;
   Database& operator=(const Database&) = delete;
   Database(Database&&) = delete;
@@ -74,7 +75,10 @@ class Database {
     return reviews_;
   }
   std::unique_ptr<Admin> FromSingleJsonAdmin(const json& j);
-  std::unique_ptr<Admin> FromSingleJsonPerformerCustomer(const json& j);
+  
+  template<typename T>
+  std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j);
+
   void FromJsonAdminPerformerCustomer(const json& j);
   json ToJsonPerformer() const;
   json ToJsonCustomer() const;
@@ -104,4 +108,37 @@ class Database {
   // в json id только растет, нужно для того, чтобы при удалении потом не возникали проблемы с переопределением одного и
   // того же id
 };
+template<class T>
+int Database::BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
+    int l = 0, r = static_cast<int>(vec.size()) - 1;
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+        int current_id = vec[m]->GetId();
+        if (id < current_id) r = m - 1;
+        else if (id > current_id) l = m + 1;
+        else return m;
+    }
+    return -1;
+}
+
+template <typename T>
+std::unique_ptr<T> Database::FromSingleJsonPerformerCustomer(const json& j) {
+  if (j.is_null())
+    return nullptr;
+
+  // Проверка наличия всех ключей
+  if (!j.contains("id") || !j.contains("login") || !j.contains("password") ||
+      !j.contains("name") || !j.contains("email") || !j.contains("phone")) {
+    throw std::invalid_argument("Missing required fields in JSON");
+  }
+
+  return std::make_unique<T>(
+      j["id"].get<int>(),
+      j["login"].get<std::string>(),
+      j["password"].get<std::string>(),
+      j["name"].get<std::string>(),
+      j["email"].get<std::string>(),
+      j["phone"].get<std::string>()
+  );
+}
 }  // namespace classes

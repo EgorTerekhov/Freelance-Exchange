@@ -1,14 +1,12 @@
 #pragma once
 #include <string>
 
-#include "/usr/include/nlohmann/json.hpp"
-#include "customer.hpp"
-#include "performer.hpp"
+#include "../nlohmann/json.hpp"
 
-enum class OrderStatus { WORK, DONE, WAIT, REJECTED };
+using json = nlohmann::json;
 
 namespace classes {
-
+enum class OrderStatus { WORK, DONE, WAIT, REJECTED };
 class Order {
  private:
   int id_;
@@ -80,6 +78,6 @@ class Order {
     performer_id_ = id;
   }
 
-  static json& ToJson(const Order& o);
+  static json ToJson(const Order& o);
 };
 }  // namespace classes

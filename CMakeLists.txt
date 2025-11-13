@@ -11,7 +11,6 @@ add_executable(freelance_exchange
   ./code/src/database.cpp
   ./code/src/order.cpp
   ./code/src/performer.cpp
-  ./code/src/rating.cpp
   ./code/src/review.cpp
   ./code/src/user.cpp
 )

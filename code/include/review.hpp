@@ -1,13 +1,11 @@
 #pragma once
 #include <string>
 
-#include "/usr/include/nlohmann/json.hpp"
-#include "user.hpp"
-#include "order.hpp"
-
-enum class ReviewStatus { PENDING, APPROVED, REJECTED };
+#include "../nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace classes {
+enum class ReviewStatus { PENDING, APPROVED, REJECTED };
 class Review {
   int id_;
   int u_to_;
