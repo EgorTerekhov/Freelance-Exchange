@@ -28,7 +28,7 @@ void Performer::HandleReview(int id) {
     }
     Database& db = Database::getInstance();
     auto& arr = db.GetReviewArr();
-    int iter_search = db.BinSearchDelete(id, arr);
+    size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
 
     std::string input;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

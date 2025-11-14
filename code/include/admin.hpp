@@ -19,7 +19,6 @@ class Admin : public User {
   void DeletePerformer(const Performer* p);
 
   void HandleReview(int id) override;  //для админа это delete review
-  std::vector<std::string> GetOptions() override;
 
   int GetId() const {
     return this->id_;
@@ -38,6 +37,12 @@ class Admin : public User {
   static std::unique_ptr<Admin> CreateFromJson(const json& j);
   void LoadFromJson(const json& j);
   json ToJson() const;
+
+  std::vector<std::string> GetOptions() override {
+    std::vector<std::string> a;
+    a.push_back("");
+    return a;
+  }
 
   static Admin* CreateFromJsonRaw(const nlohmann::json& j);
 

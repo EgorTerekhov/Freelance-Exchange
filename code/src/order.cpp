@@ -1,4 +1,3 @@
-#pragma once
 #include <string>
 
 #include "../include/order.hpp"
@@ -6,8 +5,8 @@
 
 using json = nlohmann::json;
 namespace classes {
-  Order::Order(int id, const std::string& name, double price, const std::string& description, int customer_id, int performer_id, const OrderStatus& status) 
-      : id_(id), name_(name), price_(price), description_(description), customer_id_(customer_id), performer_id_(performer_id), status_(status) {}
+  Order::Order(int id, std::string name, double price, std::string description, int customer_id, int performer_id, OrderStatus status) 
+      : id_(id), name_(std::move(name)), price_(price), description_(std::move(description)), customer_id_(customer_id), performer_id_(performer_id), status_(status) {}
 
   void Order::CompleteOrder() {
     this->status_ = OrderStatus::DONE;
@@ -33,7 +32,7 @@ namespace classes {
   //  PotPerformers.push_back(p);
   //}
 
-  json Order::ToJson(const Order& o) {
+  json Order::ToJson(Order& o) {
     std::string status;
     if (o.GetStatus() == OrderStatus::WORK) {
       status = "WORK";
