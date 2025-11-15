@@ -130,5 +130,16 @@ namespace classes {
       );
     }
     ~Database() = default;
+    
+    User* FindUserByLogin(const std::string& login);
+
+    template<typename T>
+    static T* findUserByLoginAs(const std::string& login) {
+      User* user = findUserByLogin(login);
+      if (user) {
+        return dynamic_cast<T*>(user);
+      }
+      return nullptr;
+    }
   };
 }  // namespace classes

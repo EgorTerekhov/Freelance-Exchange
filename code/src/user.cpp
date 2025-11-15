@@ -7,6 +7,6 @@
 
 using namespace classes;
 
-User::User(int id, std::string login, std::string password)
-    : id_(id), login_(std::move(login)), password_(std::move(password)) {
+User::User(int id, std::string login, std::string password, std::string salt)
+    : id_(id), login_(std::move(login)), password_(std::move(password), salt_(std::move(salt))) {
 }

@@ -189,24 +189,40 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
         CreateAdmin(std::move(admin));
     }
   }
-  else if (type == "performer" && j.contains("performers") && j["performers"].is_array()) {
-    for (const auto& item : j["performers"]) {
-      auto perf = FromSingleJsonPerformerCustomer<Performer>(item);
-      if (perf)
-        CreatePerformer(std::move(perf));
+    else if (type == "performer" && j.contains("performers") && j["performers"].is_array()) {
+      for (const auto& item : j["performers"]) {
+        auto perf = FromSingleJsonPerformerCustomer<Performer>(item);
+        if (perf)
+          CreatePerformer(std::move(perf));
+      }
+    }
+    else if (type == "customer" && j.contains("customers") && j["customers"].is_array()) {
+      for (const auto& item : j["customers"]) {
+        auto cust = FromSingleJsonPerformerCustomer<Customer>(item);
+        if (cust)
+          CreateCustomer(std::move(cust));
+      }
+    }
+    else {
+      throw std::invalid_argument("Unknown type or missing array for type: " + type);
     }
   }
-  else if (type == "customer" && j.contains("customers") && j["customers"].is_array()) {
-    for (const auto& item : j["customers"]) {
-      auto cust = FromSingleJsonPerformerCustomer<Customer>(item);
-      if (cust)
-        CreateCustomer(std::move(cust));
+
+  User* Database::FindUserByLogin(const std::string& login) {
+    for (const auto& customer : customers_) {
+      if (customer->GetLogin() == login) {
+        return customer.get();
+      }
+    }
+    for (const auto& performer : performers_) {
+      if (perfomer->GetLogin() == login) {
+        return perfomer.get();
+      }
+    }
+    for (const auto& admin : admins_) {
+      if (admin->GetLogin() == login) {
+        return admin.get();
+      }
     }
   }
-  else {
-    throw std::invalid_argument("Unknown type or missing array for type: " + type);
-  }
-}
-
-
 }  // namespace classes
