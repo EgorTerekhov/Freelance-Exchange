@@ -9,6 +9,7 @@
 #include "order.hpp"
 #include "review.hpp"
 #include "admin.hpp"
+#include "user.hpp"
 
 using json = nlohmann::json;
 
@@ -37,6 +38,8 @@ namespace classes {
   public:
     //тут короче все методы для создания и удаления сущностей
     static Database& getInstance();
+    static void initialize();
+    static void destroy();
 
     void DeleteCustomer(int id); // binSearchDelete шаблонный поэтому эти можно удалить
     void DeletePerformer(int id);
@@ -45,48 +48,45 @@ namespace classes {
     void DeleteReview(int id);
 
     //void BinSearchFind(int id, std::vector<std::unique_ptr<W>>& vec);
-    void CreateCustomer(std::unique_ptr<Customer>&& c);
-    void CreatePerformer(std::unique_ptr<Performer>&& p);
-    void CreateOrder(std::unique_ptr<Order>&& o);
-    void CreateReview(std::unique_ptr<Review>&& r);
-    void CreateAdmin(std::unique_ptr<Admin>&& a);
+    static void CreateCustomer(std::unique_ptr<Customer>&& c);
+    static void CreatePerformer(std::unique_ptr<Performer>&& p);
+    static void CreateOrder(std::unique_ptr<Order>&& o);
+    static void CreateReview(std::unique_ptr<Review>&& r);
+    static void CreateAdmin(std::unique_ptr<Admin>&& a);
 
-    std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
+    static std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
       return customers_;
     }
-    std::vector<std::unique_ptr<Performer>>& GetPerformerArr() {
+    static std::vector<std::unique_ptr<Performer>>& GetPerformerArr() {
       return performers_;
     }
-    std::vector<std::unique_ptr<Admin>>& GetAdminArr() {
+    static std::vector<std::unique_ptr<Admin>>& GetAdminArr() {
       return admins_;
     }
-    std::vector<std::unique_ptr<Order>>& GetOrderArr() {
+    static std::vector<std::unique_ptr<Order>>& GetOrderArr() {
       return orders_;
     }
-    std::vector<std::unique_ptr<Review>>& GetReviewArr() {
+    static std::vector<std::unique_ptr<Review>>& GetReviewArr() {
       return reviews_;
     }
-    std::unique_ptr<Admin> FromSingleJsonAdmin(const json& j);
+    static std::unique_ptr<Admin> FromSingleJsonAdmin(const json& u);
 
-    void FromJsonAdminPerformerCustomer(const json& j);
-    json ToJsonPerformer() const;
-    json ToJsonCustomer() const;
-    json ToJsonAdmin() const;
-    json ToJsonReview() const;
-    json ToJsonOrder() const;
+    static void FromJsonAdminPerformerCustomer(const json& j);
+    static json ToJsonPerformer();
+    static json ToJsonCustomer();
+    static json ToJsonAdmin();
+    static json ToJsonReview();
+    static json ToJsonOrder();
 
-    template <class G>
-    std::vector<std::unique_ptr<G>> GetArr() {
-    }
     template <class W>
-    json ToJsonPerformerCustomer(json& j, const W& temp) const {
+    static json ToJsonSinglePerformerCustomer(json& j, W& temp) {
       j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()},
           {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
       return j;
     }
 
     template <class T>
-    void SortById(std::vector<std::unique_ptr<T>>& vec) {
+    static void SortById(std::vector<std::unique_ptr<T>>& vec) {
       std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
         if (!a || !b)
           return false;
@@ -97,7 +97,7 @@ namespace classes {
     // в json id только растет, нужно для того, чтобы при удалении потом не возникали проблемы с переопределением одного и
     // того же id
     template<class T>
-    int BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
+    static int BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
         int l = 0, r = static_cast<int>(vec.size()) - 1;
         while (l <= r) {
             int m = l + (r - l) / 2;
@@ -110,12 +110,12 @@ namespace classes {
     }
 
     template <typename T>
-    std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j) {
+    static std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j) {
       if (j.is_null())
         return nullptr;
 
       // Проверка наличия всех ключей
-      if (!j.contains("id") || !j.contains("login") || !j.contains("password") ||
+      if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("salt") ||
           !j.contains("name") || !j.contains("email") || !j.contains("phone")) {
         throw std::invalid_argument("Missing required fields in JSON");
       }
@@ -124,6 +124,7 @@ namespace classes {
           j["id"].get<int>(),
           j["login"].get<std::string>(),
           j["password"].get<std::string>(),
+          j["salt"].get<std::string>(),
           j["name"].get<std::string>(),
           j["email"].get<std::string>(),
           j["phone"].get<std::string>()
@@ -131,11 +132,11 @@ namespace classes {
     }
     ~Database() = default;
     
-    User* FindUserByLogin(const std::string& login);
+    static User* FindUserByLogin(std::string& login);
 
     template<typename T>
-    static T* findUserByLoginAs(const std::string& login) {
-      User* user = findUserByLogin(login);
+    static T* FindUserByLoginAs(std::string& login) {
+      User* user = FindUserByLogin(login);
       if (user) {
         return dynamic_cast<T*>(user);
       }

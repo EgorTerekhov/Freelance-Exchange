@@ -19,5 +19,8 @@ class User {
   virtual void HandleReview(int id) = 0;
   virtual std::vector<std::string> GetOptions() = 0;  // будем выводить список действий, которые может сделать конкретный класс
   virtual ~User() = default;  //виртуальный деструктор для удаления наследников через указатель на юзера.
+  std::string GetSalt() { return salt_; }
+  std::string GetHash() { return password_; }
+  std::string GetLogin() { return login_; }
 };
 }  // namespace classes

@@ -1,7 +1,8 @@
 #include "../include/password.hpp"
 #include "../include/database.hpp"
 
-std::string PasswordAuth::hashPassword(const std::string& password, const std::string& salt) {
+namespace classes {
+  std::string PasswordAuth::hashPassword(const std::string& password, const std::string& salt) {
   std::string data = salt + password;
   unsigned char hash[SHA256_DIGEST_LENGTH];
   
@@ -9,7 +10,7 @@ std::string PasswordAuth::hashPassword(const std::string& password, const std::s
   
   std::stringstream ss;
   for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-    ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
   }
   return ss.str();
 }
@@ -20,7 +21,7 @@ std::string PasswordAuth::generateSalt() {
   
   std::stringstream ss;
   for (int i = 0; i < 16; i++) {
-    ss << std::hex << std::setw(2) << std::setfill('0') << (int)salt[i];
+    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(salt[i]);
   }
   return ss.str();
 }
@@ -30,25 +31,41 @@ bool PasswordAuth::checkPassword(const std::string& password, const std::string&
   return computed_hash == stored_hash;
 }
 
-std::vector<std::string> PasswordAuth::RegUser(std::string& login, std::string& password) {
+std::pair<std::string, std::string> PasswordAuth::RegUser(std::string& login, std::string& password) {
   Database& db = Database::getInstance();
-  std::vector<std::string> vec;
-  if (db.FindUserByLoginAs(login)) {
+  std::pair<std::string, std::string> vec("", "");
+  Admin* ptr_1 = db.FindUserByLoginAs<Admin>(login);
+  if (ptr_1) {
+    return vec;
+  }
+  Performer* ptr_2 = Database::FindUserByLoginAs<Performer>(login);
+  if (ptr_2) {
+    return vec;
+  }
+  Customer* ptr_3 = Database::FindUserByLoginAs<Customer>(login);
+  if (ptr_3) {
     return vec;
   }
   std::string salt = PasswordAuth::generateSalt();
-  std::string hash = PasswordAuth::hashPassword();
-  vec.push_back(login);
-  vec.push_back(hash);
-  vec.push_back(salt);
+  std::string hash = PasswordAuth::hashPassword(password, salt);
+  vec.first = hash;
+  vec.second = salt;
   return vec;
 }
 
 bool PasswordAuth::SignInUser(std::string& login, std::string& password) {
-  Database& db = Database::getInstance();
-  auto* ptr = db.FindUserByLoginAs(login);
-  if (ptr) {
-    return PasswordAuth::checkPassword(password, ptr->GetSalt(), ptr->GetHash());
+  Admin* ptr_1 = Database::FindUserByLoginAs<Admin>(login);
+  if (ptr_1) {
+    return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_1->GetHash());
+  }
+  Performer* ptr_2 = Database::FindUserByLoginAs<Performer>(login);
+  if (ptr_2) {
+    return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_2->GetHash());
+  }
+  Customer* ptr_3 = Database::FindUserByLoginAs<Customer>(login);
+  if (ptr_3) {
+    return PasswordAuth::checkPassword(password, ptr_3->GetSalt(), ptr_3->GetHash());
   }
   return false;
+}
 }

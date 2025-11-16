@@ -4,7 +4,9 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <utility>
 
+namespace classes {
 class PasswordAuth {
  private:
 
@@ -12,13 +14,13 @@ class PasswordAuth {
   
   static std::string generateSalt();
   
-  static bool checkPassword(const std::string& password, const std::string& salt, const std::string& stored_hash) {
-    std::string computed_hash = hashPassword(password, salt);
-    return computed_hash == stored_hash;
-  }
+  static bool checkPassword(const std::string& password, const std::string& salt, const std::string& stored_hash);
 
  public:
+  PasswordAuth() = default;
+  ~PasswordAuth() = default;
   
- static std::vector<std::string> RegUser(std::string& login, std::string& password);
- static bool SignInUser(std::string& login, std::string& password);
+  static std::pair<std::string, std::string> RegUser(std::string& login, std::string& password);
+  static bool SignInUser(std::string& login, std::string& password);
 };
+}

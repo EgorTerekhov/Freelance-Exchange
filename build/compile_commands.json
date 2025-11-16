@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/password.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/password.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/password.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/password.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/main.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/main.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/admin.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/admin.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/customer.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/customer.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/JsonClass.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/JsonClass.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/database.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/database.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/order.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/order.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/performer.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/performer.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/review.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/review.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o"
+},
+{
+  "directory": "/home/vlad/projects/freelance_exchange/build",
+  "command": "/usr/bin/g++  -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17 -o CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/user.cpp",
+  "file": "/home/vlad/projects/freelance_exchange/code/src/user.cpp",
+  "output": "CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o"
+}
+]

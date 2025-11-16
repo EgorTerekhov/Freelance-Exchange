@@ -11,10 +11,10 @@ using json = nlohmann::json;
 
 namespace classes {
 
-Performer::Performer(int id, std::string login, std::string password,
+Performer::Performer(int id, std::string login, std::string password, std::string salt,
                      std::string name, std::string email,
                      std::string phone, double rate)
-    : User(id, std::move(login), std::move(password)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
+    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
 
 Performer::Performer(User&& u, std::string name,
                      std::string email, std::string phone, double rate)

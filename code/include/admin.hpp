@@ -12,7 +12,7 @@ class Customer;
 class Performer;
 class Admin : public User {
  public:
-  Admin(int id, std::string login, std::string password);
+  Admin(int id, std::string login, std::string password, std::string salt);
   Admin(User&& u);
 
   void DeleteCustomer(const Customer* c);

@@ -1,139 +1,174 @@
-// чет тут писать надо, в cpp файлы мб нужно перенести реализацию методов. 
-// в main должны лежать сценарии, как пользоваться кодом и как через командную строку взаимодействовать вообще
 #include <iostream>
+#include <regex>
 #include <string>
-#include <map>
+#include <vector>
+#include <memory>
+#include "../include/database.hpp"
+#include "../include/JsonClass.hpp"
+#include "../include/password.hpp"
 
-void show_help() {
-  std::cout << "Freelance exchange cli application\n";
-  std::cout << "Available commands:\n";
-  std::cout << "help  - show this help\n";
-  std::cout << "options - show you what actions you can perform on the freelance exchange\n"
-  std::cout << "exit  - exit the program\n";
+namespace classes {
+
+bool CheckLogin(const std::string& login) {
+  if (login.empty()) {
+    return false;
+  }
+  std::regex pattern("^[a-z0-9]+$");
+  return std::regex_match(login, pattern);
 }
 
-void SignUp() {
+bool CheckName(const std::string& name) {
+  if (name.empty()) {
+    return false;
+  }
+  std::regex pattern(R"(^[A-Z][a-z]+$)");
+  return std::regex_match(name, pattern);
 }
 
-void SignIn() {
+bool CheckPass(const std::string& pas) {
+  if (pas.empty()) {
+    return false;
+  }
+  std::regex pattern(R"(^[A-Z](?=.+\d)[a-z\d_-]{6,}$)"); //начинается с зглавной, затем минимум 5 символов, обязательно есть цифра (буквы, цифры, _-)
+  return std::regex_match(pas, pattern);
 }
 
-void CheckLoginSignUp() {
+bool CheckEmail(const std::string& email) {
+  if (email.empty()) {
+    return false;
+  }
+  std::regex pattern(R"(^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$)");
+  return std::regex_match(email, pattern);
 }
 
-void CheckPassSignUp() {
+bool CheckPhone(const std::string& phone) {
+  if (phone.empty()) {
+    return false;
+  }
+  std::regex pattern(R"(^(\+7|7|8)?[- ]?\(?[489]\d{2}\)?[- ]?\d{3}[- ]?\d{2}[- ]?\d{2}$)");
+  return std::regex_match(phone, pattern);
 }
 
-void CheckLoginSignIn() {
+
+bool SignUp() { // без админа
+  std::string login;
+  std::string pass;
+  bool exit = false;
+  while (true && !exit) {
+    std::getline(std::cin, login);
+    if (login == "exit") {
+      exit = true;
+      break;
+    }
+    if (login.size() < 10 && login.size() > 3 && CheckLogin(login)) {
+      std::cout << "great login\n";
+      break;
+    } else {
+      std::cout << "error, pleace repeat or exit : " << login << "\n";
+    }
+  }
+  if (exit) {
+    return false;
+  }
+  while (true) {
+    std::getline(std::cin, pass);
+    if (pass == "exit") {
+      exit = true;
+      break;
+    }
+    if (pass.size() > 6 && CheckPass(pass)) {
+      std::cout << "great password \n";
+      break;
+    } else {
+      std::cout << "error, pleace repeat or exit : " << pass << "\n";
+    }
+  }
+  if (exit) {
+    return false;
+  }
+  std::string type;
+  while (true) {
+    std::cout << "who are you (customer, performer) : ";
+    std::getline(std::cin, type);
+    if (type == "exit") {
+      exit = true;
+      break;
+    }
+    if (type == "customer") {
+      break;
+    }
+    if (type == "performer") {
+      break;
+    }
+    std::cout << "unknown type, repeat or exit\n";
+  }
+  if (exit) {
+    return false;
+  }
+  std::string name;
+  while (true) {
+    std::cout << "enter your name : ";
+    std::getline(std::cin, name);
+    if (name == "exit") {
+      exit = true;
+      break;
+    }
+    if (CheckName(name)) {
+      break;
+    }
+    std::cout << "uncorrect name, repeat or print exit\n";
+  }
+  std::string email;
+  while (true) {
+    std::cout << "enter your email : ";
+    std::getline(std::cin, email);
+    if (email == "exit") {
+      exit = true;
+      break;
+    }
+    if (CheckEmail(email)) {
+      break;
+    }
+    std::cout << "uncorrect email, repeat or print exit\n";
+  }
+  if (exit) {
+    return false;
+  }
+  std::string phone;
+  while (true) {
+    std::cout << "enter your email : ";
+    std::getline(std::cin, phone);
+    if (phone == "exit") {
+      exit = true;
+      break;
+    }
+    if (CheckPhone(phone)) {
+      break;
+    }
+    std::cout << "uncorrect phone, repeat or print exit\n";
+  }
+  if (exit) {
+    return false;
+  }
+
+  std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
+  if (type == "customer") {
+    std::vector<std::unique_ptr<Customer>>& cust = Database::GetCustomerArr();
+    cust.emplace_back(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone));
+  } else if (type == "performer") {
+    std::vector<std::unique_ptr<Performer>>& cust = Database::GetPerformerArr();
+    cust.emplace_back(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone));
+  }
+  return true;
 }
 
-void CheckLoginSignUp() {
-}
-
-void CheckName() {
-}
-
-void CheckEmail() {
-}
-
-void CheckExit() {
 }
 
 int main() {
-  // std::cout << "Welcome to freelance_exchange CLI!\n";
-  // std::coit << "sign in or sign up (type 1 or 2): ";
-  // std::string enter;
-  // while (true && enter != "exit") {
-  //   std::getline(std::cin, enter);
-  //   if (enter == "exit") {
-  //     break;
-  //   }
-  //   if (enter == "1") {
-  //     std::cout << "type login and password\n";
-  //     std::string login;
-  //     std::string pass;
-  //     std::cout << "login: ";
-  //     std::getline(std::cin, login);
-  //     std::cout << "pass: ";
-  //     std::getline(std::cin, pass);
-  //     // тут чек функция на существование таких логинов и паролей. Далее получаем все данные по пользователю
-  //   } else if (enter == "2") {
-  //     // нужно делать проверку на корректность символов пароля и логина
-  //     bool continue = true; // нужно, чтоб цикл блокнуть, если где-то exit написали
-  //     std::cout << "type login and password\n";
-  //     std::string login;
-  //     std::string pass;
-  //     std::cout << "login: ";
-  //     std::getline(std::cin, login);
-  //     // if login correct
-  //     std::cout << "pass: ";
-  //     std::getline(std::cin, pass);
-  //     // if pass correct && continue;
-  //     std::cout << "type who are you (performer, customer): ";
-  //     std::string type;
-  //     while (true && continue) {
-  //       std::getline(std::cin, type);
-  //       if (type == "exit") {
-  //         enter = "exit";
-  //         continue = false;
-  //         break;
-  //       }
-  //       if (type == "performer") {
-  //         break;
-  //       } else if (type == "customer") {
-  //         break;
-  //       } else {
-  //         std::cout << "Unknown type: " << type << "\n";
-  //         std::cout << "repeat or type exit to break programm\n";
-  //       }
-  //     }
-  //     if (!continue) {
-  //       enter = "exit";
-  //       break;
-  //     } // возможно часто придется такое писать
-  //     std::cout << "type your name: ";
-  //     std::string name;
-  //     std::getline(std::cin, name);
-  //     // if name correct && continue
-  //     std::cout << "type your email: ";
-  //     std::string email;
-  //     std::getline(std::cin, name);
-  //     // if email correct && continue
-  //     std::cout << "type your phone: ";
-  //     std::string phone;
-  //     std::getline(std::cin, phone);
-  //     // if name correct && continue
-  //   } else {
-  //     std::cout << "Unknown command: " << enter << "\n";
-  //     std::cout << "repeat or type exit to break programm\n";
-  //   }
-  // }
-
-  // if (enter == "exit") {
-  //   return 0;
-  // }
-  // std::cout << "Type 'help' for available commands.\n\n";
-  
-  // std::string input;
-  // while (true) {
-  //     std::cout << "simple_cli> ";
-  //     std::getline(std::cin, input);
-      
-  //     if (input == "hello") {
-  //         std::cout << "hello, user\n";
-  //     }
-  //     else if (input == "help") {
-  //         show_help();
-  //     }
-  //     else if (input == "exit") {
-  //         std::cout << "Goodbye!\n";
-  //         break;
-  //     }
-  //     else if (!input.empty()) {
-  //         std::cout << "Unknown command: " << input << "\n";
-  //         std::cout << "Type 'help' for available commands.\n";
-  //     }
-  // }
-  
+  classes::Database& db = classes::Database::getInstance();
+  db.initialize();
+  std::cout << "Hello, user\n";
+  classes::SignUp();
+  db.destroy();
   return 0;
 }

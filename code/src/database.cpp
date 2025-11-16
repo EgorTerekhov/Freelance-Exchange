@@ -1,4 +1,5 @@
 #include "../include/database.hpp"
+#include "../include/JsonClass.hpp"
 #include "/usr/include/nlohmann/json.hpp"
 #include <algorithm>
 #include <iostream>
@@ -103,38 +104,39 @@ void Database::DeleteAdmin(int id) {
 
 void Database::DeleteReview(int id) {
   int idx = BinSearchDelete(id, reviews_);
-  if (idx != -1)
+  if (idx != -1) {
     reviews_.erase(reviews_.begin() + idx);
+  }
 }
 
 // ====== JSON методы ======
-json Database::ToJsonCustomer() const {
+json Database::ToJsonCustomer() {
   json j;
   json arr = json::array();
   for (const auto& c : customers_) {
     if (c) {
       json k;
-      arr.push_back(ToJsonPerformerCustomer(k, *c));
+      arr.push_back(ToJsonSinglePerformerCustomer(k, *c));
     }
   }
   j["customers"] = arr;
   return j;
 }
 
-json Database::ToJsonPerformer() const {
+json Database::ToJsonPerformer() {
   json j;
   json arr = json::array();
   for (const auto& p : performers_) {
     if (p) {
       json k;
-      arr.push_back(ToJsonPerformerCustomer(k, *p));
+      arr.push_back(ToJsonSinglePerformerCustomer(k, *p));
     }
   }
   j["performers"] = arr;
   return j;
 }
 
-json Database::ToJsonAdmin() const {
+json Database::ToJsonAdmin() {
   json j;
   json arr = json::array();
   for (const auto& a : admins_) {
@@ -145,7 +147,7 @@ json Database::ToJsonAdmin() const {
   return j;
 }
 
-json Database::ToJsonReview() const {
+json Database::ToJsonReview() {
   json j;
   json arr = json::array();
   for (const auto& r : reviews_) {
@@ -156,7 +158,7 @@ json Database::ToJsonReview() const {
   return j;
 }
 
-json Database::ToJsonOrder() const {
+json Database::ToJsonOrder() {
   json j;
   json arr = json::array();
   for (const auto& o : orders_) {
@@ -169,14 +171,23 @@ json Database::ToJsonOrder() const {
 
 // ====== Методы JSON загрузки ======
 std::unique_ptr<Admin> Database::FromSingleJsonAdmin(const json& j) {
-  if (j.is_null())
+  if (j.is_null()) {
     return nullptr;
-  return std::make_unique<Admin>(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>());
+  }
+
+  if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("salt")) {
+    throw std::invalid_argument("Missing required fields in JSON");
+  }
+
+  return std::make_unique<Admin>(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(), j["salt"].get<std::string>());
 }
 
 
 // Общая загрузка Admin/Performer/Customer
 void Database::FromJsonAdminPerformerCustomer(const json& j) {
+  if (j.is_null()) {
+    return;
+  }
   if (!j.contains("type"))
     throw std::invalid_argument("Missing 'type' field");
 
@@ -185,22 +196,25 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
   if (type == "admin" && j.contains("admins") && j["admins"].is_array()) {
     for (const auto& item : j["admins"]) {
       auto admin = FromSingleJsonAdmin(item);
-      if (admin)
+      if (admin) {
         CreateAdmin(std::move(admin));
+      }
     }
   }
     else if (type == "performer" && j.contains("performers") && j["performers"].is_array()) {
       for (const auto& item : j["performers"]) {
         auto perf = FromSingleJsonPerformerCustomer<Performer>(item);
-        if (perf)
+        if (perf) {
           CreatePerformer(std::move(perf));
+        }
       }
     }
     else if (type == "customer" && j.contains("customers") && j["customers"].is_array()) {
       for (const auto& item : j["customers"]) {
         auto cust = FromSingleJsonPerformerCustomer<Customer>(item);
-        if (cust)
+        if (cust) {
           CreateCustomer(std::move(cust));
+        }
       }
     }
     else {
@@ -208,15 +222,15 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     }
   }
 
-  User* Database::FindUserByLogin(const std::string& login) {
+  User* Database::FindUserByLogin(std::string& login) {
     for (const auto& customer : customers_) {
       if (customer->GetLogin() == login) {
         return customer.get();
       }
     }
     for (const auto& performer : performers_) {
-      if (perfomer->GetLogin() == login) {
-        return perfomer.get();
+      if (performer->GetLogin() == login) {
+        return performer.get();
       }
     }
     for (const auto& admin : admins_) {
@@ -224,5 +238,35 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
         return admin.get();
       }
     }
+    return nullptr;
+  }
+
+  void Database::initialize() {
+    Database& db = Database::getInstance();
+    JsonStruct& js = JsonStruct::getInstance();
+    js.initialize();
+    db.FromJsonAdminPerformerCustomer(js.getAdmin());
+    db.FromJsonAdminPerformerCustomer(js.getPerformer());
+    db.FromJsonAdminPerformerCustomer(js.getCustomer());
+    // FromJsonReview
+    // FromJsonOrder
+  }
+
+  void Database::destroy() {
+    Database& db = Database::getInstance();
+    JsonStruct& js = JsonStruct::getInstance();
+    json admin = db.ToJsonAdmin();
+    json performer = db.ToJsonPerformer();
+    json customer = db.ToJsonCustomer();
+    json review = db.ToJsonReview();
+    json order = db.ToJsonOrder();
+    js.setAdmin(admin);
+    js.setPerformer(performer);
+    js.setCustomer(customer);
+    js.setReview(review);
+    js.setOrder(order);
+    js.saveAllToData();
+    instance_.reset();
+    JsonStruct::destroy();
   }
 }  // namespace classes

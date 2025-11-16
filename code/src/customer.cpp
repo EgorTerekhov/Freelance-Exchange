@@ -12,10 +12,10 @@ using json = nlohmann::json;
 
 namespace classes {
 
-Customer::Customer(int id, std::string login, std::string password,
+Customer::Customer(int id, std::string login, std::string password, std::string salt,
                    std::string name, std::string email,
                    std::string phone, double rate)
-    : User(id, std::move(login), std::move(password)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
+    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
 
 Customer::Customer(User&& u, std::string name,
                    std::string email, std::string phone, double rate)

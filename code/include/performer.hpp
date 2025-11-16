@@ -18,7 +18,8 @@ class Performer : public User {
   double rate_;
 
  public:
-  Performer(int id, std::string login, std::string password, std::string name,
+ 
+  Performer(int id, std::string login, std::string password, std::string salt, std::string name,
             std::string email, std::string phone, double rate = 0.0);
 
   Performer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
