@@ -94,41 +94,26 @@ void JsonStruct::saveAllToData() {
 
 void JsonStruct::saveAdmin(const std::string& filename) {
   std::ofstream file(filename);
-  if (file.peek() == std::ifstream::traits_type::eof()) {
-    return;
-  }
   file << admin;
 }
 
 void JsonStruct::saveCustomer(const std::string& filename) {
   std::ofstream file(filename);
-  if (file.peek() == std::ifstream::traits_type::eof()) {
-    return;
-  }
   file << customer;
 }
 
 void JsonStruct::savePerformer(const std::string& filename) {
   std::ofstream file(filename);
-  if (file.peek() == std::ifstream::traits_type::eof()) {
-    return;
-  }
   file << performer;
 }
 
 void JsonStruct::saveReview(const std::string& filename) {
   std::ofstream file(filename);
-  if (file.peek() == std::ifstream::traits_type::eof()) {
-    return;
-  }
   file << review;
 }
 
 void JsonStruct::saveOrder(const std::string& filename) {
   std::ofstream file(filename);
-  if (file.peek() == std::ifstream::traits_type::eof()) {
-    return;
-  }
   file << order;
 }
 }

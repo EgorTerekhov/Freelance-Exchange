@@ -24,14 +24,6 @@ namespace classes {
     this->status_ = OrderStatus::WAIT;
   }
 
-  //void Order::AddPotPerformer(Performer* p) {   //доп.функцинал, реализуем если время будет
-  //  PotPerformers.push_back(p);
- // }
-
-  //void Order::AddMainPerformer(Performer* p) {
-  //  PotPerformers.push_back(p);
-  //}
-
   json Order::ToJson(Order& o) {
     std::string status;
     if (o.GetStatus() == OrderStatus::WORK) {

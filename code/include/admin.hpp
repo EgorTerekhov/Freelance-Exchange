@@ -15,8 +15,8 @@ class Admin : public User {
   Admin(int id, std::string login, std::string password, std::string salt);
   Admin(User&& u);
 
-  void DeleteCustomer(const Customer* c);
-  void DeletePerformer(const Performer* p);
+  void DeleteCustomer(int id); // реализовать
+  void DeletePerformer(int id); // 
 
   void HandleReview(int id) override;  //для админа это delete review
 

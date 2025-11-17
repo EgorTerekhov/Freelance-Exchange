@@ -26,17 +26,13 @@ void Customer::CreateOrder(int id, std::string& name, OrderStatus& status,
                            int customer_id, int performer_id) {
   auto order = std::make_unique<Order>(id, name, price, description, customer_id, performer_id, status);
   Database& db = Database::getInstance();
-  db.GetOrderArr().push_back(std::move(order));
-  db.SortById(db.GetOrderArr());
+  db.CreateOrder(std::move(order));
 }
 
-void Customer::RemoveOrder(int id) {
+void Customer::DeleteOrder(int id) {
   Database& db = Database::getInstance();
   auto& arr = db.GetOrderArr();
-  int id_search = db.BinSearchDelete(id, arr);
-  if (id_search != -1 && arr[static_cast<size_t>(id_search)]->GetStatus() != OrderStatus::DONE) {
-    arr.erase(arr.begin() + id_search);
-  }
+  db.DeleteOrder(id);
 }
 
 void Customer::HandleOrder(int id) {
@@ -161,8 +157,30 @@ void Customer::CreateReview(int id, const int u_to, int order_id, std::string& d
                             ReviewStatus status, int grade) {
   auto review = std::make_unique<Review>(id, this->id_, u_to, order_id, description, grade, status);
   Database& db = Database::getInstance();
-  db.GetReviewArr().push_back(std::move(review));
-  db.SortById(db.GetReviewArr());
+  db.CreateReview(std::move(review));
 }
 
+void Customer::SetPerformerRate(int id, int rate) {
+    Database& db = Database::getInstance();
+    auto& arr = db.GetPerformerArr();
+    size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
+    arr[iter_search]->AddRate(rate);
+}
+
+  double Customer::FindAvgRate() {
+    if (rate_.empty()) {
+      return 0.0;
+    }
+
+    int sum = 0;
+    for (int r : rate_) {
+      sum += r;
+    }
+
+    return static_cast<double>(sum) / rate_.size();
+  }
+
+  double Customer::GetRate(int id) {
+    return this->FindAvgRate();
+  }
 } // namespace classes

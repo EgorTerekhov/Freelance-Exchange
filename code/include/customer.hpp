@@ -16,25 +16,25 @@ class Customer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  double rate_;
+  std::vector<int> rate_;
 
  public:
-  Customer(int id, std::string login, std::string password, std::string salt, std::string name,
-           std::string email, std::string phone, double rate = 0.0);
+  Customer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
+           std::string phone, double rate = 0.0);
   Customer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
 
-  void CreateOrder(int id, std::string& name, OrderStatus& status, double price,
-                           std::string description, int customer_id, int performer_id);
+  void CreateOrder(int id, std::string& name, OrderStatus& status, double price, std::string description,
+                   int customer_id, int performer_id);
 
   void CreateReview(int id, const int u_to, int order_id, std::string& description, ReviewStatus status, int grade);
-  void RemoveOrder(int id);
+  void DeleteOrder(int id);
   void CompleteOrder(int id);
   void WorkOrder(int id);
 
   int GetId() const {
     return this->id_;
   };
-  
+
   void ChangeId(int id) {
     id_ = id;
   }
@@ -44,7 +44,7 @@ class Customer : public User {
     a.push_back("");
     return a;
   }
-  
+
   const std::string& GetLogin() const {
     return this->login_;
   };
@@ -63,5 +63,15 @@ class Customer : public User {
   void HandleReview(int id) override;
 
   void HandleOrder(int id);
+
+  void SetPerformerRate(int id, int rate);
+  
+  double GetRate(int id);
+
+  void AddRate(int rate) {
+    rate_.emplace_back(rate);
+  }
+
+  double FindAvgRate();
 };
 }  // namespace classes

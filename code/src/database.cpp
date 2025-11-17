@@ -109,6 +109,7 @@ void Database::DeleteReview(int id) {
   }
 }
 
+
 // ====== JSON методы ======
 json Database::ToJsonCustomer() {
   json j;

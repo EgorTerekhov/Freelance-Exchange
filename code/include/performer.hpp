@@ -15,12 +15,11 @@ class Performer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  double rate_;
+  std::vector<int> rate_;
 
  public:
- 
-  Performer(int id, std::string login, std::string password, std::string salt, std::string name,
-            std::string email, std::string phone, double rate = 0.0);
+  Performer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
+            std::string phone, double rate = 0.0);
 
   Performer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
 
@@ -44,9 +43,9 @@ class Performer : public User {
   };
   // const std::string& GetClass() const {
   //   std::string a = "Performer";
-  //   return a;
+  //   r  double FindAvgRate();eturn a;
   // };
-  const std::string& GetPass() const { // нахай баааля
+  const std::string& GetPass() const {  // нахай баааля
     return this->password_;
   };
   const std::string& GetName() const {
@@ -61,7 +60,15 @@ class Performer : public User {
 
   json& ToJson(json& j, const Performer& p);
 
-  void DeleteReview(int id);
-  // static std::unique_ptr<Performer> FromJson(const json& j);
+  void SetCustomerRate(int id, int rate);
+  double GetPerformerRate(int id);
+  
+  void AddRate(int rate) {
+    rate_.emplace_back(rate);
+  }
+
+  double GetRate(int id);
+
+  double FindAvgRate();
 };
 }  // namespace classes

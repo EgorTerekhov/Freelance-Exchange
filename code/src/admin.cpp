@@ -15,6 +15,16 @@ Admin::Admin(int id, std::string login, std::string password, std::string salt) 
 Admin::Admin(User&& u) : User(std::move(u)) {
 }
 
+void Admin::DeleteCustomer(int id){
+  Database& db = Database::getInstance();
+  db.DeleteCustomer(id);
+}
+
+void Admin::DeletePerformer(int id){
+  Database& db = Database::getInstance();
+  db.DeletePerformer(id);
+}
+
 void Admin::HandleReview(int id) {  // Удаление отзыва
   Database& db = Database::getInstance();
   auto it = std::find_if(db.reviews_.begin(), db.reviews_.end(), [id](const auto& ptr) { return ptr->GetId() == id; });

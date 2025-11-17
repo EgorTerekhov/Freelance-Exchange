@@ -23,7 +23,7 @@ namespace classes {
 
     void CompleteOrder();
     void RejectOrder();
-    void WorkOrder();  // зачем эти два
+    void WorkOrder();
     void WaitOrder();
 
     void ChangeName(std::string name) {
@@ -70,8 +70,8 @@ namespace classes {
       id_ = id;
     }
 
-    void ChangePerformer(int i) {
-      performer_id_ = i;
+    void ChangePerformer(int id) {
+      performer_id_ = id;
     }
 
     void AddPerformerToOrder(int id) {
