@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include <iomanip>
 
 namespace classes {
 std::unique_ptr<JsonStruct> JsonStruct::instance = nullptr;
@@ -94,26 +95,26 @@ void JsonStruct::saveAllToData() {
 
 void JsonStruct::saveAdmin(const std::string& filename) {
   std::ofstream file(filename);
-  file << admin;
+  file << std::setw(4) << admin;
 }
 
 void JsonStruct::saveCustomer(const std::string& filename) {
   std::ofstream file(filename);
-  file << customer;
+  file << std::setw(4) << customer;
 }
 
 void JsonStruct::savePerformer(const std::string& filename) {
   std::ofstream file(filename);
-  file << performer;
+  file << std::setw(4) << performer;
 }
 
 void JsonStruct::saveReview(const std::string& filename) {
   std::ofstream file(filename);
-  file << review;
+  file << std::setw(4) << review;
 }
 
 void JsonStruct::saveOrder(const std::string& filename) {
   std::ofstream file(filename);
-  file << order;
+  file << std::setw(4) << order;
 }
 }

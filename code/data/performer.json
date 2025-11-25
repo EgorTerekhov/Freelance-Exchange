@@ -1,1 +1,14 @@
-null
+{
+    "performers": [
+        {
+            "email": "egorpi228@mail.ru",
+            "id": 1,
+            "login": "egor",
+            "name": "Egor",
+            "password": "9206ad6355c623b2d780fef67a2d23e6a8d154ed84c8fa46e88364fb859092eb",
+            "phone": "89136751313",
+            "salt": "05c4d68256769f48ced781ebab7f5c73"
+        }
+    ],
+    "type": "performer"
+}

@@ -109,6 +109,7 @@ json Database::ToJsonCustomer() {
   if (arr.empty() || arr.is_null()) {
     return j;
   }
+  j["type"] = "customer";
   j["customers"] = arr;
   return j;
 }
@@ -125,6 +126,7 @@ json Database::ToJsonPerformer() {
   if (arr.empty() || arr.is_null()) {
     return j;
   }
+  j["type"] = "performer";
   j["performers"] = arr;
   return j;
 }
@@ -139,6 +141,7 @@ json Database::ToJsonAdmin() {
   if (arr.empty() || arr.is_null()) {
     return j;
   }
+  j["type"] = "admin";
   j["admins"] = arr;
   return j;
 }
@@ -153,6 +156,7 @@ json Database::ToJsonReview() {
   if (arr.empty() || arr.is_null()) {
     return j;
   }
+  j["type"] = "review";
   j["reviews"] = arr;
   return j;
 }
@@ -167,6 +171,7 @@ json Database::ToJsonOrder() {
   if (arr.empty() || arr.is_null()) {
     return j;
   }
+  j["type"] = "order";
   j["orders"] = arr;
   return j;
 }
@@ -193,6 +198,9 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
   if (!j.contains("type"))
     throw std::invalid_argument("Missing 'type' field");
 
+  if (j.size() == 1) {
+    return;
+  }
   const std::string type = j["type"].get<std::string>();
 
   if (type == "admin" && j.contains("admins") && j["admins"].is_array()) {

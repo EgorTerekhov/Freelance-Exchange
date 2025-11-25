@@ -85,7 +85,7 @@ class Database {
 
   template <class W>
   json ToJsonSinglePerformerCustomer(json& j, W& temp) {
-    j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()},
+    j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()}, {"salt", temp.GetSalt()},
          {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
     return j;
   }
