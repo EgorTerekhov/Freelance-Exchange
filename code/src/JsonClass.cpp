@@ -59,7 +59,7 @@ void JsonStruct::loadOrder(const std::string& filename) {
   if (file.peek() == std::ifstream::traits_type::eof()) {
     return;
   }
-  file >> admin;
+  file >> order;
 }
 
 void JsonStruct::loadReview(const std::string& filename) {
@@ -67,7 +67,7 @@ void JsonStruct::loadReview(const std::string& filename) {
   if (file.peek() == std::ifstream::traits_type::eof()) {
     return;
   }
-  file >> admin;
+  file >> review;
 }
 
 void JsonStruct::loadPerformer(const std::string& filename) {
@@ -75,7 +75,7 @@ void JsonStruct::loadPerformer(const std::string& filename) {
   if (file.peek() == std::ifstream::traits_type::eof()) {
     return;
   }
-  file >> admin;
+  file >> performer;
 }
 
 json& JsonStruct::getAdmin() { return admin; }
@@ -85,11 +85,11 @@ json& JsonStruct::getReview() { return review; }
 json& JsonStruct::getPerformer() { return performer; }
 
 void JsonStruct::saveAllToData() {
-  JsonStruct::saveAdmin();
-  JsonStruct::saveCustomer();
-  JsonStruct::saveOrder();
-  JsonStruct::savePerformer();
-  JsonStruct::saveReview();
+  JsonStruct::saveAdmin("./code/data/admin.json");
+  JsonStruct::saveCustomer("./code/data/customer.json");
+  JsonStruct::saveOrder("./code/data/order.json");
+  JsonStruct::savePerformer("./code/data/performer.json");
+  JsonStruct::saveReview("./code/data/review.json");
 }
 
 void JsonStruct::saveAdmin(const std::string& filename) {

@@ -14,12 +14,20 @@ namespace classes {
 
 Customer::Customer(int id, std::string login, std::string password, std::string salt,
                    std::string name, std::string email,
-                   std::string phone, double rate)
-    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
+                   std::string phone, int rate)
+    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
+      if (rate != 0) {
+        rate_.push_back(rate);
+      }
+    }
 
 Customer::Customer(User&& u, std::string name,
-                   std::string email, std::string phone, double rate)
-    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {}
+                   std::string email, std::string phone, int rate)
+    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
+      if (rate != 0) {
+        rate_.push_back(rate);
+      }
+    } 
 
 void Customer::CreateOrder(int id, std::string& name, OrderStatus& status,
                            double price, std::string description,
@@ -31,7 +39,6 @@ void Customer::CreateOrder(int id, std::string& name, OrderStatus& status,
 
 void Customer::DeleteOrder(int id) {
   Database& db = Database::getInstance();
-  auto& arr = db.GetOrderArr();
   db.DeleteOrder(id);
 }
 
@@ -172,15 +179,15 @@ void Customer::SetPerformerRate(int id, int rate) {
       return 0.0;
     }
 
-    int sum = 0;
+    double sum = 0;
     for (int r : rate_) {
-      sum += r;
+      sum += static_cast<double>(r);
     }
 
-    return static_cast<double>(sum) / rate_.size();
+    return static_cast<double>(sum) / static_cast<double>(rate_.size());
   }
 
-  double Customer::GetRate(int id) {
+  double Customer::GetRate() {
     return this->FindAvgRate();
   }
 } // namespace classes

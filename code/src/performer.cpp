@@ -12,16 +12,22 @@ using json = nlohmann::json;
 namespace classes {
 
 Performer::Performer(int id, std::string login, std::string password, std::string salt, std::string name,
-                     std::string email, std::string phone, double rate)
+                     std::string email, std::string phone, int rate)
     : User(id, std::move(login), std::move(password), std::move(salt))
     , name_(std::move(name))
     , email_(std::move(email))
     , phone_(std::move(phone))
-    , rate_(rate) {
-}
+    , rate_() { 
+      if (rate != 0) {
+        rate_.push_back(rate);
+      }
+  }
 
-Performer::Performer(User&& u, std::string name, std::string email, std::string phone, double rate)
-    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_(rate) {
+Performer::Performer(User&& u, std::string name, std::string email, std::string phone, int rate)
+    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
+      if (rate != 0) {
+        rate_.push_back(rate);
+      }
 }
 
 // Обработка ревью
@@ -79,12 +85,12 @@ double Performer::FindAvgRate() {
     return 0.0;
   }
 
-  int sum = 0;
+  double sum = 0;
   for (int r : rate_) {
-    sum += r;
+    sum += static_cast<double>(r);
   }
 
-  return static_cast<double>(sum) / rate_.size();
+  return sum / static_cast<double>(rate_.size());
 }
 
 void Performer::SetCustomerRate(int id, int rate) {
@@ -94,7 +100,7 @@ void Performer::SetCustomerRate(int id, int rate) {
   arr[iter_search]->AddRate(rate);
 }
 
-  double Performer::GetRate(int id) {
+  double Performer::GetRate() {
     return this->FindAvgRate();
   }
 

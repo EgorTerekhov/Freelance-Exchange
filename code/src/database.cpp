@@ -9,23 +9,9 @@ using json = nlohmann::json;
 namespace classes {
 
 // ====== Статические члены ======
-std::vector<std::unique_ptr<Customer>> Database::customers_;
-std::vector<std::unique_ptr<Performer>> Database::performers_;
-std::vector<std::unique_ptr<Order>> Database::orders_;
-std::vector<std::unique_ptr<Review>> Database::reviews_;
-std::vector<std::unique_ptr<Admin>> Database::admins_;
-std::unique_ptr<Database> Database::instance_ = nullptr;
 int Database::user_id_ = 0;
 int Database::order_id_ = 0;
 int Database::review_id_ = 0;
-
-// ====== Singleton ======
-Database& Database::getInstance() {
-  if (!instance_) {
-    instance_.reset(new Database());
-  }
-  return *instance_;
-}
 
 // ====== Методы создания сущностей ======
 void Database::CreateCustomer(std::unique_ptr<Customer>&& c) {
@@ -120,6 +106,9 @@ json Database::ToJsonCustomer() {
       arr.push_back(ToJsonSinglePerformerCustomer(k, *c));
     }
   }
+  if (arr.empty() || arr.is_null()) {
+    return j;
+  }
   j["customers"] = arr;
   return j;
 }
@@ -133,6 +122,9 @@ json Database::ToJsonPerformer() {
       arr.push_back(ToJsonSinglePerformerCustomer(k, *p));
     }
   }
+  if (arr.empty() || arr.is_null()) {
+    return j;
+  }
   j["performers"] = arr;
   return j;
 }
@@ -143,6 +135,9 @@ json Database::ToJsonAdmin() {
   for (const auto& a : admins_) {
     if (a)
       arr.push_back(Admin::ToJson(*a));
+  }
+  if (arr.empty() || arr.is_null()) {
+    return j;
   }
   j["admins"] = arr;
   return j;
@@ -155,6 +150,9 @@ json Database::ToJsonReview() {
     if (r)
       arr.push_back(Review::ToJson(*r));  // передаём объект
   }
+  if (arr.empty() || arr.is_null()) {
+    return j;
+  }
   j["reviews"] = arr;
   return j;
 }
@@ -166,13 +164,16 @@ json Database::ToJsonOrder() {
     if (o)
       arr.push_back(Order::ToJson(*o));
   }
+  if (arr.empty() || arr.is_null()) {
+    return j;
+  }
   j["orders"] = arr;
   return j;
 }
 
 // ====== Методы JSON загрузки ======
 std::unique_ptr<Admin> Database::FromSingleJsonAdmin(const json& j) {
-  if (j.is_null()) {
+  if (j.is_null() || j.empty()) {
     return nullptr;
   }
 
@@ -186,7 +187,7 @@ std::unique_ptr<Admin> Database::FromSingleJsonAdmin(const json& j) {
 
 // Общая загрузка Admin/Performer/Customer
 void Database::FromJsonAdminPerformerCustomer(const json& j) {
-  if (j.is_null()) {
+  if (j.is_null() || j.empty()) {
     return;
   }
   if (!j.contains("type"))
@@ -267,7 +268,6 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     js.setReview(review);
     js.setOrder(order);
     js.saveAllToData();
-    instance_.reset();
     JsonStruct::destroy();
   }
 }  // namespace classes

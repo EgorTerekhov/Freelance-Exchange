@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 #include "../include/database.hpp"
+#include "../include/customer.hpp"
+#include "../include/performer.hpp"
 #include "../include/JsonClass.hpp"
 #include "../include/password.hpp"
 
@@ -21,7 +23,7 @@ bool CheckName(const std::string& name) {
   if (name.empty()) {
     return false;
   }
-  std::regex pattern(R"(^[A-Z][a-z]+$)");
+  std::regex pattern("^[A-Z][a-z]+[a-z]*$");
   return std::regex_match(name, pattern);
 }
 
@@ -152,12 +154,13 @@ bool SignUp() { // без админа
   }
 
   std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
+  Database& db = Database::getInstance();
   if (type == "customer") {
-    std::vector<std::unique_ptr<Customer>>& cust = Database::GetCustomerArr();
-    cust.emplace_back(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone));
+    std::vector<std::unique_ptr<Customer>>& cust = db.GetCustomerArr();
+    cust.emplace_back(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone, 0));
   } else if (type == "performer") {
-    std::vector<std::unique_ptr<Performer>>& cust = Database::GetPerformerArr();
-    cust.emplace_back(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone));
+    std::vector<std::unique_ptr<Performer>>& cust = db.GetPerformerArr();
+    cust.emplace_back(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone, 0));
   }
   return true;
 }

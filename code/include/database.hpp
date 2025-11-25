@@ -17,12 +17,12 @@ namespace classes {
 class Database {
  private:
   // нужно сортировать по порядку возрастания id каждый раз
-  static std::vector<std::unique_ptr<Customer>> customers_;
-  static std::vector<std::unique_ptr<Performer>> performers_;
-  static std::vector<std::unique_ptr<Order>> orders_;
-  static std::vector<std::unique_ptr<Review>> reviews_;
-  static std::vector<std::unique_ptr<Admin>> admins_;
-  static std::unique_ptr<Database> instance_;
+  std::vector<std::unique_ptr<Customer>> customers_;
+  std::vector<std::unique_ptr<Performer>> performers_;
+  std::vector<std::unique_ptr<Order>> orders_;
+  std::vector<std::unique_ptr<Review>> reviews_;
+  std::vector<std::unique_ptr<Admin>> admins_;
+  std::unique_ptr<Database> instance_;
 
   Database() = default;
   Database(const Database&) = delete;
@@ -37,7 +37,11 @@ class Database {
   // singletone
  public:
   //тут короче все методы для создания и удаления сущностей
-  static Database& getInstance();
+  static Database& getInstance() {
+    static Database instance;
+    return instance;
+  }
+
   static void initialize();
   static void destroy();
 
@@ -48,46 +52,46 @@ class Database {
   void DeleteReview(int id);
 
   // void BinSearchFind(int id, std::vector<std::unique_ptr<W>>& vec);
-  static void CreateCustomer(std::unique_ptr<Customer>&& c);
-  static void CreatePerformer(std::unique_ptr<Performer>&& p);
-  static void CreateOrder(std::unique_ptr<Order>&& o);
-  static void CreateReview(std::unique_ptr<Review>&& r);
-  static void CreateAdmin(std::unique_ptr<Admin>&& a);
+  void CreateCustomer(std::unique_ptr<Customer>&& c);
+  void CreatePerformer(std::unique_ptr<Performer>&& p);
+  void CreateOrder(std::unique_ptr<Order>&& o);
+  void CreateReview(std::unique_ptr<Review>&& r);
+  void CreateAdmin(std::unique_ptr<Admin>&& a);
 
-  static std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
+  std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
     return customers_;
   }
-  static std::vector<std::unique_ptr<Performer>>& GetPerformerArr() {
+  std::vector<std::unique_ptr<Performer>>& GetPerformerArr() {
     return performers_;
   }
-  static std::vector<std::unique_ptr<Admin>>& GetAdminArr() {
+  std::vector<std::unique_ptr<Admin>>& GetAdminArr() {
     return admins_;
   }
-  static std::vector<std::unique_ptr<Order>>& GetOrderArr() {
+  std::vector<std::unique_ptr<Order>>& GetOrderArr() {
     return orders_;
   }
-  static std::vector<std::unique_ptr<Review>>& GetReviewArr() {
+  std::vector<std::unique_ptr<Review>>& GetReviewArr() {
     return reviews_;
   }
-  static std::unique_ptr<Admin> FromSingleJsonAdmin(const json& u);
+  std::unique_ptr<Admin> FromSingleJsonAdmin(const json& u);
 
-  static void FromJsonAdminPerformerCustomer(const json& j);
-  static json ToJsonPerformer();
-  static json ToJsonCustomer();
-  static json ToJsonAdmin();
-  static json ToJsonReview();
-  static json ToJsonOrder();
+  void FromJsonAdminPerformerCustomer(const json& j);
+  json ToJsonPerformer();
+  json ToJsonCustomer();
+  json ToJsonAdmin();
+  json ToJsonReview();
+  json ToJsonOrder();
 
 
   template <class W>
-  static json ToJsonSinglePerformerCustomer(json& j, W& temp) {
+  json ToJsonSinglePerformerCustomer(json& j, W& temp) {
     j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()},
          {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
     return j;
   }
 
   template <class T>
-  static void SortById(std::vector<std::unique_ptr<T>>& vec) {
+  void SortById(std::vector<std::unique_ptr<T>>& vec) {
     std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
       if (!a || !b)
         return false;
@@ -98,7 +102,7 @@ class Database {
   // в json id только растет, нужно для того, чтобы при удалении потом не возникали проблемы с переопределением одного и
   // того же id
   template <class T>
-  static int BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
+  int BinSearchDelete(int id, std::vector<std::unique_ptr<T>>& vec) {
     int l = 0, r = static_cast<int>(vec.size()) - 1;
     while (l <= r) {
       int m = l + (r - l) / 2;
@@ -114,7 +118,7 @@ class Database {
   }
 
   template <typename T>
-  static std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j) {
+  std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j) {
     if (j.is_null())
       return nullptr;
 
@@ -130,10 +134,10 @@ class Database {
   }
   ~Database() = default;
 
-  static User* FindUserByLogin(std::string& login);
+  User* FindUserByLogin(std::string& login);
 
   template <typename T>
-  static T* FindUserByLoginAs(std::string& login) {
+  T* FindUserByLoginAs(std::string& login) {
     User* user = FindUserByLogin(login);
     if (user) {
       return dynamic_cast<T*>(user);

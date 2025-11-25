@@ -38,11 +38,11 @@ std::pair<std::string, std::string> PasswordAuth::RegUser(std::string& login, st
   if (ptr_1) {
     return vec;
   }
-  Performer* ptr_2 = Database::FindUserByLoginAs<Performer>(login);
+  Performer* ptr_2 = db.FindUserByLoginAs<Performer>(login);
   if (ptr_2) {
     return vec;
   }
-  Customer* ptr_3 = Database::FindUserByLoginAs<Customer>(login);
+  Customer* ptr_3 = db.FindUserByLoginAs<Customer>(login);
   if (ptr_3) {
     return vec;
   }
@@ -54,15 +54,16 @@ std::pair<std::string, std::string> PasswordAuth::RegUser(std::string& login, st
 }
 
 bool PasswordAuth::SignInUser(std::string& login, std::string& password) {
-  Admin* ptr_1 = Database::FindUserByLoginAs<Admin>(login);
+  Database& db = Database::getInstance();
+  Admin* ptr_1 = db.FindUserByLoginAs<Admin>(login);
   if (ptr_1) {
     return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_1->GetHash());
   }
-  Performer* ptr_2 = Database::FindUserByLoginAs<Performer>(login);
+  Performer* ptr_2 = db.FindUserByLoginAs<Performer>(login);
   if (ptr_2) {
     return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_2->GetHash());
   }
-  Customer* ptr_3 = Database::FindUserByLoginAs<Customer>(login);
+  Customer* ptr_3 = db.FindUserByLoginAs<Customer>(login);
   if (ptr_3) {
     return PasswordAuth::checkPassword(password, ptr_3->GetSalt(), ptr_3->GetHash());
   }

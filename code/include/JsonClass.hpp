@@ -23,11 +23,11 @@ class JsonStruct {
   static void destroy();
 
   static void LoadFromAllFiles();
-  static void loadAdmin(const std::string& filename = "../data/admin.json");
-  static void loadCustomer(const std::string& filename = "../data/customer.json");
-  static void loadOrder(const std::string& filename = "../data/order.json");
-  static void loadReview(const std::string& filename = "../data/review.json");
-  static void loadPerformer(const std::string& filename = "../data/performer.json");
+  static void loadAdmin(const std::string& filename = "./code/data/admin.json");
+  static void loadCustomer(const std::string& filename = "./code/data/customer.json");
+  static void loadOrder(const std::string& filename = "./code/data/order.json");
+  static void loadReview(const std::string& filename = "./code/data/review.json");
+  static void loadPerformer(const std::string& filename = "./code/data/performer.json");
 
   static json& getAdmin();
   static json& getCustomer();

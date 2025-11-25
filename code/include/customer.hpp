@@ -20,8 +20,8 @@ class Customer : public User {
 
  public:
   Customer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
-           std::string phone, double rate = 0.0);
-  Customer(User&& u, std::string name, std::string email, std::string phone, double rate = 0.0);
+           std::string phone, int rate = 0.0);
+  Customer(User&& u, std::string name, std::string email, std::string phone, int rate = 0.0);
 
   void CreateOrder(int id, std::string& name, OrderStatus& status, double price, std::string description,
                    int customer_id, int performer_id);
@@ -66,7 +66,7 @@ class Customer : public User {
 
   void SetPerformerRate(int id, int rate);
   
-  double GetRate(int id);
+  double GetRate();
 
   void AddRate(int rate) {
     rate_.emplace_back(rate);
