@@ -53,26 +53,35 @@ bool CheckPhone(const std::string& phone) {
 
 
 bool SignUp() { // без админа
+  Database& db = Database::getInstance();
   std::string login;
   std::string pass;
   bool exit = false;
+  std::cout << "имя не должно содержать цифр, оно не должно начичинаться с заглавной буквы и все должно быть на латинице\n";
   while (true && !exit) {
+    std::cout << "enter your name: ";
     std::getline(std::cin, login);
     if (login == "exit") {
       exit = true;
       break;
     }
-    if (login.size() < 10 && login.size() > 3 && CheckLogin(login)) {
+  if (login.size() < 10 && login.size() > 3 && CheckLogin(login)) {
+    if (db.FindUserByLoginAs<Performer>(login) || db.FindUserByLoginAs<Customer>(login) || db.FindUserByLoginAs<Admin>(login)) {
+      std::cout << "такой логин уже есть\n";
+    } else {
       std::cout << "great login\n";
       break;
-    } else {
-      std::cout << "error, pleace repeat or exit : " << login << "\n";
     }
+  } else {
+      std::cout << "error, pleace repeat or exit: " << login << "\n";
+  }
   }
   if (exit) {
     return false;
   }
+  std::cout << "пароль должен начинаться с большой буквы, может содержать символы латиницы и цифр\n";
   while (true) {
+    std::cout << "enter your password : ";
     std::getline(std::cin, pass);
     if (pass == "exit") {
       exit = true;
@@ -108,6 +117,7 @@ bool SignUp() { // без админа
     return false;
   }
   std::string name;
+  std::cout << "имя должно начинаться с большой буквы и буквы только латиницы\n";
   while (true) {
     std::cout << "enter your name : ";
     std::getline(std::cin, name);
@@ -121,6 +131,7 @@ bool SignUp() { // без админа
     std::cout << "uncorrect name, repeat or print exit\n";
   }
   std::string email;
+  std::cout << "имейл должен иметь вид email@chtoto.chtoto\n";
   while (true) {
     std::cout << "enter your email : ";
     std::getline(std::cin, email);
@@ -137,8 +148,9 @@ bool SignUp() { // без админа
     return false;
   }
   std::string phone;
+  std::cout << "только российские номера форматов 89174523333 и тп\n";
   while (true) {
-    std::cout << "enter your email : ";
+    std::cout << "enter your phone : ";
     std::getline(std::cin, phone);
     if (phone == "exit") {
       exit = true;
@@ -154,12 +166,12 @@ bool SignUp() { // без админа
   }
 
   std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
-  Database& db = Database::getInstance();
   if (type == "customer") {
     db.CreateCustomer(std::move(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone, 0)));
   } else if (type == "performer") {
     db.CreatePerformer(std::move(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone, 0)));
   }
+  std::cout << "Вы успешно зарегистрировались\n";
   return true;
 }
 
