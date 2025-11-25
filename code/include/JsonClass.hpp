@@ -10,44 +10,50 @@ class JsonStruct {
   JsonStruct& operator=(const JsonStruct&) = delete;
   JsonStruct(JsonStruct&&) = delete;
   JsonStruct operator=(JsonStruct&&) = delete;
-  static json admin;
-  static json customer;
-  static json order;
-  static json review;
-  static json performer;
-  static std::unique_ptr<JsonStruct> instance;
+  json admin;
+  json customer;
+  json order;
+  json review;
+  json performer;
+  json idjs;
 
  public:
-  static JsonStruct& getInstance();
   static void initialize();
-  static void destroy();
 
-  static void LoadFromAllFiles();
-  static void loadAdmin(const std::string& filename = "./code/data/admin.json");
-  static void loadCustomer(const std::string& filename = "./code/data/customer.json");
-  static void loadOrder(const std::string& filename = "./code/data/order.json");
-  static void loadReview(const std::string& filename = "./code/data/review.json");
-  static void loadPerformer(const std::string& filename = "./code/data/performer.json");
+  static JsonStruct& getInstance() {
+    static JsonStruct instance;
+    return instance;
+  }
 
-  static json& getAdmin();
-  static json& getCustomer();
-  static json& getOrder();
-  static json& getReview();
-  static json& getPerformer();
+  void LoadFromAllFiles();
+  void loadAdmin(const std::string& filename = "./code/data/admin.json");
+  void loadCustomer(const std::string& filename = "./code/data/customer.json");
+  void loadOrder(const std::string& filename = "./code/data/order.json");
+  void loadReview(const std::string& filename = "./code/data/review.json");
+  void loadPerformer(const std::string& filename = "./code/data/performer.json");
+  void LoadMaxId(const std::string& filename = "./code/data/idjs.json");
 
-  static void setAdmin(const json& data) { admin = data; }
-  static void setCustomer(const json& data) { customer = data; }
-  static void setOrder(const json& data) { order = data; }
-  static void setReview(const json& data) { review = data; }
-  static void setPerformer(const json& data) { performer = data; }
+  json& getAdmin();
+  json& getCustomer();
+  json& getOrder();
+  json& getReview();
+  json& getPerformer();
+  json& GetId();
 
+  void setAdmin(const json& data) { admin = data; }
+  void setCustomer(const json& data) { customer = data; }
+  void setOrder(const json& data) { order = data; }
+  void setReview(const json& data) { review = data; }
+  void setPerformer(const json& data) { performer = data; }
+  void setId(int order_id, int user_id, int review_id);
   ~JsonStruct() = default;
 
-  static void saveAllToData();
-  static void saveAdmin(const std::string& filename = "../data/admin.json");
-  static void saveCustomer(const std::string& filename = "../data/customer.json");
-  static void saveOrder(const std::string& filename = "../data/order.json");
-  static void saveReview(const std::string& filename = "../data/review.json");
-  static void savePerformer(const std::string& filename = "../data/performer.json");
+  void saveAllToData();
+  void saveAdmin(const std::string& filename = "./code/data/admin.json");
+  void saveCustomer(const std::string& filename = "./code/data/customer.json");
+  void saveOrder(const std::string& filename = "./code/data/order.json");
+  void saveReview(const std::string& filename = "./code/data/review.json");
+  void savePerformer(const std::string& filename = "./code/data/performer.json");
+  void saveId(const std::string& filename = "./code/data/idjs.json");
 };
 }

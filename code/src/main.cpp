@@ -156,11 +156,9 @@ bool SignUp() { // без админа
   std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
   Database& db = Database::getInstance();
   if (type == "customer") {
-    std::vector<std::unique_ptr<Customer>>& cust = db.GetCustomerArr();
-    cust.emplace_back(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone, 0));
+    db.CreateCustomer(std::move(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone, 0)));
   } else if (type == "performer") {
-    std::vector<std::unique_ptr<Performer>>& cust = db.GetPerformerArr();
-    cust.emplace_back(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone, 0));
+    db.CreatePerformer(std::move(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone, 0)));
   }
   return true;
 }

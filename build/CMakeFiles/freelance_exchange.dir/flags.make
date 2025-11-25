@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann
+CXX_INCLUDES = -I/home/vlad/projects/freelance_exchange/include -I/home/vlad/projects/freelance_exchange/include/nlohmann -I/home/vlad/projects/freelance_exchange/data
 
 CXX_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize=leak -fno-omit-frame-pointer -g3 -Wall -Wextra -pedantic -Wshadow -Wconversion -Wsign-conversion -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference -Wuseless-cast -Wold-style-cast -g3 -ggdb -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize=undefined -fsanitize=leak -fsanitize=bounds-strict -g -std=gnu++17
 

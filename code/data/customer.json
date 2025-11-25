@@ -1,22 +1,13 @@
 {
     "customers": [
         {
-            "email": "asdfkljadd@mail.ru",
-            "id": 2,
+            "email": "asdfsddf@mail.ru",
+            "id": 1,
             "login": "vlad",
             "name": "Vlad",
-            "password": "27959b37d0fca8706c0efaf324701436c10fc052d6b604b83c7afb1a5c66f2b7",
-            "phone": "89171231212",
-            "salt": "d63325860799c5d02116c074cc864fd0"
-        },
-        {
-            "email": "danyalik@mail.ru",
-            "id": 1,
-            "login": "daniil",
-            "name": "Danya",
-            "password": "5f8c8dbccbeaf80488ad620e4437e910ad70d14a8a097549a287d891bc306902",
-            "phone": "89184561313",
-            "salt": "d0f25d536e7848b64673c9dd8b9affd1"
+            "password": "a08b8338ac4b4d7da4dbf8b2bf0ed139f32d4e4e373418fe47d7114789236b7d",
+            "phone": "89384668558",
+            "salt": "ac04647b5be5db299cfa18140ec8178a"
         }
     ],
     "type": "customer"

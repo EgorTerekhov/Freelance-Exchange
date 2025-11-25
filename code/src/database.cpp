@@ -8,21 +8,12 @@ using json = nlohmann::json;
 
 namespace classes {
 
-// ====== Статические члены ======
-int Database::user_id_ = 0;
-int Database::order_id_ = 0;
-int Database::review_id_ = 0;
-
 // ====== Методы создания сущностей ======
 void Database::CreateCustomer(std::unique_ptr<Customer>&& c) {
   c->ChangeId(++user_id_);
   customers_.push_back(std::move(c));
   SortById(customers_);
 }
-//                     ✅
-//✅  ✅    ✅  ✅   ✅  ✅
- // ✅        ✅     ✅✅✅
-//✅  ✅    ✅       ✅  ✅
 
 void Database::CreatePerformer(std::unique_ptr<Performer>&& p) {
   p->ChangeId(++user_id_);
@@ -258,8 +249,18 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     db.FromJsonAdminPerformerCustomer(js.getAdmin());
     db.FromJsonAdminPerformerCustomer(js.getPerformer());
     db.FromJsonAdminPerformerCustomer(js.getCustomer());
+    db.FromJsonId(js.GetId());
     // FromJsonReview
     // FromJsonOrder
+  }
+
+  void Database::FromJsonId(const json& j) {
+    if (j.is_null() || j.empty() || !j.contains("idorder") || !j.contains("iduser") || !j.contains("idreview")) {
+      return;
+    }
+    Database::GetMaxIdOrder() = j["idorder"];
+    Database::GetMaxIdReview() = j["idreview"];
+    Database::GetMaxIdUser() = j["iduser"];
   }
 
   void Database::destroy() {
@@ -275,7 +276,7 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     js.setCustomer(customer);
     js.setReview(review);
     js.setOrder(order);
+    js.setId(db.GetMaxIdOrder(), db.GetMaxIdUser(), db.GetMaxIdReview());
     js.saveAllToData();
-    JsonStruct::destroy();
   }
 }  // namespace classes

@@ -22,6 +22,7 @@ find_package(OpenSSL REQUIRED)
 target_include_directories(freelance_exchange PRIVATE 
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/include/nlohmann
+  ${CMAKE_CURRENT_SOURCE_DIR}/data
 )
 
 target_link_libraries(freelance_exchange OpenSSL::SSL OpenSSL::Crypto)

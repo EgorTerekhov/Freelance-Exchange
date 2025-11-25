@@ -29,9 +29,9 @@ class Database {
   Database& operator=(const Database&) = delete;
   Database(Database&&) = delete;
   Database operator=(Database&&) = delete;
-  static int user_id_;
-  static int order_id_;
-  static int review_id_;
+  int user_id_;
+  int order_id_;
+  int review_id_;
 
   friend class Admin;
   // singletone
@@ -136,6 +136,8 @@ class Database {
 
   User* FindUserByLogin(std::string& login);
 
+  void FromJsonId(const json& j);
+
   template <typename T>
   T* FindUserByLoginAs(std::string& login) {
     User* user = FindUserByLogin(login);
@@ -144,5 +146,10 @@ class Database {
     }
     return nullptr;
   }
+
+
+  int& GetMaxIdOrder() { return order_id_; }
+  int& GetMaxIdReview() { return review_id_; }
+  int& GetMaxIdUser() { return user_id_; }
 };
 }  // namespace classes
