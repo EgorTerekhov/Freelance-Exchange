@@ -1,14 +1,4 @@
 {
-    "customers": [
-        {
-            "email": "asdfsddf@mail.ru",
-            "id": 1,
-            "login": "vlad",
-            "name": "Vlad",
-            "password": "a08b8338ac4b4d7da4dbf8b2bf0ed139f32d4e4e373418fe47d7114789236b7d",
-            "phone": "89384668558",
-            "salt": "ac04647b5be5db299cfa18140ec8178a"
-        }
-    ],
+    "customers": [],
     "type": "customer"
 }

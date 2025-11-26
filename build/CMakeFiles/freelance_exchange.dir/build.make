@@ -83,10 +83,38 @@ CMakeFiles/freelance_exchange.dir/code/src/password.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/freelance_exchange.dir/code/src/password.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vlad/projects/freelance_exchange/code/src/password.cpp -o CMakeFiles/freelance_exchange.dir/code/src/password.cpp.s
 
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o: /home/vlad/projects/freelance_exchange/code/src/cli/SignUp.cpp
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/cli/SignUp.cpp
+
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/vlad/projects/freelance_exchange/code/src/cli/SignUp.cpp > CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.i
+
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vlad/projects/freelance_exchange/code/src/cli/SignUp.cpp -o CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.s
+
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o: /home/vlad/projects/freelance_exchange/code/src/cli/SignIn.cpp
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/cli/SignIn.cpp
+
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/vlad/projects/freelance_exchange/code/src/cli/SignIn.cpp > CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.i
+
+CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vlad/projects/freelance_exchange/code/src/cli/SignIn.cpp -o CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.s
+
 CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: /home/vlad/projects/freelance_exchange/code/src/main.cpp
 CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/main.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/main.cpp.i: cmake_force
@@ -100,7 +128,7 @@ CMakeFiles/freelance_exchange.dir/code/src/main.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o: /home/vlad/projects/freelance_exchange/code/src/admin.cpp
 CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/admin.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.i: cmake_force
@@ -114,7 +142,7 @@ CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o: /home/vlad/projects/freelance_exchange/code/src/customer.cpp
 CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/customer.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.i: cmake_force
@@ -128,7 +156,7 @@ CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o: /home/vlad/projects/freelance_exchange/code/src/JsonClass.cpp
 CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/JsonClass.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.i: cmake_force
@@ -142,7 +170,7 @@ CMakeFiles/freelance_exchange.dir/code/src/JsonClass.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o: /home/vlad/projects/freelance_exchange/code/src/database.cpp
 CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/database.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/database.cpp.i: cmake_force
@@ -156,7 +184,7 @@ CMakeFiles/freelance_exchange.dir/code/src/database.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o: /home/vlad/projects/freelance_exchange/code/src/order.cpp
 CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/order.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/order.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/order.cpp.i: cmake_force
@@ -170,7 +198,7 @@ CMakeFiles/freelance_exchange.dir/code/src/order.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o: /home/vlad/projects/freelance_exchange/code/src/performer.cpp
 CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/performer.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.i: cmake_force
@@ -184,7 +212,7 @@ CMakeFiles/freelance_exchange.dir/code/src/performer.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o: /home/vlad/projects/freelance_exchange/code/src/review.cpp
 CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/review.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/review.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/review.cpp.i: cmake_force
@@ -198,7 +226,7 @@ CMakeFiles/freelance_exchange.dir/code/src/review.cpp.s: cmake_force
 CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o: CMakeFiles/freelance_exchange.dir/flags.make
 CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o: /home/vlad/projects/freelance_exchange/code/src/user.cpp
 CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o: CMakeFiles/freelance_exchange.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o -MF CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o.d -o CMakeFiles/freelance_exchange.dir/code/src/user.cpp.o -c /home/vlad/projects/freelance_exchange/code/src/user.cpp
 
 CMakeFiles/freelance_exchange.dir/code/src/user.cpp.i: cmake_force
@@ -212,6 +240,8 @@ CMakeFiles/freelance_exchange.dir/code/src/user.cpp.s: cmake_force
 # Object files for target freelance_exchange
 freelance_exchange_OBJECTS = \
 "CMakeFiles/freelance_exchange.dir/code/src/password.cpp.o" \
+"CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o" \
+"CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o" \
 "CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o" \
 "CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o" \
 "CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o" \
@@ -226,6 +256,8 @@ freelance_exchange_OBJECTS = \
 freelance_exchange_EXTERNAL_OBJECTS =
 
 freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/password.cpp.o
+freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o
+freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o
 freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o
 freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o
 freelance_exchange: CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o
@@ -239,7 +271,7 @@ freelance_exchange: CMakeFiles/freelance_exchange.dir/build.make
 freelance_exchange: /usr/lib/x86_64-linux-gnu/libssl.so
 freelance_exchange: /usr/lib/x86_64-linux-gnu/libcrypto.so
 freelance_exchange: CMakeFiles/freelance_exchange.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable freelance_exchange"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/vlad/projects/freelance_exchange/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable freelance_exchange"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/freelance_exchange.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

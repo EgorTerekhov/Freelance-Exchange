@@ -309,9 +309,8 @@ CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: \
  /home/vlad/projects/freelance_exchange/code/src/../include/order.hpp \
  /home/vlad/projects/freelance_exchange/code/src/../include/performer.hpp \
  /home/vlad/projects/freelance_exchange/code/src/../include/admin.hpp \
- /home/vlad/projects/freelance_exchange/code/src/../include/JsonClass.hpp \
- /home/vlad/projects/freelance_exchange/code/src/../include/./nlohmann/json.hpp \
- /home/vlad/projects/freelance_exchange/code/src/../include/password.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/SignUp.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/../password.hpp \
  /usr/include/openssl/sha.h /usr/include/openssl/macros.h \
  /usr/include/x86_64-linux-gnu/openssl/opensslconf.h \
  /usr/include/x86_64-linux-gnu/openssl/configuration.h \
@@ -336,4 +335,7 @@ CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: \
  /usr/include/openssl/bn.h /usr/include/openssl/bnerr.h \
  /usr/include/openssl/objects.h /usr/include/openssl/obj_mac.h \
  /usr/include/openssl/asn1.h /usr/include/openssl/asn1err.h \
- /usr/include/openssl/objectserr.h
+ /usr/include/openssl/objectserr.h \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/SignIn.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/JsonClass.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/./nlohmann/json.hpp

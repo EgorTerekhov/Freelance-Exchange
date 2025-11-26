@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(freelance_exchange
   ./code/src/password.cpp
+  ./code/src/cli/SignUp.cpp
+  ./code/src/cli/SignIn.cpp
   ./code/src/main.cpp
   ./code/src/admin.cpp
   ./code/src/customer.cpp
@@ -21,6 +23,7 @@ find_package(OpenSSL REQUIRED)
 
 target_include_directories(freelance_exchange PRIVATE 
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/cli
   ${CMAKE_CURRENT_SOURCE_DIR}/include/nlohmann
   ${CMAKE_CURRENT_SOURCE_DIR}/data
 )

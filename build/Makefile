@@ -177,6 +177,54 @@ code/src/admin.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.s
 .PHONY : code/src/admin.cpp.s
 
+code/src/cli/SignIn.o: code/src/cli/SignIn.cpp.o
+.PHONY : code/src/cli/SignIn.o
+
+# target to build an object file
+code/src/cli/SignIn.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o
+.PHONY : code/src/cli/SignIn.cpp.o
+
+code/src/cli/SignIn.i: code/src/cli/SignIn.cpp.i
+.PHONY : code/src/cli/SignIn.i
+
+# target to preprocess a source file
+code/src/cli/SignIn.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.i
+.PHONY : code/src/cli/SignIn.cpp.i
+
+code/src/cli/SignIn.s: code/src/cli/SignIn.cpp.s
+.PHONY : code/src/cli/SignIn.s
+
+# target to generate assembly for a file
+code/src/cli/SignIn.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.s
+.PHONY : code/src/cli/SignIn.cpp.s
+
+code/src/cli/SignUp.o: code/src/cli/SignUp.cpp.o
+.PHONY : code/src/cli/SignUp.o
+
+# target to build an object file
+code/src/cli/SignUp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o
+.PHONY : code/src/cli/SignUp.cpp.o
+
+code/src/cli/SignUp.i: code/src/cli/SignUp.cpp.i
+.PHONY : code/src/cli/SignUp.i
+
+# target to preprocess a source file
+code/src/cli/SignUp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.i
+.PHONY : code/src/cli/SignUp.cpp.i
+
+code/src/cli/SignUp.s: code/src/cli/SignUp.cpp.s
+.PHONY : code/src/cli/SignUp.s
+
+# target to generate assembly for a file
+code/src/cli/SignUp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.s
+.PHONY : code/src/cli/SignUp.cpp.s
+
 code/src/customer.o: code/src/customer.cpp.o
 .PHONY : code/src/customer.o
 
@@ -384,6 +432,12 @@ help:
 	@echo "... code/src/admin.o"
 	@echo "... code/src/admin.i"
 	@echo "... code/src/admin.s"
+	@echo "... code/src/cli/SignIn.o"
+	@echo "... code/src/cli/SignIn.i"
+	@echo "... code/src/cli/SignIn.s"
+	@echo "... code/src/cli/SignUp.o"
+	@echo "... code/src/cli/SignUp.i"
+	@echo "... code/src/cli/SignUp.s"
 	@echo "... code/src/customer.o"
 	@echo "... code/src/customer.i"
 	@echo "... code/src/customer.s"
