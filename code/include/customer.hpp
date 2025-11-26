@@ -39,12 +39,6 @@ class Customer : public User {
     id_ = id;
   }
 
-  std::vector<std::string> GetOptions() override {
-    std::vector<std::string> a;
-    a.push_back("");
-    return a;
-  }
-
   const std::string& GetLogin() const {
     return this->login_;
   };

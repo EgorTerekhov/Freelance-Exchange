@@ -5,8 +5,8 @@
 
 using json = nlohmann::json;
 namespace classes {
-  Order::Order(int id, std::string name, double price, std::string description, int customer_id, int performer_id, OrderStatus status) 
-      : id_(id), name_(std::move(name)), price_(price), description_(std::move(description)), customer_id_(customer_id), performer_id_(performer_id), status_(status) {}
+  Order::Order(int id, std::string name, double price, std::string description, int customer_id, int performer_id, OrderStatus status, std::vector<int> potential_performers) 
+      : id_(id), name_(std::move(name)), price_(price), description_(std::move(description)), customer_id_(customer_id), performer_id_(performer_id), status_(status),  potential_performers_(potential_performers){}
 
   void Order::CompleteOrder() {
     this->status_ = OrderStatus::DONE;

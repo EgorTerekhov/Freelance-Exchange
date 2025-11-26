@@ -38,12 +38,6 @@ class Admin : public User {
   void LoadFromJson(const json& j);
   json ToJson() const;
 
-  std::vector<std::string> GetOptions() override {
-    std::vector<std::string> a;
-    a.push_back("");
-    return a;
-  }
-
   static Admin* CreateFromJsonRaw(const nlohmann::json& j);
 
   static json ToJson(const Admin& a);

@@ -16,10 +16,11 @@ namespace classes {
     int customer_id_;
     int performer_id_;  //пока его никто не взял, это поле будет nullptr
     OrderStatus status_;
+    std::vector<int> potential_performers_;
 
   public:
     Order(int id, std::string name, double price, std::string description, int customer_id,
-          int performer_id, OrderStatus status = OrderStatus::WAIT);
+          int performer_id, OrderStatus status = OrderStatus::WAIT, std::vector<int> potential_performers_ = std::vector<int>());
 
     void CompleteOrder();
     void RejectOrder();
@@ -66,6 +67,11 @@ namespace classes {
     int& GetCustomerId() {
       return this->customer_id_;
     };
+
+    std::vector<int>& Getarrperformer() {
+      return this->potential_performers_;
+    }
+    
     void ChangeId(int id) {
       id_ = id;
     }

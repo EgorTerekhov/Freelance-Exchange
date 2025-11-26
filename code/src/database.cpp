@@ -279,4 +279,18 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     js.setId(db.GetMaxIdOrder(), db.GetMaxIdUser(), db.GetMaxIdReview());
     js.saveAllToData();
   }
+
+  Order* Database::FindOrder(int id_customer, int id_performer) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    auto it = std::find_if(orders.begin(), orders.end(), 
+          [id_customer, id_performer](const std::unique_ptr<Order>& o) {
+            return (o->GetCustomer() == id_customer && o->GetPerformer() == id_performer);
+    });
+    if (it != orders.end()) {
+      Order* found_order = it->get();
+      return found_order;
+    }
+    return nullptr;
+  }
 }  // namespace classes

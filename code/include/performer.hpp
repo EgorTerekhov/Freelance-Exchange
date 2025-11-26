@@ -29,12 +29,6 @@ class Performer : public User {
 
   void HandleReview(int id) override;
 
-  std::vector<std::string> GetOptions() override {
-    std::vector<std::string> a;
-    a.push_back("");
-    return a;
-  }
-
   int GetId() const {
     return id_;
   };

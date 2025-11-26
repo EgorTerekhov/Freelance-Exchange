@@ -147,7 +147,7 @@ class Database {
     return nullptr;
   }
 
-
+  Order* FindOrder(int id_customer, int id_performer);
   int& GetMaxIdOrder() { return order_id_; }
   int& GetMaxIdReview() { return review_id_; }
   int& GetMaxIdUser() { return user_id_; }

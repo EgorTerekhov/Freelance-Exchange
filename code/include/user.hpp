@@ -17,7 +17,6 @@ class User {
   User(int id, std::string login, std::string password, std::string salt);
   // убрал create profile тк он у всех одинаковый будет и смысла нет в наследовании, а админу он вообще не нужен
   virtual void HandleReview(int id) = 0;
-  virtual std::vector<std::string> GetOptions() = 0;  // будем выводить список действий, которые может сделать конкретный класс
   virtual ~User() = default;  //виртуальный деструктор для удаления наследников через указатель на юзера.
   std::string GetSalt() { return salt_; }
   std::string GetHash() { return password_; }
