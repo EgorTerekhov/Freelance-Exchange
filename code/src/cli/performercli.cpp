@@ -1,7 +1,5 @@
 #include "../../include/cli/performercli.hpp"
 
-// не написана функцию account
-// не написана функция AllUsersPerformerCli
 namespace classes {
   void show_help() {
     std::cout << "Freelance exchange cli application for performer" << std::endl;
@@ -10,19 +8,27 @@ namespace classes {
     std::cout << "orders - работа с заказами:" << std::endl;
     std::cout << "rate - оценка customer" << std::endl;
     std::cout << "account - описание вашего аккаунта" << std::endl;
-    std::cout << "allcustomers - выведет всех заказчиков с их id и ролью" << std::endl;
+    std::cout << "allcustomers - выведет всех заказчиков с их id" << std::endl;
     std::cout << "exit  - выйти из программы" << std::endl;
   }
 
-
-  void AccountPerformerCli() {
-
+  void AccountPerformerCli(Performer* p) {
+    std::cout << "Ваши данные" << std::endl;
+    std::cout << "Логин: " << p->GetLogin() << std::endl;
+    std::cout << "Имя: " << p->GetName() << std::endl;
+    std::cout << "Email: " << p->GetEmail() << std::endl;
+    std::cout << "Телефон: " << p->GetPhone() << std::endl;
+    std::cout << "Рейтинг: " << p->GetRate() << std::endl;  
   }
+
   void AllCustomersPerformerCli() {
-
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Customer>>& customers = db.GetCustomerArr();
+    for (const auto& c : customers) {
+      std::cout << "Логин: " << c->GetLogin() << " id: " << c->GetId() << std::endl;
+    }
   }
 
-  
   bool PerformerOrders(Perfomer* p) {
     std::cout << "Вам доступны следующие функции: " << std::endl;
     std::cout << "work orders - покажет над какими заказами вы работаете" << std::endl;
@@ -82,11 +88,11 @@ namespace classes {
     for (const auto& order : orders) {
       if (order.GetStatus() == OrderStatus::WORK && order.GetPerformer() == p->GetId()) {
         ++i;
-        std::cout << "id заказа : " << order.GetId() << std::endl;
-        std::cout << "название : " << order.GetName() << std::endl;
-        std::cout << "цена : " << order.GetPrice() << std::endl;
-        std::cout << "описание : " << order.GetDescription() << std::endl;
-        std::cout << "id заказчика : " << order.GetCustomer() << std::endl;
+        std::cout << "id заказа : " << order->GetId() << std::endl;
+        std::cout << "название : " << order->GetName() << std::endl;
+        std::cout << "цена : " << order->GetPrice() << std::endl;
+        std::cout << "описание : " << order->GetDescription() << std::endl;
+        std::cout << "id заказчика : " << order->GetCustomer() << std::endl;
         std::cout << std::endl;
       }
     }
@@ -97,7 +103,7 @@ namespace classes {
 
   void AllOrdersPerformerCli() {
     Database& db = Database::getInstance();
-    std::vector<std::unique_ptr<Performer>>& orders = db.GetOrderArr();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     if (orders.empty()) {
       std::cout << "Заказов нет" << std::endl;
       return;

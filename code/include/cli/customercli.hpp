@@ -13,9 +13,15 @@ namespace classes {
   bool customercli(Customer* c);
   bool customerOrders(Customer* c);
   bool createOrderCustomerCli(Customer* c);
-  void AllOrdersCustomerCli();
   void AllPerformersCustomerCli();
-  void AccountCustomerCli();
+  void AccountCustomerCli(Customer* c);
   bool RateCustomerCli(Customer* c);
   void ReviewCustomerCli(Customer* c);
+  bool ChoisePerformertoOrder(int id_order, int id_performer, int cust_id);
+  bool HandleOrderCustomerCli(Customer* c);
+  void WorkOrderCustomerCli(Customer* c);
+  void WaitOrderCustomerCli(Customer* c);
+  void DoneOrderCustomerCli(Customer* c);
+  void CompeteOrderCustomerCli(Customer* c, ind id_order);
+  void PotentialPerformersCustomerCli(Customer* c, int order_id);
 }

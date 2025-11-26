@@ -58,10 +58,8 @@ namespace classes {
     std::string& GetDescription() {
       return this->description_;
     };
-    int GetCustomer() {
-      return this->customer_id_;
-    };
-    int& GetPerformer() {
+
+    int& GetPerformerId() {
       return this->performer_id_;
     };
     int& GetCustomerId() {
@@ -71,16 +69,12 @@ namespace classes {
     std::vector<int>& Getarrperformer() {
       return this->potential_performers_;
     }
-    
+
     void ChangeId(int id) {
       id_ = id;
     }
 
     void ChangePerformer(int id) {
-      performer_id_ = id;
-    }
-
-    void AddPerformerToOrder(int id) {
       performer_id_ = id;
     }
 

@@ -1,6 +1,16 @@
 #include "../../include/cli/customercli.hpp"
-
+// надо добавить механику, что как только заказчик закрывает заказ, то он сразу отзыв пишет, либо нужно в выводе всех done orders выписывать, был ли сделан review
+// также нужно как-то проверять, был ли сделан отзыв или нет. Если сделан отзыв по какому-то конкретному заказу, то больше нельзя делать.
 namespace classes {
+
+  bool CheckNameOrder(std::string& tmp) {
+    if (tmp.empty()) {
+      return false;
+    }
+    std::regex pattern("^[A-Z][a-z]+[a-z]*$");
+    return std::regex_match(tmp, pattern);
+  }
+
   void show_help() {
     std::cout << "Freelance exchange cli application for customer" << std::endl;
     std::cout << "Available commands:" << std::endl;
@@ -13,34 +23,332 @@ namespace classes {
     std::cout << "exit  - выйти из программы" << std::endl;
   }
 
-  bool createOrderCustomerCli(Customer* c) {
-
-  }
-
   void AllPerformersCustomerCli() {
-
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Performer>>& performers = db.GetPerformerArr();
+    for (const auto& p : performers) {
+      std::cout << "Логин: " << p->GetLogin() << " id: " << p->GetId() << std::endl;
+    }
   }
 
-  void AccountCustomerCli() {
-    
+  void AccountCustomerCli(Customer* c) {
+    std::cout << "Ваши данные" << std::endl;
+    std::cout << "Логин: " << c->GetLogin() << std::endl;
+    std::cout << "Имя: " << c->GetName() << std::endl;
+    std::cout << "Email: " << c->GetEmail() << std::endl;
+    std::cout << "Телефон: " << c->GetPhone() << std::endl;
+    std::cout << "Рейтинг: " << c->GetRate() << std::endl;  
   }
 
   void ReviewCustomerCli(Customer* c) {
 
   }
 
-  bool RateCustomerCli(Customer* c) {
-
+  bool RateCustomerCli(Customer* c, int id_performer) {
+    // тут нужно организовать сложную механику с показом всех сделанных отзывов и тп, также как в customerOrders
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    // можно искать с помощью std::find_if
+    for (const auto& order : orders) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::DONE) {
+        int id_perf = order->GetPerformerId();
+        c->SetPerformerRate(id_perf, )
+      }
+    }
   }
 
-  void AllOrdersCustomerCli() {
+  void ChoisePerformertoOrder(int id_order, int id_performer, int cust_id) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Performer>> performers = db.GetPerformerArr();
+    std::vector<std::unique_ptr<Order>> orders = db.GetOrderArr();
+    int perf_id = db.BinSearchDelete(id_performer, performers);
+    int ord_id = db.BinSearchDelete(id_order, orders);
+    if (perf_id == -1) {
+      std::cout << "performer с таким id не существует" << std::endl;
+      return false;
+    }
+    if (ord_id == -1) {
+      std::cout << "order с таким id не существует" << std::endl;
+      return false;
+    }
+    if (orders[ord_id]->GetCustomerId() != cust_id) {
+      std::cout << "это не ваш заказ" << std::endl;
+      return false;
+    }
+    if (orders[ord_id]->GetStatus() != OrderStatus::WAIT) {
+      std::cout << "заказ уже находится в работе";
+      return false;
+    }
+    orders[ord_id]->ChangePerformer(id_performer);
+    orders[ord_id]->ChangeStatus(OrderStatus::WORK);
+    return true;
+  }
 
+  bool createOrderCustomerCli(Customer* c) {
+    std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
+    std::string name;
+    Database& db = Database::getInstance();
+    while (true && name != "exit" && name != "stop") {
+      std::cout << "введите название заказа: ";
+      std::getline(std::cin, mame);
+      if (!CheckNameOrder(name)) {
+        std::cout << "неправильный формат, название должно начинаться с большой буквы и содержать только буквы кириллицы" << std::endl;
+      }
+    }
+    if (name == "stop") {
+      return true;
+    }
+    if (name == "exit") {
+      return false;
+    }
+    double price;
+    std::string price_str;
+    while (true && price != "exit" && price != "stop") {
+      std::cout << "Введите цену за заказ: ";
+      std::getline(std::cin, price_str);
+      std::regex pattern(R"(^\d+$)");
+      if (price_str == "exit" || price_str == "stop") {
+        break;
+      }
+      if (std::regex_match(price, pattern)) {
+        price = std::stod(price_str);
+        break;
+      } else {
+        std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
+      }
+    }
+    if (name == "stop") {
+      return true;
+    }
+    if (name == "exit") {
+      return false;
+    }
+    std::string description;
+    while (true && description != "exit" && description != "stop") {
+      std::cout << "Введите описание заказа : ";
+      std::getline(std::cin, description);
+      break;
+    }
+    if (description == "stop") {
+      return true;
+    }
+    if (description == "exit") {
+      return false;
+    }
+    int customer_id = 0;
+    int performer_id = 0;
+    std::string customer_id_str;
+    std::string performer_id_str;
+    while (true && customer_id_str != "exit" && customer_id_str != "stop" && performer_id_str != "exit" && performer_id_str != "stop") {
+      std::cout << "Введите customer id : ";
+      std::getline(std::cin, customer_id_str);
+      if (customer_id_str == "exit" || customer_id_str == "stop") {
+        break;
+      }
+      std::regex pattern(R"(^\d+$)");
+      if (!std::regex_match(customer_id_str, pattern)) {
+        std::cout << "ввод customer id должен состоять только из одного числа" << std::endl;
+        continue;
+      }
+      std::cout << "Введите performer id : ";
+      std::getline(std::cin, performer_id_str);
+      if (performer_id_str == "exit" || performer_id_str == "stop") {
+        break;
+      }
+      if (!std::regex_match(customer_id_str, pattern)) {
+        std::cout << "ввод performer id должен состоять только из одного числа" << std::endl;
+        continue;
+      }
+      customer_id = std::stoi(customer_id_str);
+      performer_id = std::stoi(performer_id_str);
+      int c = db.BinSearchDelete<Customer>(customer_id, std::vector<std::unique_ptr<Customer>>& db.GetCustomerArr());
+      int p = db.BinSearchDelete<Performer>(customer_id, std::vector<std::unique_ptr<Performer>>& db.GetPerformerArr());
+      if (c == -1) {
+        std::cout << "customer с таким id не существует" << std::endl;
+      } else if (p == -1) {
+        std::cout << "performer с таким id не существует" << std::endl;
+      }
+    }
+    if (customer_id_str == "stop" || performer_id_str == "stop") {
+      return true;
+    }
+    if (customer_id_str == "exit" || performer_id_str == "exit") {
+      return false;
+    }
+    c->CreateOrder(1, name, OrderStatus::WAIT, price, description, customer_id, performer_id);
+    return true;
+  }
+
+  bool HandleOrderCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
+    int order_id = 0;
+    std::string order_id_str;
+    while (true &&) order_id_str != "exit" && order_id_str != "stop") {
+      std::cout << "Введите order id : ";
+      std::getline(std::cin, order_id_str);
+      std::regex pattern(R"(^\d+$)");
+      if (!std::regex_match(order_id_str, pattern)) {
+        std::cout << "Некорректно введен id, повторите попытку" << std::endl;
+        continue;
+      }
+      order_id = std::stoi(order_id_str);
+      c->HandleOrder(order_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
+    }
+  }
+
+  void WorkOrderCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    int i = 0;
+    for (const auto& order : orders) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::WORK) {
+        ++i;
+        std::cout << "id заказа : " << order->GetId() << std::endl;
+        std::cout << "название : " << order.GetName() << std::endl;
+        std::cout << "цена : " << order.GetPrice() << std::endl;
+        std::cout << "описание : " << order.GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << std::endl;
+      }
+    }
+    if (i = 0) {
+      std::cout << "заказов в работе нет" << std::endl;
+    }
+  }
+
+  void WaitOrderCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    int i = 0;
+    for (const auto& order : orders) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::WAIT) {
+        ++i;
+        std::cout << "id заказа : " << order->GetId() << std::endl;
+        std::cout << "название : " << order.GetName() << std::endl;
+        std::cout << "цена : " << order.GetPrice() << std::endl;
+        std::cout << "описание : " << order.GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << std::endl;
+      }
+    }
+    if (i = 0) {
+      std::cout << "заказов в ожидании нет" << std::endl;
+    }
+  }
+
+  void DoneOrderCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    int i = 0;
+    for (const auto& order : orders) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::DONE) {
+        ++i;
+        std::cout << "id заказа : " << order->GetId() << std::endl;
+        std::cout << "название : " << order.GetName() << std::endl;
+        std::cout << "цена : " << order.GetPrice() << std::endl;
+        std::cout << "описание : " << order.GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << std::endl;
+      }
+    }
+    if (i = 0) {
+      std::cout << "завершенных заказов нет" << std::endl;
+    }
+  }
+  void PotentialPerformersCustomerCli(Customer* c, int order_id) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    int order_id = db.BinSearchDelete<Order>(order_id, orders);
+    if (order_id == -1) {
+      std::cout << "Заказа с таким id не существует" << std::endl;
+      return;
+    }
+    if (orders[order_id]->GetCustomerId != c->GetId()) {
+      std::cout << "Этот заказ вам не принадлежит" << std::endl;
+    }
+    std::vector<std::unique_ptr<Performer>>& performers = db.GetPerformerArr();
+    for (const auto& performer : orders[order_id]->Getarrperformer()) {
+      int performer_id = db.BinSearchDelete<Performer>(performer, performers);
+      if (performer_id != -1) {
+        std::cout << performers[performer_id]->GetId() << " - " << performers[performer_id]->GetLogin() << std::endl;
+      }
+    }
+  }
+
+  void CompeteOrderCustomerCli(Customer* c, ind id_order) {
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    int order_id = db.BinSearchDelete<Order>(order_id, orders);
+    if (order_id == -1) {
+      std::cout << "Заказа с таким id не существует" << std::endl;
+      return;
+    }
+    if (orders[order_id]->GetCustomerId != c->GetId()) {
+      std::cout << "Этот заказ вам не принадлежит" << std::endl;
+    }
+    orders[order_id]->ChangeStatus(OrderStatus::DONE);
+    std::cout << "Вы успешно поменяли статус" << std::endl;
   }
 
   bool customerOrders(Customer* c) {
-
+    std::cout << "Вам доступны следующие функции: " << std::endl;
+    std::cout << "create order - сможете в этой функции создать заказ" << std::endl;
+    std::cout << "handle order - сможете изменить содержание заказов, которые еще не в работе" << std::endl;
+    std::cout << "work orders - покажет над какими вашими заказами уже работают" << std::endl;
+    std::cout << "complete order \"id\" - завершить заказ с определенным id" << std::endl;
+    std::cout << "wait orders - покажет какие заказы вы создали, но над которыми еще не работают" << std::endl;
+    std::cout << "done orders - завершенные заказы, которые вы создавали" << std::endl;
+    std::cout << "potential performers to \"id\" - покажет потенциальных performer на заказ" << std::endl;
+    std::cout << "choise \"id_performer\" to \"id_order\" - выбрать для проекта определенного performer, после этого проект считается в работе" << std::endl;
+    std::string enter;
+    while (true && enter != "stop" && enter != "exit") {
+      std::getline(std::cin, enter);
+      if (enter == "create order") {
+        bool what = createOrderCustomerCli(c);
+        if (!what) {
+          enter = "exit";
+          break;
+        }
+      } else if (enter == "handle order") {
+        bool what = HandleOrderCustomerCli(c);
+        if (!what) {
+          enter = "exit";
+          break;
+        }
+      } else if (enter == "work orders") {
+        WorkOrderCustomerCli(c);
+      } else if (enter == "wait orders") {
+        WaitOrderCustomerCli(c);
+      } else if (std::regex_match(enter, std::regex(R"(choise \d+ to \d+)"))) {
+        std::regex pattern(R"(choise (\d+) to (\d+))");
+        std::smatch matches;
+        if (std::regex_search(enter, matches, pattern) && matches.size() == 3) {
+          int id_performer = std::stoi(matches[1].str());
+          int id_order = std::stoi(matches[2].str());
+          ChoisePerformertoOrder(id_order, id_performer, c->GetId());
+      } else if (std::regex_match(enter, std::regex(R"(potential performers to \d+)"))) {
+        std::regex pattern(R"(potential performers to (\d+))");
+        std::smatch matches;
+        if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
+          int id_order = std::stoi(matches[1].str());
+          PotentialPerformersCustomerCli(c, id_order);
+        }
+      } else if (enter == "done orders") {
+        DoneOrderCustomerCli(c);
+      } else if (std::regex_match(enter, std::regex(R"(complete order \d+)"))) {
+        td::regex pattern(R"(complete order (\d+))");
+        std::smatch matches;
+        if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
+          int id_order = std::stoi(matches[1].str());
+          CompeteOrderCustomerCli(c, id_order);
+        }
+      } else {
+        std::cout << "Неверный вход" << std::endl;
+      }
+      }
+    }
   }
-
+  
   bool customercli(Customer* c) {
     std::cout << "Здравствуй customer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
     std::string enter;

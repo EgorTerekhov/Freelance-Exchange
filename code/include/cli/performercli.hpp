@@ -15,7 +15,7 @@ namespace classes {
   void WorkOrdersPerformerCli(Perfomer* p);
   void AllOrdersPerformerCli();
   void workOnOrder(int id_order, int id_performer);
-  void AllUsersPerformerCli();
-  void AccountPerformerCli();
+  void AllCustomersPerformerCli();
+  void AccountPerformerCli(Performer* p);
   bool RatePerformerCli(Performer* p);
 }
