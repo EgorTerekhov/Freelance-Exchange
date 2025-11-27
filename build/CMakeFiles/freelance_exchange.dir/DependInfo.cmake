@@ -12,6 +12,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/vlad/projects/freelance_exchange/code/src/admin.cpp" "CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/admin.cpp.o.d"
   "/home/vlad/projects/freelance_exchange/code/src/cli/SignIn.cpp" "CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/cli/SignIn.cpp.o.d"
   "/home/vlad/projects/freelance_exchange/code/src/cli/SignUp.cpp" "CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.o.d"
+  "/home/vlad/projects/freelance_exchange/code/src/cli/customercli.cpp" "CMakeFiles/freelance_exchange.dir/code/src/cli/customercli.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/cli/customercli.cpp.o.d"
+  "/home/vlad/projects/freelance_exchange/code/src/cli/performercli.cpp" "CMakeFiles/freelance_exchange.dir/code/src/cli/performercli.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/cli/performercli.cpp.o.d"
   "/home/vlad/projects/freelance_exchange/code/src/customer.cpp" "CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/customer.cpp.o.d"
   "/home/vlad/projects/freelance_exchange/code/src/database.cpp" "CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/database.cpp.o.d"
   "/home/vlad/projects/freelance_exchange/code/src/main.cpp" "CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o" "gcc" "CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o.d"

@@ -19,7 +19,7 @@ json& Review::ToJson(const Review& r) {
        {"u_from", r.u_from_},
        {"order_id", r.order_id_},
        {"description", r.description_},
-       {"grade", r.grade_},
+       {"grade", r.grade_}};
 
   return j;
 }

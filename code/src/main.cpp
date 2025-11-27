@@ -53,15 +53,11 @@ int main() {
 
   classes::Performer* p = db.FindUserByLoginAs<classes::Performer>(login);
   classes::Customer* c = db.FindUserByLoginAs<classes::Customer>(login);
-  classes::Admin* a = db.FindUserByLoginAs<classes::Admin>(login);
   if (p) {
     classes::performercli(p);
   }
   if (c) {
     classes::customercli(c);
-  }
-  if (a) {
-    classes::admincli(a);
   }
   db.destroy();
   return 0;

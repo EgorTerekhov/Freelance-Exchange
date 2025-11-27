@@ -61,7 +61,7 @@ bool PasswordAuth::SignInUser(std::string& login, std::string& password) {
   }
   Performer* ptr_2 = db.FindUserByLoginAs<Performer>(login);
   if (ptr_2) {
-    return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_2->GetHash());
+    return PasswordAuth::checkPassword(password, ptr_2->GetSalt(), ptr_2->GetHash());
   }
   Customer* ptr_3 = db.FindUserByLoginAs<Customer>(login);
   if (ptr_3) {

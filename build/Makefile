@@ -225,6 +225,54 @@ code/src/cli/SignUp.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/SignUp.cpp.s
 .PHONY : code/src/cli/SignUp.cpp.s
 
+code/src/cli/customercli.o: code/src/cli/customercli.cpp.o
+.PHONY : code/src/cli/customercli.o
+
+# target to build an object file
+code/src/cli/customercli.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/customercli.cpp.o
+.PHONY : code/src/cli/customercli.cpp.o
+
+code/src/cli/customercli.i: code/src/cli/customercli.cpp.i
+.PHONY : code/src/cli/customercli.i
+
+# target to preprocess a source file
+code/src/cli/customercli.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/customercli.cpp.i
+.PHONY : code/src/cli/customercli.cpp.i
+
+code/src/cli/customercli.s: code/src/cli/customercli.cpp.s
+.PHONY : code/src/cli/customercli.s
+
+# target to generate assembly for a file
+code/src/cli/customercli.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/customercli.cpp.s
+.PHONY : code/src/cli/customercli.cpp.s
+
+code/src/cli/performercli.o: code/src/cli/performercli.cpp.o
+.PHONY : code/src/cli/performercli.o
+
+# target to build an object file
+code/src/cli/performercli.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/performercli.cpp.o
+.PHONY : code/src/cli/performercli.cpp.o
+
+code/src/cli/performercli.i: code/src/cli/performercli.cpp.i
+.PHONY : code/src/cli/performercli.i
+
+# target to preprocess a source file
+code/src/cli/performercli.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/performercli.cpp.i
+.PHONY : code/src/cli/performercli.cpp.i
+
+code/src/cli/performercli.s: code/src/cli/performercli.cpp.s
+.PHONY : code/src/cli/performercli.s
+
+# target to generate assembly for a file
+code/src/cli/performercli.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/freelance_exchange.dir/build.make CMakeFiles/freelance_exchange.dir/code/src/cli/performercli.cpp.s
+.PHONY : code/src/cli/performercli.cpp.s
+
 code/src/customer.o: code/src/customer.cpp.o
 .PHONY : code/src/customer.o
 
@@ -438,6 +486,12 @@ help:
 	@echo "... code/src/cli/SignUp.o"
 	@echo "... code/src/cli/SignUp.i"
 	@echo "... code/src/cli/SignUp.s"
+	@echo "... code/src/cli/customercli.o"
+	@echo "... code/src/cli/customercli.i"
+	@echo "... code/src/cli/customercli.s"
+	@echo "... code/src/cli/performercli.o"
+	@echo "... code/src/cli/performercli.i"
+	@echo "... code/src/cli/performercli.s"
 	@echo "... code/src/customer.o"
 	@echo "... code/src/customer.i"
 	@echo "... code/src/customer.s"

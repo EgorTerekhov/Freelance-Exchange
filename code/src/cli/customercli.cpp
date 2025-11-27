@@ -9,7 +9,7 @@ namespace classes {
     return std::regex_match(tmp, pattern);
   }
 
-  void show_help() {
+  void show_help_customer() {
     std::cout << "Freelance exchange cli application for customer" << std::endl;
     std::cout << "Available commands:" << std::endl;
     std::cout << "help  - show this help" << std::endl;
@@ -41,14 +41,13 @@ namespace classes {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Review>>& reviews = db.GetReviewArr();
     for (const auto& review : reviews) {
-      if (review->GetUFrom() == c->GetId() && review->GetStatus() != ReviewStatus::REJECTED) {
+      if (review->GetUFrom() == c->GetId()) {
         std::cout << "id review : " << review->GetId() << std::endl;
         std::cout << "id_from : " << review->GetUFrom() << std::endl;
         std::cout << "id_to : " << review->GetUTo() << std::endl;
         std::cout << "order_id : " << review->GetOrderId() << std::endl;
         std::cout << "description : " << review->GetDescription() << std::endl;
         std::cout << "grade : " << review->GetGrade() << std::endl;
-        std::cout << "status : " << to_string_reviewstatus(review->GetStatus()) << std::endl;
         std::cout << std::endl;
       }
     }
@@ -71,17 +70,17 @@ namespace classes {
       std::cout << "Это не ваш заказ" << std::endl;
       return true;
     }
-    int id_to_str = 0;
+    int id_to = 0;
     std::string id_to_str;
-    while (true && price != "exit" && price != "stop") {
+    while (true && id_to_str != "exit" && id_to_str != "stop") {
       std::cout << "Введите цену за заказ: ";
-      std::getline(std::cin, price_str);
+      std::getline(std::cin, id_to_str);
       std::regex pattern(R"(^\d+$)");
-      if (price_str == "exit" || price_str == "stop") {
+      if (id_to_str == "exit" || id_to_str == "stop") {
         break;
       }
-      if (std::regex_match(price, pattern)) {
-        price = std::stoi(price_str);
+      if (std::regex_match(id_to_str, pattern)) {
+        id_to = std::stoi(id_to_str);
         break;
       } else {
         std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
@@ -125,7 +124,7 @@ namespace classes {
         std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
       }
     }
-    c->CreateReview(1, id_to_str, order_id, description, grade);
+    c->CreateReview(1, id_to, order_id, description, grade);
     return true;
   }
 
@@ -146,7 +145,7 @@ namespace classes {
         std::smatch matches;
         if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
           int id_order = std::stoi(matches[1].str());
-          bool what = createReviewCustomerCli(c, order_id);
+          bool what = createReviewCustomerCli(c, id_order);
           if (!what) {
             enter = "exit";
             break;
@@ -168,17 +167,17 @@ namespace classes {
     return false;
   }
 
-  void ChoisePerformertoOrder(int id_order, int id_performer, int cust_id) {
+  bool ChoisePerformertoOrder(int id_order, int id_performer, int cust_id) {
     Database& db = Database::getInstance();
-    std::vector<std::unique_ptr<Performer>> performers = db.GetPerformerArr();
-    std::vector<std::unique_ptr<Order>> orders = db.GetOrderArr();
+    std::vector<std::unique_ptr<Performer>>& performers = db.GetPerformerArr();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     int perf_id = db.BinSearchDelete(id_performer, performers);
-    int ord_id = db.BinSearchDelete(id_order, orders);
+    size_t ord_id = static_cast<size_t>(db.BinSearchDelete(id_order, orders));
     if (perf_id == -1) {
       std::cout << "performer с таким id не существует" << std::endl;
       return false;
     }
-    if (ord_id == -1) {
+    if (ord_id == static_cast<size_t>(-1)) {
       std::cout << "order с таким id не существует" << std::endl;
       return false;
     }
@@ -198,13 +197,13 @@ namespace classes {
   bool createOrderCustomerCli(Customer* c) {
     std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
     std::string name;
-    Database& db = Database::getInstance();
     while (true && name != "exit" && name != "stop") {
       std::cout << "введите название заказа: ";
-      std::getline(std::cin, mame);
+      std::getline(std::cin, name);
       if (!CheckNameOrder(name)) {
-        std::cout << "неправильный формат, название должно начинаться с большой буквы и содержать только буквы кириллицы" << std::endl;
+        std::cout << "неправильный формат, название должно начинаться с большой буквы и содержать только буквы латиницы" << std::endl;
       }
+      break;
     }
     if (name == "stop") {
       return true;
@@ -214,14 +213,14 @@ namespace classes {
     }
     double price;
     std::string price_str;
-    while (true && price != "exit" && price != "stop") {
+    while (true && price_str != "exit" && price_str != "stop") {
       std::cout << "Введите цену за заказ: ";
       std::getline(std::cin, price_str);
       std::regex pattern(R"(^\d+$)");
       if (price_str == "exit" || price_str == "stop") {
         break;
       }
-      if (std::regex_match(price, pattern)) {
+      if (std::regex_match(price_str, pattern)) {
         price = std::stod(price_str);
         break;
       } else {
@@ -246,55 +245,15 @@ namespace classes {
     if (description == "exit") {
       return false;
     }
-    int customer_id = 0;
-    int performer_id = 0;
-    std::string customer_id_str;
-    std::string performer_id_str;
-    while (true && customer_id_str != "exit" && customer_id_str != "stop" && performer_id_str != "exit" && performer_id_str != "stop") {
-      std::cout << "Введите customer id : ";
-      std::getline(std::cin, customer_id_str);
-      if (customer_id_str == "exit" || customer_id_str == "stop") {
-        break;
-      }
-      std::regex pattern(R"(^\d+$)");
-      if (!std::regex_match(customer_id_str, pattern)) {
-        std::cout << "ввод customer id должен состоять только из одного числа" << std::endl;
-        continue;
-      }
-      std::cout << "Введите performer id : ";
-      std::getline(std::cin, performer_id_str);
-      if (performer_id_str == "exit" || performer_id_str == "stop") {
-        break;
-      }
-      if (!std::regex_match(customer_id_str, pattern)) {
-        std::cout << "ввод performer id должен состоять только из одного числа" << std::endl;
-        continue;
-      }
-      customer_id = std::stoi(customer_id_str);
-      performer_id = std::stoi(performer_id_str);
-      int c = db.BinSearchDelete<Customer>(customer_id, std::vector<std::unique_ptr<Customer>>& db.GetCustomerArr());
-      int p = db.BinSearchDelete<Performer>(customer_id, std::vector<std::unique_ptr<Performer>>& db.GetPerformerArr());
-      if (c == -1) {
-        std::cout << "customer с таким id не существует" << std::endl;
-      } else if (p == -1) {
-        std::cout << "performer с таким id не существует" << std::endl;
-      }
-    }
-    if (customer_id_str == "stop" || performer_id_str == "stop") {
-      return true;
-    }
-    if (customer_id_str == "exit" || performer_id_str == "exit") {
-      return false;
-    }
-    c->CreateOrder(1, name, OrderStatus::WAIT, price, description, customer_id, performer_id);
+    OrderStatus status = OrderStatus::WAIT;
+    c->CreateOrder(1, name, status, price, description, c->GetId(), -1);
     return true;
   }
 
   bool HandleOrderCustomerCli(Customer* c) {
-    Database& db = Database::getInstance();
     int order_id = 0;
     std::string order_id_str;
-    while (true &&) order_id_str != "exit" && order_id_str != "stop") {
+    while (true && order_id_str != "exit" && order_id_str != "stop") {
       std::cout << "Введите order id : ";
       std::getline(std::cin, order_id_str);
       std::regex pattern(R"(^\d+$)");
@@ -316,17 +275,17 @@ namespace classes {
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     int i = 0;
     for (const auto& order : orders) {
-      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::WORK) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus() == OrderStatus::WORK) {
         ++i;
         std::cout << "id заказа : " << order->GetId() << std::endl;
-        std::cout << "название : " << order.GetName() << std::endl;
-        std::cout << "цена : " << order.GetPrice() << std::endl;
-        std::cout << "описание : " << order.GetDescription() << std::endl;
-        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << "название : " << order->GetName() << std::endl;
+        std::cout << "цена : " << order->GetPrice() << std::endl;
+        std::cout << "описание : " << order->GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformerId() << std::endl;
         std::cout << std::endl;
       }
     }
-    if (i = 0) {
+    if (i == 0) {
       std::cout << "заказов в работе нет" << std::endl;
     }
   }
@@ -336,17 +295,17 @@ namespace classes {
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     int i = 0;
     for (const auto& order : orders) {
-      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::WAIT) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus() == OrderStatus::WAIT) {
         ++i;
         std::cout << "id заказа : " << order->GetId() << std::endl;
-        std::cout << "название : " << order.GetName() << std::endl;
-        std::cout << "цена : " << order.GetPrice() << std::endl;
-        std::cout << "описание : " << order.GetDescription() << std::endl;
-        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << "название : " << order->GetName() << std::endl;
+        std::cout << "цена : " << order->GetPrice() << std::endl;
+        std::cout << "описание : " << order->GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformerId() << std::endl;
         std::cout << std::endl;
       }
     }
-    if (i = 0) {
+    if (i == 0) {
       std::cout << "заказов в ожидании нет" << std::endl;
     }
   }
@@ -356,45 +315,44 @@ namespace classes {
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     int i = 0;
     for (const auto& order : orders) {
-      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::DONE) {
+      if (order->GetCustomerId() == c->GetId() && order->GetStatus() == OrderStatus::DONE) {
         ++i;
         std::cout << "id заказа : " << order->GetId() << std::endl;
-        std::cout << "название : " << order.GetName() << std::endl;
-        std::cout << "цена : " << order.GetPrice() << std::endl;
-        std::cout << "описание : " << order.GetDescription() << std::endl;
-        std::cout << "id исполнителя : " <<  order->GetPerformer() << std::endl;
+        std::cout << "название : " << order->GetName() << std::endl;
+        std::cout << "цена : " << order->GetPrice() << std::endl;
+        std::cout << "описание : " << order->GetDescription() << std::endl;
+        std::cout << "id исполнителя : " <<  order->GetPerformerId() << std::endl;
         std::cout << std::endl;
       }
     }
-    if (i = 0) {
+    if (i == 0) {
       std::cout << "завершенных заказов нет" << std::endl;
     }
   }
   void PotentialPerformersCustomerCli(Customer* c, int order_id) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
-    int order_id = db.BinSearchDelete<Order>(order_id, orders);
-    if (order_id == -1) {
+    size_t id = static_cast<size_t>(db.BinSearchDelete<Order>(order_id, orders));
+    if (id == static_cast<size_t>(-1)) {
       std::cout << "Заказа с таким id не существует" << std::endl;
       return;
     }
-    if (orders[order_id]->GetCustomerId != c->GetId()) {
+    if (orders[id]->GetCustomerId() != c->GetId()) {
       std::cout << "Этот заказ вам не принадлежит" << std::endl;
     }
     std::vector<std::unique_ptr<Performer>>& performers = db.GetPerformerArr();
-    for (const auto& performer : orders[order_id]->Getarrperformer()) {
-      int performer_id = db.BinSearchDelete<Performer>(performer, performers);
-      if (performer_id != -1) {
+    for (const auto& performer : orders[id]->Getarrperformer()) {
+      size_t performer_id = static_cast<size_t>(db.BinSearchDelete<Performer>(performer, performers));
+      if (performer_id != static_cast<size_t>(-1)) {
         std::cout << performers[performer_id]->GetId() << " - " << performers[performer_id]->GetLogin() << std::endl;
       }
     }
   }
 
   bool HandleReviewCustomerCli(Customer* c) {
-    Database& db = Database::getInstance();
     int review_id = 0;
     std::string review_id_str;
-    while (true &&) review_id_str != "exit" && review_id_str != "stop") {
+    while (true && review_id_str != "exit" && review_id_str != "stop") {
       std::cout << "Введите review id : ";
       std::getline(std::cin, review_id_str);
       std::regex pattern(R"(^\d+$)");
@@ -403,28 +361,27 @@ namespace classes {
         continue;
       }
       review_id = std::stoi(review_id_str);
-      c->HandleReview(order_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
+      c->HandleReview(review_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
       return true;
     }
     if (review_id_str == "exit") {
       return false;
     }
-    if (review_id_str == "stop") {
-      return true;
-    }
+    return true;
   }
-  void CompeteOrderCustomerCli(Customer* c, ind id_order) {
+
+  void CompeteOrderCustomerCli(Customer* c, int id_order) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
-    int order_id = db.BinSearchDelete<Order>(order_id, orders);
-    if (order_id == -1) {
+    size_t id = static_cast<size_t>(db.BinSearchDelete<Order>(id_order, orders));
+    if (id == static_cast<size_t>(-1)) {
       std::cout << "Заказа с таким id не существует" << std::endl;
       return;
     }
-    if (orders[order_id]->GetCustomerId != c->GetId()) {
+    if (orders[id]->GetCustomerId() != c->GetId()) {
       std::cout << "Этот заказ вам не принадлежит" << std::endl;
     }
-    orders[order_id]->ChangeStatus(OrderStatus::DONE);
+    orders[id]->ChangeStatus(OrderStatus::DONE);
     std::cout << "Вы успешно поменяли статус" << std::endl;
   }
 
@@ -440,6 +397,7 @@ namespace classes {
     std::cout << "choise \"id_performer\" to \"id_order\" - выбрать для проекта определенного performer, после этого проект считается в работе" << std::endl;
     std::string enter;
     while (true && enter != "stop" && enter != "exit") {
+      std::cout << "Введите команду: ";
       std::getline(std::cin, enter);
       if (enter == "create order") {
         bool what = createOrderCustomerCli(c);
@@ -464,30 +422,34 @@ namespace classes {
           int id_performer = std::stoi(matches[1].str());
           int id_order = std::stoi(matches[2].str());
           ChoisePerformertoOrder(id_order, id_performer, c->GetId());
+        }
       } else if (std::regex_match(enter, std::regex(R"(potential performers to \d+)"))) {
-        std::regex pattern(R"(potential performers to (\d+))");
-        std::smatch matches;
-        if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
-          int id_order = std::stoi(matches[1].str());
+        std::regex pattern_(R"(potential performers to (\d+))");
+        std::smatch matches_;
+        if (std::regex_search(enter, matches_, pattern_) && matches_.size() == 2) {
+          int id_order = std::stoi(matches_[1].str());
           PotentialPerformersCustomerCli(c, id_order);
         }
       } else if (enter == "done orders") {
         DoneOrderCustomerCli(c);
       } else if (std::regex_match(enter, std::regex(R"(complete order \d+)"))) {
-        td::regex pattern(R"(complete order (\d+))");
-        std::smatch matches;
-        if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
-          int id_order = std::stoi(matches[1].str());
+        std::regex pattern__(R"(complete order (\d+))");
+        std::smatch matches__;
+        if (std::regex_search(enter, matches__, pattern__) && matches__.size() == 2) {
+          int id_order = std::stoi(matches__[1].str());
           CompeteOrderCustomerCli(c, id_order);
         }
       } else {
         std::cout << "Неверный вход" << std::endl;
       }
-      }
     }
+    if (enter == "stop") {
+      return true;
+    }
+    return false;
   }
   
-  bool customercli(Customer* c) {
+  void customercli(Customer* c) {
     std::cout << "Здравствуй customer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
     std::string enter;
     while (true && enter != "exit") {
@@ -495,7 +457,7 @@ namespace classes {
       if (enter == "exit") {
         break;
       } else if (enter == "help") {
-        show_help();
+        show_help_customer();
       } else if (enter == "orders") {
         bool what = customerOrders(c);
         if (!what) {
@@ -503,7 +465,7 @@ namespace classes {
           break;
         }
       } else if (enter == "account") {
-        AccountCustomerCli();
+        AccountCustomerCli(c);
       } else if (enter == "allperformers") {
         AllPerformersCustomerCli();
       } else if (enter == "review") {

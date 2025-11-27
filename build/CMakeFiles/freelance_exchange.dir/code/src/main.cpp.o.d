@@ -337,5 +337,8 @@ CMakeFiles/freelance_exchange.dir/code/src/main.cpp.o: \
  /usr/include/openssl/asn1.h /usr/include/openssl/asn1err.h \
  /usr/include/openssl/objectserr.h \
  /home/vlad/projects/freelance_exchange/code/src/../include/cli/SignIn.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/admincli.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/customercli.hpp \
+ /home/vlad/projects/freelance_exchange/code/src/../include/cli/performercli.hpp \
  /home/vlad/projects/freelance_exchange/code/src/../include/JsonClass.hpp \
  /home/vlad/projects/freelance_exchange/code/src/../include/./nlohmann/json.hpp

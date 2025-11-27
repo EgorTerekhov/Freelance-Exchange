@@ -1,1 +1,14 @@
-null
+{
+    "orders": [
+        {
+            "customer_id": 2,
+            "description": "TTest",
+            "id": 1,
+            "name": "Test",
+            "performer_id": -1,
+            "price": 100.0,
+            "status": "WAIT"
+        }
+    ],
+    "type": "order"
+}

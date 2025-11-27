@@ -8,6 +8,8 @@ add_executable(freelance_exchange
   ./code/src/password.cpp
   ./code/src/cli/SignUp.cpp
   ./code/src/cli/SignIn.cpp
+  ./code/src/cli/customercli.cpp
+  ./code/src/cli/performercli.cpp
   ./code/src/main.cpp
   ./code/src/admin.cpp
   ./code/src/customer.cpp

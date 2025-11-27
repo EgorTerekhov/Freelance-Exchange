@@ -9,14 +9,14 @@
 #include <regex>
 
 namespace classes {
-  void show_help();
-  bool performercli(Perfomer* p);
-  bool PerformerOrders(Perfomer* p);
-  void WorkOrdersPerformerCli(Perfomer* p);
+  void show_help_performer();
+  void performercli(Performer* p);
+  bool PerformerOrders(Performer* p);
+  void WorkOrdersPerformerCli(Performer* p);
   void AllOrdersPerformerCli();
   void workOnOrder(int id_order, int id_performer);
   void AllCustomersPerformerCli();
   void AccountPerformerCli(Performer* p);
   bool RatePerformerCli(Performer* p);
-  bool ReviewPerfomerCli(Perfomer* p);
+  bool ReviewPerfomerCli();
 }

@@ -32,8 +32,8 @@ void Database::CreateReview(std::unique_ptr<Review>&& r) {
   r->ChangeId(++review_id_);
   reviews_.push_back(std::move(r));
   int id_performer = r->GetUTo();
-  int id = BinSearchDelete<Performer>(id_performer, performers_);
-  if (id != -1) {
+  size_t id = static_cast<size_t>(BinSearchDelete<Performer>(id_performer, performers_));
+  if (id != static_cast<size_t>(-1)) {
     performers_[id]->AddRate(r->GetGrade());
   }
   SortById(reviews_);
@@ -55,7 +55,7 @@ void Database::DeleteCustomer(int id) {
   orders_.erase(
       std::remove_if(orders_.begin(), orders_.end(),
                      [id](const std::unique_ptr<Order>& o) {
-                       return o && o->GetCustomer() == id &&
+                       return o && o->GetCustomerId() == id &&
                               (o->GetStatus() == OrderStatus::WORK || o->GetStatus() == OrderStatus::REJECTED);
                      }),
       orders_.end());
@@ -68,7 +68,7 @@ void Database::DeletePerformer(int id) {
 
   // Обнуляем performer у активных заказов
   for (auto& o : orders_) {
-    if (o && o->GetPerformer() == id && o->GetStatus() == OrderStatus::WORK)
+    if (o && o->GetPerformerId() == id && o->GetStatus() == OrderStatus::WORK)
       o->ChangePerformer(0);
   }
 }
@@ -291,7 +291,7 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     auto it = std::find_if(orders.begin(), orders.end(), 
           [id_customer, id_performer](const std::unique_ptr<Order>& o) {
-            return (o->GetCustomer() == id_customer && o->GetPerformer() == id_performer);
+            return (o->GetCustomerId() == id_customer && o->GetPerformerId() == id_performer);
     });
     if (it != orders.end()) {
       Order* found_order = it->get();

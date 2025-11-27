@@ -7,6 +7,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <regex>
 
 using json = nlohmann::json;
 
@@ -96,7 +97,7 @@ bool Customer::HandleOrder(int id) {
     }
     if (!input.empty()) {
       std::regex pattern(R"(^\d+$)");
-      if (!std::regex_match(order_id_str, pattern)) {
+      if (!std::regex_match(input, pattern)) {
         std::cout << "Некорректно введен price, повторите попытку" << std::endl;
         continue;
       }
@@ -129,7 +130,7 @@ bool Customer::HandleOrder(int id) {
   }
 
   while (true) {
-    std::cout << "Current performer: " << arr[iter_search]->GetPerformer()
+    std::cout << "Current performer: " << arr[iter_search]->GetPerformerId()
             << " | Enter new performer (or press Enter to keep current): ";
     std::getline(std::cin, input);
     if (input == "exit") {
@@ -158,22 +159,22 @@ bool Customer::HandleOrder(int id) {
 
 void Customer::HandleReview(int id) {
   Database& db = Database::getInstance();
-  std::vector<std::unique_ptr<Review>>& arr = db.GetReviewrArr();
+  std::vector<std::unique_ptr<Review>>& arr = db.GetReviewArr();
   size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
   if (static_cast<int>(iter_search) == -1) {
     std::cout << "Заказа с таким id не существует" << std::endl;
-    return
+    return;
   }
   if (!arr[iter_search]) {
     std::cout << "Заказ уже был удален" << std::endl;
     return;
   }
   int id_perf = arr[iter_search]->GetUTo();
-  int id = db.BinSearchDelete<Perfomer>(id_perf, db.GetPerformerArr());
-  if (id != -1) {
-    db.GetPerformerArr()[id]->DeleteRate(arr[iter_search]->GetGrade());
+  size_t performer_id = static_cast<size_t>(db.BinSearchDelete<Performer>(id_perf, db.GetPerformerArr()));
+  if (performer_id != static_cast<size_t>(-1)) {
+    db.GetPerformerArr()[performer_id]->DeleteRate(arr[iter_search]->GetGrade());
   }
-  arr.erase(arr.begin() + iter_search);
+  arr.erase(arr.begin() + static_cast<int>(iter_search));
 }
 
 void Customer::CompleteOrder(int id) {
@@ -197,7 +198,7 @@ void Customer::WorkOrder(int id) {
 }
 
 void Customer::CreateReview(int id, const int u_to, int order_id, std::string& description, int grade) {
-  auto review = std::make_unique<Review>(id, this->id_, u_to, order_id, description, grade, status);
+  auto review = std::make_unique<Review>(id, this->id_, u_to, order_id, description, grade);
   Database& db = Database::getInstance();
   db.CreateReview(std::move(review));
 }

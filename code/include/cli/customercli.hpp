@@ -9,8 +9,8 @@
 #include <regex>
 
 namespace classes {
-  void show_help();
-  bool customercli(Customer* c);
+  void show_help_customer();
+  void customercli(Customer* c);
   bool customerOrders(Customer* c);
   bool createOrderCustomerCli(Customer* c);
   bool createReviewCustomerCli(Customer* c, int order_id);
@@ -23,7 +23,7 @@ namespace classes {
   void AllReviewCustomerCli(Customer* c);
   void WaitOrderCustomerCli(Customer* c);
   void DoneOrderCustomerCli(Customer* c);
-  void CompeteOrderCustomerCli(Customer* c, ind id_order);
+  void CompeteOrderCustomerCli(Customer* c, int id_order);
   void PotentialPerformersCustomerCli(Customer* c, int order_id);
   bool HandleReviewCustomerCli(Customer* c);
 }
