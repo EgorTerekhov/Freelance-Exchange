@@ -61,6 +61,15 @@ class Performer : public User {
     rate_.emplace_back(rate);
   }
 
+  void DeleteRate(int rate) {
+    auto it = std::find_if(rate_.begin(), rate_.end(),
+          [rate](int& r) {
+            return rate == r;
+          });
+    if (it != rate_.end()) {
+      rate_.erase(it);
+    }
+  }
   double GetRate();
 
   double FindAvgRate();

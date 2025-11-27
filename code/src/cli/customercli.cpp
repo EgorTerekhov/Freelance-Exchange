@@ -1,6 +1,4 @@
 #include "../../include/cli/customercli.hpp"
-// надо добавить механику, что как только заказчик закрывает заказ, то он сразу отзыв пишет, либо нужно в выводе всех done orders выписывать, был ли сделан review
-// также нужно как-то проверять, был ли сделан отзыв или нет. Если сделан отзыв по какому-то конкретному заказу, то больше нельзя делать.
 namespace classes {
 
   bool CheckNameOrder(std::string& tmp) {
@@ -17,7 +15,6 @@ namespace classes {
     std::cout << "help  - show this help" << std::endl;
     std::cout << "orders - работа с заказами:" << std::endl;
     std::cout << "review - работа с отзывами" << std::endl;
-    std::cout << "rate - оценка performer" << std::endl;
     std::cout << "account - описание вашего аккаунта" << std::endl;
     std::cout << "allperformers - выведет всех perfromer с их id и ролью" << std::endl;
     std::cout << "exit  - выйти из программы" << std::endl;
@@ -40,21 +37,135 @@ namespace classes {
     std::cout << "Рейтинг: " << c->GetRate() << std::endl;  
   }
 
-  void ReviewCustomerCli(Customer* c) {
-
-  }
-
-  bool RateCustomerCli(Customer* c, int id_performer) {
-    // тут нужно организовать сложную механику с показом всех сделанных отзывов и тп, также как в customerOrders
+  void AllReviewCustomerCli(Customer* c) {
     Database& db = Database::getInstance();
-    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
-    // можно искать с помощью std::find_if
-    for (const auto& order : orders) {
-      if (order->GetCustomerId() == c->GetId() && order->GetStatus == OrderStatus::DONE) {
-        int id_perf = order->GetPerformerId();
-        c->SetPerformerRate(id_perf, )
+    std::vector<std::unique_ptr<Review>>& reviews = db.GetReviewArr();
+    for (const auto& review : reviews) {
+      if (review->GetUFrom() == c->GetId() && review->GetStatus() != ReviewStatus::REJECTED) {
+        std::cout << "id review : " << review->GetId() << std::endl;
+        std::cout << "id_from : " << review->GetUFrom() << std::endl;
+        std::cout << "id_to : " << review->GetUTo() << std::endl;
+        std::cout << "order_id : " << review->GetOrderId() << std::endl;
+        std::cout << "description : " << review->GetDescription() << std::endl;
+        std::cout << "grade : " << review->GetGrade() << std::endl;
+        std::cout << "status : " << to_string_reviewstatus(review->GetStatus()) << std::endl;
+        std::cout << std::endl;
       }
     }
+  }
+  
+  bool createReviewCustomerCli(Customer* c, int order_id) {
+    std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
+    Database& db = Database::getInstance();
+    std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
+    auto it = std::find_if(orders.begin(), orders.end(), 
+                [order_id](std::unique_ptr<Order>& order) {
+                  return order->GetId() == order_id;
+    });
+    if (it == orders.end()) {
+      std::cout << "Такого заказа не существует" << std::endl;
+      return true;
+    }
+    Order* found_order = it->get();
+    if (found_order->GetCustomerId() != c->GetId()) {
+      std::cout << "Это не ваш заказ" << std::endl;
+      return true;
+    }
+    int id_to_str = 0;
+    std::string id_to_str;
+    while (true && price != "exit" && price != "stop") {
+      std::cout << "Введите цену за заказ: ";
+      std::getline(std::cin, price_str);
+      std::regex pattern(R"(^\d+$)");
+      if (price_str == "exit" || price_str == "stop") {
+        break;
+      }
+      if (std::regex_match(price, pattern)) {
+        price = std::stoi(price_str);
+        break;
+      } else {
+        std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
+      }
+    }
+    if (id_to_str == "stop") {
+      return true;
+    }
+    if (id_to_str == "exit") {
+      return false;
+    }
+    std::string description;
+    while (true && description != "exit" && description != "stop") {
+      std::cout << "Введите описание ревью : ";
+      std::getline(std::cin, description);
+      break;
+    }
+    if (description == "stop") {
+      return true;
+    }
+    if (description == "exit") {
+      return false;
+    }
+    int grade;
+    std::string grade_str;
+    while (true && grade_str != "exit" && grade_str != "stop") {
+      std::cout << "Введите оценку за заказ (от 0 до 10): ";
+      std::getline(std::cin, grade_str);
+      std::regex pattern(R"(^\d+$)");
+      if (grade_str == "exit" || grade_str == "stop") {
+        break;
+      }
+      if (std::regex_match(grade_str, pattern)) {
+        grade = std::stoi(grade_str);
+        if (grade <= 0 || grade >= 10) {
+          std::cout << "неправильный ввод, число должно быть от 0 до 10" << std::endl;
+        } else {
+          break;
+        }
+      } else {
+        std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
+      }
+    }
+    c->CreateReview(1, id_to_str, order_id, description, grade);
+    return true;
+  }
+
+
+  bool ReviewCustomerCli(Customer* c) {
+    std::cout << "Вам доступны следующие функции работы с ревью: " << std::endl;
+    std::cout << "all review - показать все ревью, которые вы создавали" << std::endl;
+    std::cout << "create review on \"id\" - сделать ревье на заказ с определенным id" << std::endl;
+    std::cout << "handle review - изменить ревью, которое вы сделали" << std::endl;
+    std::string enter;
+    while (true && enter != "exit" && enter != "stop") {
+      std::cout << "Введите команду: " << std::endl;
+      std::getline(std::cin, enter);
+      if (enter == "all review") {
+        AllReviewCustomerCli(c);
+      } else if (std::regex_match(enter, std::regex(R"(create review on \d+)"))) {
+        std::regex pattern(R"(create review on (\d+))");
+        std::smatch matches;
+        if (std::regex_search(enter, matches, pattern) && matches.size() == 2) {
+          int id_order = std::stoi(matches[1].str());
+          bool what = createReviewCustomerCli(c, order_id);
+          if (!what) {
+            enter = "exit";
+            break;
+          }
+        }
+      } else if (enter == "handle review") {
+        bool what = HandleReviewCustomerCli(c);
+        if (!what) {
+          enter = "exit";
+          break;
+        }
+      } else {
+        std::cout << "Неизвестная команда";
+      }
+    }
+    if (enter == "stop") {
+      return true;
+    }
+    return false;
   }
 
   void ChoisePerformertoOrder(int id_order, int id_performer, int cust_id) {
@@ -192,8 +303,12 @@ namespace classes {
         continue;
       }
       order_id = std::stoi(order_id_str);
-      c->HandleOrder(order_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
+      return c->HandleOrder(order_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
     }
+    if (order_id_str == "stop") {
+      return true;
+    }
+    return true;
   }
 
   void WorkOrderCustomerCli(Customer* c) {
@@ -275,6 +390,29 @@ namespace classes {
     }
   }
 
+  bool HandleReviewCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
+    int review_id = 0;
+    std::string review_id_str;
+    while (true &&) review_id_str != "exit" && review_id_str != "stop") {
+      std::cout << "Введите review id : ";
+      std::getline(std::cin, review_id_str);
+      std::regex pattern(R"(^\d+$)");
+      if (!std::regex_match(review_id_str, pattern)) {
+        std::cout << "Некорректно введен id, повторите попытку" << std::endl;
+        continue;
+      }
+      review_id = std::stoi(review_id_str);
+      c->HandleReview(order_id); // мб стоит сюда переписать, но оч лень как будто. Там можно просто enter протыкать и всё.
+      return true;
+    }
+    if (review_id_str == "exit") {
+      return false;
+    }
+    if (review_id_str == "stop") {
+      return true;
+    }
+  }
   void CompeteOrderCustomerCli(Customer* c, ind id_order) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
@@ -360,12 +498,6 @@ namespace classes {
         show_help();
       } else if (enter == "orders") {
         bool what = customerOrders(c);
-        if (!what) {
-          enter = "exit";
-          break;
-        }
-      } else if (enter == "rate") {
-        bool what = RateCustomerCli(p);
         if (!what) {
           enter = "exit";
           break;

@@ -26,7 +26,7 @@ class Customer : public User {
   void CreateOrder(int id, std::string& name, OrderStatus& status, double price, std::string description,
                    int customer_id, int performer_id);
 
-  void CreateReview(int id, const int u_to, int order_id, std::string& description, ReviewStatus status, int grade);
+  void CreateReview(int id, const int u_to, int order_id, std::string& description, int grade);
   void DeleteOrder(int id);
   void CompleteOrder(int id);
   void WorkOrder(int id);
@@ -56,7 +56,7 @@ class Customer : public User {
   };
   void HandleReview(int id) override;
 
-  void HandleOrder(int id);
+  bool HandleOrder(int id);
 
   void SetPerformerRate(int id, int rate);
   

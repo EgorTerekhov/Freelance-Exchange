@@ -1,5 +1,5 @@
 #include "../../include/cli/performercli.hpp"
-
+// нужно написать функцию работы с ревью или похуй?
 namespace classes {
   void show_help() {
     std::cout << "Freelance exchange cli application for performer" << std::endl;
@@ -29,11 +29,14 @@ namespace classes {
     }
   }
 
+  bool ReviewPerfomerCli(Perfomer* p) {}
+
   bool PerformerOrders(Perfomer* p) {
     std::cout << "Вам доступны следующие функции: " << std::endl;
     std::cout << "work orders - покажет над какими заказами вы работаете" << std::endl;
     std::cout << "all orders - покажет какие заказы сейчас вы можете взять" << std::endl;
     std::cout << "work on \"id\" - взять потенциально (если вас примет заказчик) в работу заказ с выбранным id, который вы можете узнать через all orders" << std::endl;
+    std::cout << "review"
     std::cout << "stop - чтобы выйти из функции" << std::endl;
     std::cout << "exit - чтобы завершить программу" << std::endl;
     std::string enter;

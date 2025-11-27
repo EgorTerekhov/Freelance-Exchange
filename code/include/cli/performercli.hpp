@@ -18,4 +18,5 @@ namespace classes {
   void AllCustomersPerformerCli();
   void AccountPerformerCli(Performer* p);
   bool RatePerformerCli(Performer* p);
+  bool ReviewPerfomerCli(Perfomer* p);
 }

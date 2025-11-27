@@ -28,8 +28,14 @@ void Database::CreateOrder(std::unique_ptr<Order>&& o) {
 }
 
 void Database::CreateReview(std::unique_ptr<Review>&& r) {
+  
   r->ChangeId(++review_id_);
   reviews_.push_back(std::move(r));
+  int id_performer = r->GetUTo();
+  int id = BinSearchDelete<Performer>(id_performer, performers_);
+  if (id != -1) {
+    performers_[id]->AddRate(r->GetGrade());
+  }
   SortById(reviews_);
 }
 

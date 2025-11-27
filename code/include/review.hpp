@@ -5,7 +5,6 @@
 using json = nlohmann::json;
 
 namespace classes {
-enum class ReviewStatus { PENDING, APPROVED, REJECTED };
 class Review {
   int id_;
   int u_to_;
@@ -13,11 +12,9 @@ class Review {
   int order_id_;
   std::string description_;
   int grade_;
-  ReviewStatus status_;
 
  public:
-  Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade_,
-         ReviewStatus s = ReviewStatus::PENDING);
+  Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade_);
 
   void ChangeId(int id) {
     id_ = id;
@@ -28,6 +25,7 @@ class Review {
   int& GetUFrom() {
     return this->u_from_;
   };
+
   int& GetUTo() {
     return this->u_to_;
   };
@@ -37,8 +35,9 @@ class Review {
   int& GetGrade() {
     return this->grade_;
   };
-  ReviewStatus GetStatus() const {
-    return this->status_;
+
+  int& GetOrderId() {
+    return this->order_id_;
   }
   static json& ToJson(const Review& r);
   bool operator==(const Review* other);

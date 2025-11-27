@@ -7,25 +7,12 @@ using json = nlohmann::json;
 
 namespace classes {
 
-Review::Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade, ReviewStatus s)
-    : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade), status_(s) {
+Review::Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade)
+    : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade) {
 }
 
 json& Review::ToJson(const Review& r) {
   static json j;  // статический, т.к. функция возвращает ссылку
-  std::string status;
-
-  switch (r.GetStatus()) {
-    case ReviewStatus::APPROVED:
-      status = "APPROVED";
-      break;
-    case ReviewStatus::PENDING:
-      status = "PENDING";
-      break;
-    case ReviewStatus::REJECTED:
-      status = "REJECTED";
-      break;
-  }
 
   j = {{"id", r.id_},
        {"u_to", r.u_to_},
@@ -33,7 +20,6 @@ json& Review::ToJson(const Review& r) {
        {"order_id", r.order_id_},
        {"description", r.description_},
        {"grade", r.grade_},
-       {"status", status}};
 
   return j;
 }

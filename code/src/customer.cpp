@@ -158,47 +158,22 @@ bool Customer::HandleOrder(int id) {
 
 void Customer::HandleReview(int id) {
   Database& db = Database::getInstance();
-  auto& arr = db.GetReviewArr();
+  std::vector<std::unique_ptr<Review>>& arr = db.GetReviewrArr();
   size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
-  if (static_cast<int>(iter_search) == -1 || !arr[iter_search] || arr[iter_search]->GetStatus() != ReviewStatus::PENDING) {
+  if (static_cast<int>(iter_search) == -1) {
+    std::cout << "Заказа с таким id не существует" << std::endl;
+    return
+  }
+  if (!arr[iter_search]) {
+    std::cout << "Заказ уже был удален" << std::endl;
     return;
   }
-
-  std::string input;
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  std::cout << "Current u_to: " << arr[iter_search]->GetUTo()
-            << " | Enter new u_to (or press Enter to keep current): ";
-  std::getline(std::cin, input);
-  if (!input.empty()) {
-    try {
-      int new_to = std::stoi(input);
-      arr[iter_search]->GetUTo() = new_to;
-    } catch (const std::exception&) {
-      std::cout << "Invalid input for u_to. Keeping current value.\n";
-    }
+  int id_perf = arr[iter_search]->GetUTo();
+  int id = db.BinSearchDelete<Perfomer>(id_perf, db.GetPerformerArr());
+  if (id != -1) {
+    db.GetPerformerArr()[id]->DeleteRate(arr[iter_search]->GetGrade());
   }
-
-  std::cout << "Current description: " << arr[iter_search]->GetDescription()
-            << " | Enter new description (or press Enter to keep current): ";
-  std::getline(std::cin, input);
-  if (!input.empty()) {
-    arr[iter_search]->GetDescription() = input;
-  }
-
-  std::cout << "Current grade: " << arr[iter_search]->GetGrade()
-            << " | Enter new grade (or press Enter to keep current): ";
-  std::getline(std::cin, input);
-  if (!input.empty()) {
-    try {
-      int new_grade = std::stoi(input);
-      arr[iter_search]->GetGrade() = new_grade;
-    } catch (const std::exception&) {
-      std::cout << "Invalid input for grade. Keeping current value.\n";
-    }
-  }
-
-  std::cout << "Review updated successfully!\n";
+  arr.erase(arr.begin() + iter_search);
 }
 
 void Customer::CompleteOrder(int id) {
@@ -221,8 +196,7 @@ void Customer::WorkOrder(int id) {
   arr[iter_search]->ChangeStatus(OrderStatus::WORK);
 }
 
-void Customer::CreateReview(int id, const int u_to, int order_id, std::string& description,
-                            ReviewStatus status, int grade) {
+void Customer::CreateReview(int id, const int u_to, int order_id, std::string& description, int grade) {
   auto review = std::make_unique<Review>(id, this->id_, u_to, order_id, description, grade, status);
   Database& db = Database::getInstance();
   db.CreateReview(std::move(review));
