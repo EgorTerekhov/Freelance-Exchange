@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 namespace classes {
 
-Review::Review(int id, int u_from, int u_to, int order_id, std::string& d, int grade)
+Review::Review(int id, int u_from, int u_to, int order_id, std::string d, int grade)
     : id_(id), u_to_(u_to), u_from_(u_from), order_id_(order_id), description_(d), grade_(grade) {
 }
 

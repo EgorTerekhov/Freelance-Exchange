@@ -256,8 +256,69 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
     db.FromJsonAdminPerformerCustomer(js.getPerformer());
     db.FromJsonAdminPerformerCustomer(js.getCustomer());
     db.FromJsonId(js.GetId());
+    db.FromJsonOrder(js.getOrder());
+    db.FromJsonReview(js.getReview());
     // FromJsonReview
     // FromJsonOrder
+  }
+
+  void Database::FromJsonReview(const json& j) {
+    Database& db = Database::getInstance();
+    if (j.is_null() || j.empty() || !j.contains("type") || !j.contains("reviews") || !j["reviews"].is_array() || j["type"] != "review") {
+      return;
+    }
+    for (const auto& review_json : j["reviews"]) {
+      if (!review_json.contains("id") || !review_json.contains("customer_id") || 
+        !review_json.contains("u_from") || !review_json.contains("u_to") || 
+        !review_json.contains("grade") || !review_json.contains("order_id") ||
+        !review_json.contains("description")) {
+        throw std::invalid_argument("Missing required fields in review JSON");
+      }
+
+      auto review = std::make_unique<Review>(
+        review_json["id"].get<int>(),
+        review_json["u_from"].get<int>(),
+        review_json["u_to"].get<int>(),
+        review_json["order_id"].get<int>(),
+        review_json["description"].get<std::string>(),
+        review_json["grade"].get<int>()
+      );
+      db.CreateReview(std::move(review));
+    }
+  }
+
+  void Database::FromJsonOrder(const json& j) {
+    Database& db = Database::getInstance();
+    if (j.is_null() || j.empty() || !j.contains("type") || !j.contains("orders") || !j["orders"].is_array() || j["type"] != "order") {
+      return;
+    }
+
+    for (const auto& order_json : j["orders"]) {
+      if (!order_json.contains("id") || !order_json.contains("name") || 
+        !order_json.contains("price") || !order_json.contains("customer_id") || 
+        !order_json.contains("performer_id") || !order_json.contains("status") ||
+        !order_json.contains("description")) {
+        throw std::invalid_argument("Missing required fields in order JSON");
+      }
+
+      std::string status = order_json["status"].get<std::string>();
+      OrderStatus status_obj = OrderStatus::REJECTED;
+      if (status == "WAIT") {
+        status_obj = OrderStatus::WAIT;
+      } else if (status == "WORK") {
+        status_obj = OrderStatus::WORK;
+      }
+      auto order = std::make_unique<Order>(
+        order_json["id"].get<int>(),
+        order_json["name"].get<std::string>(),
+        order_json["price"].get<double>(),
+        order_json["description"].get<std::string>(),
+        order_json["customer_id"].get<int>(),
+        order_json["performer_id"].get<int>(),
+        status_obj
+      );
+      db.CreateOrder(std::move(order));
+    }
   }
 
   void Database::FromJsonId(const json& j) {

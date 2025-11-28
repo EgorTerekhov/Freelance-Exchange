@@ -399,6 +399,12 @@ namespace classes {
     while (true && enter != "stop" && enter != "exit") {
       std::cout << "Введите команду: ";
       std::getline(std::cin, enter);
+      if (enter == "stop") {
+        return true;
+      }
+      if (enter == "exit") {
+        return false;
+      }
       if (enter == "create order") {
         bool what = createOrderCustomerCli(c);
         if (!what) {
@@ -453,6 +459,7 @@ namespace classes {
     std::cout << "Здравствуй customer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
     std::string enter;
     while (true && enter != "exit") {
+      std::cout << "Введите команду: ";
       std::getline(std::cin, enter);
       if (enter == "exit") {
         break;

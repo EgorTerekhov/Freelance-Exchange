@@ -83,6 +83,8 @@ class Database {
   json ToJsonOrder();
 
 
+  void FromJsonOrder(const json& j);
+
   template <class W>
   json ToJsonSinglePerformerCustomer(json& j, W& temp) {
     j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()}, {"salt", temp.GetSalt()},
@@ -136,6 +138,7 @@ class Database {
 
   User* FindUserByLogin(std::string& login);
 
+  void FromJsonReview(const json& j);
   void FromJsonId(const json& j);
 
   template <typename T>
