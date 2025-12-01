@@ -170,6 +170,8 @@ namespace classes {
       db.CreateCustomer(std::move(std::make_unique<Customer>(0, login, vec.first, vec.second, name, email, phone, 0)));
     } else if (type == "performer") {
       db.CreatePerformer(std::move(std::make_unique<Performer>(0, login, vec.first, vec.second, name, email, phone, 0)));
+
+      auto& performers = db.GetPerformerArr();
     }
     std::cout << "Вы успешно зарегистрировались\n";
     return true;

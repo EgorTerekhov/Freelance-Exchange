@@ -1,1 +1,14 @@
-null
+{
+    "performers": [
+        {
+            "email": "email@xyi.trew",
+            "id": 1,
+            "login": "egor",
+            "name": "Egor",
+            "password": "77a3dd4702599a6ae53e525ab660ac8911d6ef043926367d608e6ad9515e79c5",
+            "phone": "89876541234",
+            "salt": "3229431eb392e0ee69c8322172e819b1"
+        }
+    ],
+    "type": "performer"
+}
