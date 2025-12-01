@@ -42,7 +42,7 @@ namespace classes {
   }
 
 
-  bool SignUp() { // без админа
+  bool SignUp() {
     Database& db = Database::getInstance();
     std::string login;
     std::string pass;
@@ -89,7 +89,7 @@ namespace classes {
     }
     std::string type;
     while (true) {
-      std::cout << "who are you (customer, performer) : ";
+      std::cout << "who are you (customer, performer, admin) : ";
       std::getline(std::cin, type);
       if (type == "exit") {
         exit = true;
@@ -101,10 +101,20 @@ namespace classes {
       if (type == "performer") {
         break;
       }
+      if (type == "admin") {
+        break;
+      }
       std::cout << "unknown type, repeat or exit\n";
     }
     if (exit) {
       return false;
+    }
+
+    if (type == "admin") {
+      std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
+      db.CreateAdmin(std::move(std::make_unique<Admin>(0, login, vec.first, vec.second)));
+      std::cout << "Вы успешно зарегистрировались\n";
+      return true;
     }
     std::string name;
     std::cout << "имя должно начинаться с большой буквы и буквы только латиницы\n";
@@ -157,9 +167,9 @@ namespace classes {
 
     std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
     if (type == "customer") {
-      db.CreateCustomer(std::move(std::make_unique<Customer>(1, login, vec.first, vec.second, name, email, phone, 0)));
+      db.CreateCustomer(std::move(std::make_unique<Customer>(0, login, vec.first, vec.second, name, email, phone, 0)));
     } else if (type == "performer") {
-      db.CreatePerformer(std::move(std::make_unique<Performer>(1, login, vec.first, vec.second, name, email, phone, 0)));
+      db.CreatePerformer(std::move(std::make_unique<Performer>(0, login, vec.first, vec.second, name, email, phone, 0)));
     }
     std::cout << "Вы успешно зарегистрировались\n";
     return true;

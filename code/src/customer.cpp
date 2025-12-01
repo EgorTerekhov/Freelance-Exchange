@@ -51,11 +51,11 @@ bool Customer::HandleOrder(int id) {
     std::cout << "Заказа с таким id не существует" << std::endl;
     return true;
   }
-  if (!arr[static_cast<size_t>(iter_search)]) {
+  if (!arr[iter_search]) {
     std::cout << "Заказ уже был удален" << std::endl;
     return true;
   }
-  if (arr[static_cast<size_t>(iter_search)]->GetStatus() != OrderStatus::WAIT) {
+  if (arr[iter_search]->GetStatus() != OrderStatus::WAIT) {
     std::cout << "Заказ не находится в режиме wait" << std::endl;
     return true;
   }
@@ -220,7 +220,7 @@ void Customer::SetPerformerRate(int id, int rate) {
       sum += static_cast<double>(r);
     }
 
-    return static_cast<double>(sum) / static_cast<double>(rate_.size());
+    return sum / static_cast<double>(rate_.size());
   }
 
   double Customer::GetRate() {
