@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 #include "customer.hpp"
 #include "performer.hpp"
 #include "order.hpp"

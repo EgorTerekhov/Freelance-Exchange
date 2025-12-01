@@ -24,10 +24,10 @@ add_executable(freelance_exchange
 find_package(OpenSSL REQUIRED)
 
 target_include_directories(freelance_exchange PRIVATE 
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/cli
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/nlohmann
-  ${CMAKE_CURRENT_SOURCE_DIR}/data
+  ${CMAKE_CURRENT_SOURCE_DIR}/code/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/code/include/cli
+  ${CMAKE_CURRENT_SOURCE_DIR}/code/include/nlohmann
+  ${CMAKE_CURRENT_SOURCE_DIR}/code/data
 )
 
 target_link_libraries(freelance_exchange OpenSSL::SSL OpenSSL::Crypto)

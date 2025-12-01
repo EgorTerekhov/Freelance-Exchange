@@ -1,6 +1,6 @@
 #include "../include/database.hpp"
 #include "../include/JsonClass.hpp"
-#include "/usr/include/nlohmann/json.hpp"
+#include "../include/nlohmann/json.hpp"
 #include <algorithm>
 #include <iostream>
 

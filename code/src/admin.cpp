@@ -4,7 +4,7 @@
 #include "../include/admin.hpp"
 #include "../include/database.hpp"
 #include "../include/review.hpp"
-#include "/usr/include/nlohmann/json.hpp"
+#include "../include/nlohmann/json.hpp"
 
 
 using json = nlohmann::json;

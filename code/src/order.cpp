@@ -1,7 +1,7 @@
 #include <string>
 
 #include "../include/order.hpp"
-#include "/usr/include/nlohmann/json.hpp"
+#include "../include/nlohmann/json.hpp"
 
 using json = nlohmann::json;
 namespace classes {

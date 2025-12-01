@@ -6,7 +6,7 @@
 #include "user.hpp"
 #include "order.hpp"
 #include "review.hpp"
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 namespace classes {
