@@ -1,0 +1,23 @@
+{
+    "performers": [
+        {
+            "email": "email@xyi.trew",
+            "id": 1,
+            "login": "egor",
+            "name": "Egor",
+            "password": "77a3dd4702599a6ae53e525ab660ac8911d6ef043926367d608e6ad9515e79c5",
+            "phone": "89876541234",
+            "salt": "3229431eb392e0ee69c8322172e819b1"
+        },
+        {
+            "email": "nick@nick.nick",
+            "id": 3,
+            "login": "nick",
+            "name": "Nick",
+            "password": "95806397add3430b3a90f93742d672c5b379546fe09609a01af418812c266a60",
+            "phone": "89174523333",
+            "salt": "0bda97b369a47ae1789d93e13f234112"
+        }
+    ],
+    "type": "performer"
+}

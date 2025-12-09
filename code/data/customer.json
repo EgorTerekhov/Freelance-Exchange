@@ -1,0 +1,14 @@
+{
+    "customers": [
+        {
+            "email": "amsdkf@sdklfj.ru",
+            "id": 2,
+            "login": "vlad",
+            "name": "Vlad",
+            "password": "6fc261bd525249d8af59032a4214ce5bb2af718d43eb3130872b0a36d0853a73",
+            "phone": "89384668558",
+            "salt": "f17c5013eb88012acd3961e9b1c1de97"
+        }
+    ],
+    "type": "customer"
+}
