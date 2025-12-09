@@ -128,7 +128,6 @@ namespace classes {
     return true;
   }
 
-
   bool ReviewCustomerCli(Customer* c) {
     std::cout << "Вам доступны следующие функции работы с ревью: " << std::endl;
     std::cout << "all review - показать все ревью, которые вы создавали" << std::endl;
@@ -269,7 +268,6 @@ namespace classes {
     }
     return true;
   }
-
   void WorkOrderCustomerCli(Customer* c) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
@@ -289,7 +287,6 @@ namespace classes {
       std::cout << "заказов в работе нет" << std::endl;
     }
   }
-
   void WaitOrderCustomerCli(Customer* c) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
@@ -309,7 +306,6 @@ namespace classes {
       std::cout << "заказов в ожидании нет" << std::endl;
     }
   }
-
   void DoneOrderCustomerCli(Customer* c) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();

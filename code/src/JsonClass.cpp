@@ -109,12 +109,12 @@ json& JsonStruct::GetId() {
 
 void JsonStruct::saveAllToData() {
   JsonStruct& j = JsonStruct::getInstance();
-  j.JsonStruct::saveAdmin("../code/data/admin.json"); //относительные пути из папки build
-  j.JsonStruct::saveCustomer("../code/data/customer.json");
-  j.JsonStruct::saveOrder("../code/data/order.json");
-  j.JsonStruct::savePerformer("../code/data/performer.json");
-  j.JsonStruct::saveReview("../code/data/review.json");
-  j.JsonStruct::saveId("../code/data/idjs.json");
+  j.JsonStruct::saveAdmin(); //относительные пути из папки build
+  j.JsonStruct::saveCustomer();
+  j.JsonStruct::saveOrder();
+  j.JsonStruct::savePerformer();
+  j.JsonStruct::saveReview();
+  j.JsonStruct::saveId();
 }
 
 void JsonStruct::setId(int order_id, int user_id, int review_id) {
