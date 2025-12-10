@@ -18,8 +18,8 @@ class User {
   // убрал create profile тк он у всех одинаковый будет и смысла нет в наследовании, а админу он вообще не нужен
   virtual void HandleReview(int id) = 0;
   virtual ~User() = default;  //виртуальный деструктор для удаления наследников через указатель на юзера.
-  std::string GetSalt() { return salt_; }
-  std::string GetHash() { return password_; }
-  std::string GetLogin() { return login_; }
+  std::string GetSalt() const { return salt_; }
+  std::string GetHash() const { return password_; }
+  std::string GetLogin() const { return login_; }
 };
 }  // namespace classes

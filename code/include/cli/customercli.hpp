@@ -25,5 +25,5 @@ namespace classes {
   void DoneOrderCustomerCli(Customer* c);
   void CompeteOrderCustomerCli(Customer* c, int id_order);
   void PotentialPerformersCustomerCli(Customer* c, int order_id);
-  bool HandleReviewCustomerCli(Customer* c);
+  bool DeleteReviewCustomerCli(Customer* c);
 }

@@ -2,7 +2,7 @@
 
 namespace classes {
 
-    void ShowHelpAdminCli(Admin& a) {
+    void ShowHelpAdminCli() {
         std::cout << "Freelance exchange CLI for admin" << std::endl;
         std::cout << "Available commands:" << std::endl;
         std::cout << "help - show this help" << std::endl;
@@ -15,7 +15,7 @@ namespace classes {
         std::cout << "exit - exit the program" << std::endl;
     }
 
-    void ShowAllCustomersCli(Admin& a) {
+    void ShowAllCustomersCli() {
         Database& db = Database::getInstance();
         auto& customers = db.GetCustomerArr();
         for (const auto& c : customers) {
@@ -24,7 +24,7 @@ namespace classes {
         }
     }
 
-    void ShowAllPerformersCli(Admin& a) {
+    void ShowAllPerformersCli() {
         Database& db = Database::getInstance();
         auto& performers = db.GetPerformerArr();
         for (const auto& p : performers) {
@@ -33,7 +33,7 @@ namespace classes {
         }
     }
 
-    void ShowAllOrdersCli(Admin& a) {
+    void ShowAllOrdersCli() {
         Database& db = Database::getInstance();
         auto& orders = db.GetOrderArr();
         for (const auto& o : orders) {
@@ -73,13 +73,13 @@ namespace classes {
             if (input == "exit") break;
 
             if (input == "help") {
-                ShowHelpAdminCli(*a);
+                ShowHelpAdminCli();
             } else if (input == "all customers") {
-                ShowAllCustomersCli(*a);
+                ShowAllCustomersCli();
             } else if (input == "all performers") {
-                ShowAllPerformersCli(*a);
+                ShowAllPerformersCli();
             } else if (input == "all orders") {
-                ShowAllOrdersCli(*a);
+                ShowAllOrdersCli();
             } else if (std::regex_match(input, std::regex(R"(delete customer \d+)"))) {
                 std::regex pattern(R"(delete customer (\d+))");
                 std::smatch matches;

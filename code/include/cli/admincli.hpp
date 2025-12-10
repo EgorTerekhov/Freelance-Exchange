@@ -15,7 +15,7 @@ namespace classes {
   void DeletePerformerCli(int id);
   void HandleReviewCli(int id);
   void AdminCli(Admin* a);
-  void ShowAllCustomersCli(Admin& a);
-  void ShowAllPerformersCli(Admin& a);
-  void ShowAllOrdersCli(Admin& a);
+  void ShowAllCustomersCli();
+  void ShowAllPerformersCli();
+  void ShowAllOrdersCli();
 }

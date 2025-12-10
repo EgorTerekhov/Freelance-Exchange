@@ -16,18 +16,11 @@ class Customer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  std::vector<int> rate_;
+  std::vector<double> rate_;
 
  public:
   Customer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
-           std::string phone, int rate = 0.0);
-  Customer(User&& u, std::string name, std::string email, std::string phone, int rate = 0.0);
-
-  void CreateOrder(int id, std::string& name, OrderStatus& status, double price, std::string description,
-                   int customer_id, int performer_id);
-
-  void CreateReview(int id, const int u_to, int order_id, std::string& description, int grade);
-  void DeleteOrder(int id);
+           std::string phone, double rate = 0.0);
   void CompleteOrder(int id);
   void WorkOrder(int id);
 
@@ -62,7 +55,7 @@ class Customer : public User {
   
   double GetRate();
 
-  void AddRate(int rate) {
+  void AddRate(double rate) {
     rate_.emplace_back(rate);
   }
 

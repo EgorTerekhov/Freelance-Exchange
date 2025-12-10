@@ -52,11 +52,17 @@ class Database {
   void DeleteReview(int id);
 
   // void BinSearchFind(int id, std::vector<std::unique_ptr<W>>& vec);
-  void CreateCustomer(std::unique_ptr<Customer>&& c);
-  void CreatePerformer(std::unique_ptr<Performer>&& p);
-  void CreateOrder(std::unique_ptr<Order>&& o);
-  void CreateReview(std::unique_ptr<Review>&& r);
-  void CreateAdmin(std::unique_ptr<Admin>&& a);
+  void CreateCustomer(int id, std::string login, std::string password, std::string salt,
+                      std::string name, std::string email,
+                      std::string phone, double rate);
+  void CreatePerformer(int id, std::string login, std::string password, std::string salt,
+                      std::string name, std::string email,
+                      std::string phone, double rate);
+  void CreateOrder(int id, std::string name,
+                   double price, std::string description,
+                   int customer_id, int performer_id, std::string status);
+  void CreateReview(int id, const int u_from, const int u_to, int order_id, std::string description, double grade);
+  void CreateAdmin(int id, std::string login, std::string password, std::string salt);
 
   std::vector<std::unique_ptr<Customer>>& GetCustomerArr() {
     return customers_;
@@ -73,7 +79,7 @@ class Database {
   std::vector<std::unique_ptr<Review>>& GetReviewArr() {
     return reviews_;
   }
-  std::unique_ptr<Admin> FromSingleJsonAdmin(const json& u);
+  void FromSingleJsonAdmin(const json& json);
 
   void FromJsonAdminPerformerCustomer(const json& j);
   json ToJsonPerformer();
@@ -88,7 +94,7 @@ class Database {
   template <class W>
   json ToJsonSinglePerformerCustomer(json& j, W& temp) {
     j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()}, {"salt", temp.GetSalt()},
-         {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
+         {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}, {"rate", temp.GetRate()}};
     return j;
   }
 
@@ -120,19 +126,25 @@ class Database {
   }
 
   template <typename T>
-  std::unique_ptr<T> FromSingleJsonPerformerCustomer(const json& j) {
+  void FromSingleJsonPerformerCustomer(const json& j) {
     if (j.is_null())
-      return nullptr;
+      return;
 
     // Проверка наличия всех ключей
     if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("salt") ||
-        !j.contains("name") || !j.contains("email") || !j.contains("phone")) {
+        !j.contains("name") || !j.contains("email") || !j.contains("phone") || !j.contains("rate")) {
       throw std::invalid_argument("Missing required fields in JSON");
     }
-
-    return std::make_unique<T>(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(),
+    Database& db = Database::getInstance();
+    if constexpr (std::is_same_v<T, Performer>) {
+        db.CreatePerformer(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(),
                                j["salt"].get<std::string>(), j["name"].get<std::string>(),
-                               j["email"].get<std::string>(), j["phone"].get<std::string>());
+                               j["email"].get<std::string>(), j["phone"].get<std::string>(), 0);
+    } else if constexpr (std::is_same_v<T, Customer>) {
+        db.CreateCustomer(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(),
+                               j["salt"].get<std::string>(), j["name"].get<std::string>(),
+                               j["email"].get<std::string>(), j["phone"].get<std::string>(), 0);
+    }
   }
   ~Database() = default;
 

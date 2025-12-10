@@ -12,23 +12,16 @@ using json = nlohmann::json;
 namespace classes {
 
 Performer::Performer(int id, std::string login, std::string password, std::string salt, std::string name,
-                     std::string email, std::string phone, int rate)
+                     std::string email, std::string phone, double rate)
     : User(id, std::move(login), std::move(password), std::move(salt))
     , name_(std::move(name))
     , email_(std::move(email))
     , phone_(std::move(phone))
     , rate_() { 
-      if (rate != 0) {
+      if (rate != 0.0) {
         rate_.push_back(rate);
       }
   }
-
-Performer::Performer(User&& u, std::string name, std::string email, std::string phone, int rate)
-    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
-      if (rate != 0) {
-        rate_.push_back(rate);
-      }
-}
 
 // Обработка ревью
 void Performer::HandleReview(int id) {
@@ -86,21 +79,21 @@ double Performer::FindAvgRate() {
   }
 
   double sum = 0;
-  for (int r : rate_) {
+  for (double r : rate_) {
     sum += static_cast<double>(r);
   }
 
   return sum / static_cast<double>(rate_.size());
 }
 
-void Performer::SetCustomerRate(int id, int rate) {
+void Performer::SetCustomerRate(int id, double rate) {
   Database& db = Database::getInstance();
   auto& arr = db.GetCustomerArr();
   size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
   arr[iter_search]->AddRate(rate);
 }
 
-  double Performer::GetRate() {
+double Performer::GetRate() {
     return this->FindAvgRate();
   }
 

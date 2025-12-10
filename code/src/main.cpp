@@ -20,6 +20,7 @@ int main() {
   std::cout << "Hello, user" << std::endl;
   std::string enter;
   std::string login;
+  
   while (true && enter != "exit") {
     std::cout << "sign in or sign up (type 1 or 2) or type exit to close programm" << std::endl;
     std::getline(std::cin, enter);
@@ -53,12 +54,17 @@ int main() {
 
   classes::Performer* p = db.FindUserByLoginAs<classes::Performer>(login);
   classes::Customer* c = db.FindUserByLoginAs<classes::Customer>(login);
+  classes::Admin* a = db.FindUserByLoginAs<classes::Admin>(login);
   if (p) {
     classes::performercli(p);
   }
   if (c) {
     classes::customercli(c);
   }
+  if (a) {
+    classes::AdminCli(a);
+  }
+
   db.destroy();
   return 0;
 }

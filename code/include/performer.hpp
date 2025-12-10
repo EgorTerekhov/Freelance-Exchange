@@ -15,13 +15,11 @@ class Performer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  std::vector<int> rate_;
+  std::vector<double> rate_; // нужно сделать реализацию выгрузки.
 
  public:
   Performer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
-            std::string phone, int rate = 0);
-
-  Performer(User&& u, std::string name, std::string email, std::string phone, int rate = 0);
+            std::string phone, double rate = 0.0);
 
   void ChangeId(int id) {
     id_ = id;
@@ -54,16 +52,15 @@ class Performer : public User {
 
   json& ToJson(json& j, const Performer& p);
 
-  void SetCustomerRate(int id, int rate);
-  double GetPerformerRate(int id);
+  void SetCustomerRate(int id, double rate);
   
-  void AddRate(int rate) {
+  void AddRate(double rate) {
     rate_.emplace_back(rate);
   }
 
-  void DeleteRate(int rate) {
+  void DeleteRate(double rate) {
     auto it = std::find_if(rate_.begin(), rate_.end(),
-          [rate](int& r) {
+          [rate](double& r) {
             return rate == r;
           });
     if (it != rate_.end()) {

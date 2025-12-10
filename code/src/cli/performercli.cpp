@@ -12,6 +12,16 @@ namespace classes {
     std::cout << "exit  - выйти из программы" << std::endl;
   }
 
+  void help_order_perf() {
+    std::cout << "Вам доступны следующие функции: " << std::endl;
+    std::cout << "work orders - покажет над какими заказами вы работаете" << std::endl;
+    std::cout << "all orders - покажет какие заказы сейчас вы можете взять" << std::endl;
+    std::cout << "work on \"id\" - взять потенциально (если вас примет заказчик) в работу заказ с выбранным id, который вы можете узнать через all orders" << std::endl;
+    std::cout << "review";
+    std::cout << "stop - чтобы выйти из функции" << std::endl;
+    std::cout << "exit - чтобы завершить программу" << std::endl;
+  }
+
   void AccountPerformerCli(Performer* p) {
     std::cout << "Ваши данные" << std::endl;
     std::cout << "Логин: " << p->GetLogin() << std::endl;
@@ -34,15 +44,9 @@ namespace classes {
   }
 
   bool PerformerOrders(Performer* p) {
-    std::cout << "Вам доступны следующие функции: " << std::endl;
-    std::cout << "work orders - покажет над какими заказами вы работаете" << std::endl;
-    std::cout << "all orders - покажет какие заказы сейчас вы можете взять" << std::endl;
-    std::cout << "work on \"id\" - взять потенциально (если вас примет заказчик) в работу заказ с выбранным id, который вы можете узнать через all orders" << std::endl;
-    std::cout << "review";
-    std::cout << "stop - чтобы выйти из функции" << std::endl;
-    std::cout << "exit - чтобы завершить программу" << std::endl;
     std::string enter;
     while (true && enter != "stop" && enter != "exit") {
+      std::cout << "Введите команду (или напишите helpOrder) : ";
       std::getline(std::cin, enter);
       if (enter == "work orders") {
         WorkOrdersPerformerCli(p);
@@ -64,6 +68,8 @@ namespace classes {
         break;
       } else if (enter == "exit") {
         break;
+      } else if (enter == "helpOrder") {
+        help_order_perf();
       } else {
         std::cout << "Неизвестная команда, введите еще раз" << std::endl;
       }
@@ -113,6 +119,7 @@ namespace classes {
       std::cout << "Заказов нет" << std::endl;
       return;
     }
+    int i = 0;
     for (const auto& order : orders) {
       if (order->GetStatus() == OrderStatus::WAIT) {
         std::cout << "id заказа : " << order->GetId() << std::endl;
@@ -123,12 +130,37 @@ namespace classes {
         std::cout << std::endl;
       }
     }
+    if (i == 0) {
+      std::cout << "Заказов в ожидании нет" << std::endl;
+    }
   }
 
   bool RatePerformerCli(Performer* p) {
     std::cout << "Вы можете оценить customer, чьи заказы вы выполняли" << std::endl;
     std::string enter;
     Database& db = Database::getInstance();
+    // int c_id = 0;
+    // while (true && enter != "stop" && enter != "exit") {
+    //   std::cout << "введите id customer (введите stop чтобы выйти из функции или exit, чтобы завершить программу): ";
+    //   std::getline(std::cin, enter);
+    //   if (enter == "exit") {
+    //     break;
+    //   } else if (enter == "stop") {
+    //     break;
+    //   } else if (!enter.empty() && std::all_of(enter.begin(), enter.end(), ::isdigit)) {
+    //     c_id = static_cast<size_t>(db.BinSearchDelete<Customer>(std::stoi(enter), db.GetCustomerArr()));
+    //     if (c_id == static_cast<size_t>(-1)) {
+    //       std::cout << "customer с таким id не существует";
+    //     }
+    //     break;
+    //   }
+    // }
+    // if (enter == "exit") {
+    //   return false;
+    // }
+    // if (enter == "stop") {
+    //   return true;
+    // }
     while (true && enter != "stop" && enter != "exit") {
       std::cout << "введите id customer (введите stop чтобы выйти из функции или exit, чтобы завершить программу): ";
       std::getline(std::cin, enter);
@@ -163,7 +195,7 @@ namespace classes {
   }
 
   void performercli(Performer* p) {
-    std::cout << "Здравствуй performer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
+    std::cout << "Здравствуй performer, напиши help, если забыл или не знаешь команды, для выхода введи exit : ";
     std::string enter;
     while (true && enter != "exit") {
       std::getline(std::cin, enter);

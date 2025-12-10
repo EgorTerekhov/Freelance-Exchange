@@ -1,22 +1,24 @@
 {
     "performers": [
         {
-            "email": "email@xyi.trew",
-            "id": 1,
+            "email": "egor@egor.egor",
+            "id": 3,
             "login": "egor",
             "name": "Egor",
-            "password": "77a3dd4702599a6ae53e525ab660ac8911d6ef043926367d608e6ad9515e79c5",
-            "phone": "89876541234",
-            "salt": "3229431eb392e0ee69c8322172e819b1"
+            "password": "e232e8b9b40683277c2965d84c7f01e66bade5d7d680a385423991e6a382a4fd",
+            "phone": "89174523333",
+            "rate": 0.0,
+            "salt": "df828379522d1b309e4d1924212fe1cf"
         },
         {
-            "email": "nick@nick.nick",
-            "id": 3,
-            "login": "nick",
-            "name": "Nick",
-            "password": "95806397add3430b3a90f93742d672c5b379546fe09609a01af418812c266a60",
+            "email": "david@david.david",
+            "id": 4,
+            "login": "david",
+            "name": "David",
+            "password": "cf9c90ef8ddab59ab9d689d26430961d4d411aa78b9523cb0827d3c2e9998178",
             "phone": "89174523333",
-            "salt": "0bda97b369a47ae1789d93e13f234112"
+            "rate": 0.0,
+            "salt": "4a902cb633584a85c7ac11ec511c7b87"
         }
     ],
     "type": "performer"

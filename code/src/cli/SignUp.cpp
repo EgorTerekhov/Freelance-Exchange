@@ -112,7 +112,7 @@ namespace classes {
 
     if (type == "admin") {
       std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
-      db.CreateAdmin(std::move(std::make_unique<Admin>(0, login, vec.first, vec.second)));
+      db.CreateAdmin(++db.GetMaxIdUser(), login, vec.first, vec.second);
       std::cout << "Вы успешно зарегистрировались\n";
       return true;
     }
@@ -167,11 +167,9 @@ namespace classes {
 
     std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
     if (type == "customer") {
-      db.CreateCustomer(std::move(std::make_unique<Customer>(0, login, vec.first, vec.second, name, email, phone, 0)));
+      db.CreateCustomer(++db.GetMaxIdUser(), login, vec.first, vec.second, name, email, phone, 0);
     } else if (type == "performer") {
-      db.CreatePerformer(std::move(std::make_unique<Performer>(0, login, vec.first, vec.second, name, email, phone, 0)));
-
-      auto& performers = db.GetPerformerArr();
+      db.CreatePerformer(++db.GetMaxIdUser(), login, vec.first, vec.second, name, email, phone, 0);
     }
     std::cout << "Вы успешно зарегистрировались\n";
     return true;

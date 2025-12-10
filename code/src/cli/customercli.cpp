@@ -9,6 +9,29 @@ namespace classes {
     return std::regex_match(tmp, pattern);
   }
 
+  void help_order() {
+    std::cout << "Вам доступны следующие функции: " << std::endl;
+    std::cout << "create order - сможете в этой функции создать заказ" << std::endl;
+    std::cout << "handle order - сможете изменить содержание заказов, которые еще не в работе" << std::endl;
+    std::cout << "work orders - покажет над какими вашими заказами уже работают" << std::endl;
+    std::cout << "complete order \"id\" - завершить заказ с определенным id" << std::endl;
+    std::cout << "wait orders - покажет какие заказы вы создали, но над которыми еще не работают" << std::endl;
+    std::cout << "done orders - завершенные заказы, которые вы создавали" << std::endl;
+    std::cout << "potential performers to \"id\" - покажет потенциальных performer на заказ" << std::endl;
+    std::cout << "choise \"id_performer\" to \"id_order\" - выбрать для проекта определенного performer, после этого проект считается в работе" << std::endl;
+    std::cout << "stop - чтобы завершить работу с orders" << std::endl;
+    std::cout << "exit - чтобы завершить работу программы" << std::endl;
+  }
+
+  void help_review() {
+    std::cout << "Вам доступны следующие функции работы с ревью: " << std::endl;
+    std::cout << "all review - показать все ревью, которые вы создавали" << std::endl;
+    std::cout << "create review on \"id\" - сделать ревье на заказ с определенным id" << std::endl;
+    std::cout << "delete review - удалить ревью" << std::endl;
+    std::cout << "stop - чтобы завершить работу с orders" << std::endl;
+    std::cout << "exit - чтобы завершить работу программы" << std::endl;
+  }
+
   void show_help_customer() {
     std::cout << "Freelance exchange cli application for customer" << std::endl;
     std::cout << "Available commands:" << std::endl;
@@ -40,8 +63,10 @@ namespace classes {
   void AllReviewCustomerCli(Customer* c) {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Review>>& reviews = db.GetReviewArr();
+    int i = 0;
     for (const auto& review : reviews) {
       if (review->GetUFrom() == c->GetId()) {
+        ++i;
         std::cout << "id review : " << review->GetId() << std::endl;
         std::cout << "id_from : " << review->GetUFrom() << std::endl;
         std::cout << "id_to : " << review->GetUTo() << std::endl;
@@ -51,10 +76,12 @@ namespace classes {
         std::cout << std::endl;
       }
     }
+    if (i == 0) {
+      std::cout << "Вы не создавали ни разу review" << std::endl;
+    }
   }
   
   bool createReviewCustomerCli(Customer* c, int order_id) {
-    std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     auto it = std::find_if(orders.begin(), orders.end(), 
@@ -70,10 +97,20 @@ namespace classes {
       std::cout << "Это не ваш заказ" << std::endl;
       return true;
     }
+    std::vector<std::unique_ptr<Review>>& reviews = db.GetReviewArr();
+    auto it_review = std::find_if(reviews.begin(), reviews.end(), 
+                [found_order](std::unique_ptr<Review>& review) {
+                  return found_order->GetId() == review->GetOrderId();
+    });
+    if (it_review != reviews.end()) {
+      std::cout << "Вы уже создавали review на этот заказ, вы можете только удалить его" << std::endl;
+      return true;
+    }
+    std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
     int id_to = 0;
     std::string id_to_str;
     while (true && id_to_str != "exit" && id_to_str != "stop") {
-      std::cout << "Введите цену за заказ: ";
+      std::cout << "Введите id_performer: ";
       std::getline(std::cin, id_to_str);
       std::regex pattern(R"(^\d+$)");
       if (id_to_str == "exit" || id_to_str == "stop") {
@@ -81,6 +118,10 @@ namespace classes {
       }
       if (std::regex_match(id_to_str, pattern)) {
         id_to = std::stoi(id_to_str);
+        int iter = db.BinSearchDelete<Performer>(id_to, db.GetPerformerArr());
+        if (iter == -1) {
+          std::cout << "performer с таким id не существует, он либо удален, либо вы неправильно ввели" << std::endl;
+        }
         break;
       } else {
         std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
@@ -104,7 +145,7 @@ namespace classes {
     if (description == "exit") {
       return false;
     }
-    int grade;
+    double grade;
     std::string grade_str;
     while (true && grade_str != "exit" && grade_str != "stop") {
       std::cout << "Введите оценку за заказ (от 0 до 10): ";
@@ -114,8 +155,8 @@ namespace classes {
         break;
       }
       if (std::regex_match(grade_str, pattern)) {
-        grade = std::stoi(grade_str);
-        if (grade <= 0 || grade >= 10) {
+        grade = std::stod(grade_str);
+        if (grade <= 0.0 || grade >= 10.0) {
           std::cout << "неправильный ввод, число должно быть от 0 до 10" << std::endl;
         } else {
           break;
@@ -124,20 +165,18 @@ namespace classes {
         std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
       }
     }
-    c->CreateReview(1, id_to, order_id, description, grade);
+    db.CreateReview(++db.GetMaxIdReview(), c->GetId(), id_to, order_id, description, grade);
     return true;
   }
 
   bool ReviewCustomerCli(Customer* c) {
-    std::cout << "Вам доступны следующие функции работы с ревью: " << std::endl;
-    std::cout << "all review - показать все ревью, которые вы создавали" << std::endl;
-    std::cout << "create review on \"id\" - сделать ревье на заказ с определенным id" << std::endl;
-    std::cout << "handle review - изменить ревью, которое вы сделали" << std::endl;
     std::string enter;
     while (true && enter != "exit" && enter != "stop") {
-      std::cout << "Введите команду: " << std::endl;
+      std::cout << "Введите команду (введите helpReview, если нужна помощь): ";
       std::getline(std::cin, enter);
-      if (enter == "all review") {
+      if (enter == "helpReview") {
+        help_review();
+      } else if (enter == "all review") {
         AllReviewCustomerCli(c);
       } else if (std::regex_match(enter, std::regex(R"(create review on \d+)"))) {
         std::regex pattern(R"(create review on (\d+))");
@@ -150,18 +189,19 @@ namespace classes {
             break;
           }
         }
-      } else if (enter == "handle review") {
-        bool what = HandleReviewCustomerCli(c);
+      } else if (enter == "delete review") {
+        bool what = DeleteReviewCustomerCli(c);
         if (!what) {
           enter = "exit";
           break;
         }
+      } else if (enter == "stop") {
+        return true;
+      } else if (enter == "exit") {
+        return false;
       } else {
-        std::cout << "Неизвестная команда";
+        std::cout << "Неизвестная команда" << std::endl;
       }
-    }
-    if (enter == "stop") {
-      return true;
     }
     return false;
   }
@@ -194,6 +234,7 @@ namespace classes {
   }
 
   bool createOrderCustomerCli(Customer* c) {
+    Database& db = Database::getInstance();
     std::cout << "напишите stop чтобы выйти из функции или exit, чтобы завершить работу программы)" << std::endl;
     std::string name;
     while (true && name != "exit" && name != "stop") {
@@ -201,8 +242,9 @@ namespace classes {
       std::getline(std::cin, name);
       if (!CheckNameOrder(name)) {
         std::cout << "неправильный формат, название должно начинаться с большой буквы и содержать только буквы латиницы" << std::endl;
+      } else {
+        break;
       }
-      break;
     }
     if (name == "stop") {
       return true;
@@ -226,10 +268,10 @@ namespace classes {
         std::cout << "неправильный ввод, должны быть только цифры без пробелов" << std::endl;
       }
     }
-    if (name == "stop") {
+    if (price_str == "stop") {
       return true;
     }
-    if (name == "exit") {
+    if (price_str == "exit") {
       return false;
     }
     std::string description;
@@ -244,8 +286,8 @@ namespace classes {
     if (description == "exit") {
       return false;
     }
-    OrderStatus status = OrderStatus::WAIT;
-    c->CreateOrder(1, name, status, price, description, c->GetId(), -1);
+    std::string status = "WAIT";
+    db.CreateOrder(++db.GetMaxIdOrder(), name, price, description, c->GetId(), -1, status);
     return true;
   }
 
@@ -345,9 +387,10 @@ namespace classes {
     }
   }
 
-  bool HandleReviewCustomerCli(Customer* c) {
+  bool DeleteReviewCustomerCli(Customer* c) {
     int review_id = 0;
     std::string review_id_str;
+    std::cout << "Здесь вы можете только удалить ревью" << std::endl;
     while (true && review_id_str != "exit" && review_id_str != "stop") {
       std::cout << "Введите review id : ";
       std::getline(std::cin, review_id_str);
@@ -382,18 +425,9 @@ namespace classes {
   }
 
   bool customerOrders(Customer* c) {
-    std::cout << "Вам доступны следующие функции: " << std::endl;
-    std::cout << "create order - сможете в этой функции создать заказ" << std::endl;
-    std::cout << "handle order - сможете изменить содержание заказов, которые еще не в работе" << std::endl;
-    std::cout << "work orders - покажет над какими вашими заказами уже работают" << std::endl;
-    std::cout << "complete order \"id\" - завершить заказ с определенным id" << std::endl;
-    std::cout << "wait orders - покажет какие заказы вы создали, но над которыми еще не работают" << std::endl;
-    std::cout << "done orders - завершенные заказы, которые вы создавали" << std::endl;
-    std::cout << "potential performers to \"id\" - покажет потенциальных performer на заказ" << std::endl;
-    std::cout << "choise \"id_performer\" to \"id_order\" - выбрать для проекта определенного performer, после этого проект считается в работе" << std::endl;
     std::string enter;
     while (true && enter != "stop" && enter != "exit") {
-      std::cout << "Введите команду: ";
+      std::cout << "Введите команду (helpOrder, если нужна помощь): ";
       std::getline(std::cin, enter);
       if (enter == "stop") {
         return true;
@@ -401,7 +435,9 @@ namespace classes {
       if (enter == "exit") {
         return false;
       }
-      if (enter == "create order") {
+      if (enter == "helpOrder") {
+        help_order();
+      } else if (enter == "create order") {
         bool what = createOrderCustomerCli(c);
         if (!what) {
           enter = "exit";
@@ -455,7 +491,7 @@ namespace classes {
     std::cout << "Здравствуй customer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
     std::string enter;
     while (true && enter != "exit") {
-      std::cout << "Введите команду: ";
+      std::cout << "Введите команду (или напиши help, чтобы показать все возможности): ";
       std::getline(std::cin, enter);
       if (enter == "exit") {
         break;
@@ -472,7 +508,11 @@ namespace classes {
       } else if (enter == "allperformers") {
         AllPerformersCustomerCli();
       } else if (enter == "review") {
-        ReviewCustomerCli(c);
+        bool what = ReviewCustomerCli(c);
+        if (!what) {
+          enter = "exit";
+          break;
+        }
       } else {
         std::cout << "Неизвестная команда, введите еще раз" << std::endl;
       }

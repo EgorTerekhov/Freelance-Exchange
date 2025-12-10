@@ -10,6 +10,7 @@
 
 namespace classes {
   void show_help_performer();
+  void help_order_perf();
   void performercli(Performer* p);
   bool PerformerOrders(Performer* p);
   void WorkOrdersPerformerCli(Performer* p);

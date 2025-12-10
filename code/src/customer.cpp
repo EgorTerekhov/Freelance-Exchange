@@ -15,33 +15,12 @@ namespace classes {
 
 Customer::Customer(int id, std::string login, std::string password, std::string salt,
                    std::string name, std::string email,
-                   std::string phone, int rate)
+                   std::string phone, double rate)
     : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
       if (rate != 0) {
         rate_.push_back(rate);
       }
     }
-
-Customer::Customer(User&& u, std::string name,
-                   std::string email, std::string phone, int rate)
-    : User(std::move(u)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
-      if (rate != 0) {
-        rate_.push_back(rate);
-      }
-    } 
-
-void Customer::CreateOrder(int id, std::string& name, OrderStatus& status,
-                           double price, std::string description,
-                           int customer_id, int performer_id) {
-  auto order = std::make_unique<Order>(id, name, price, description, customer_id, performer_id, status);
-  Database& db = Database::getInstance();
-  db.CreateOrder(std::move(order));
-}
-
-void Customer::DeleteOrder(int id) {
-  Database& db = Database::getInstance();
-  db.DeleteOrder(id);
-}
 
 bool Customer::HandleOrder(int id) {
   Database& db = Database::getInstance();
@@ -156,17 +135,16 @@ bool Customer::HandleOrder(int id) {
   return true;
 }
 
-
 void Customer::HandleReview(int id) {
   Database& db = Database::getInstance();
   std::vector<std::unique_ptr<Review>>& arr = db.GetReviewArr();
   size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
   if (static_cast<int>(iter_search) == -1) {
-    std::cout << "Заказа с таким id не существует" << std::endl;
+    std::cout << "review с таким id не существует" << std::endl;
     return;
   }
   if (!arr[iter_search]) {
-    std::cout << "Заказ уже был удален" << std::endl;
+    std::cout << "review уже был удален" << std::endl;
     return;
   }
   int id_perf = arr[iter_search]->GetUTo();
@@ -197,12 +175,6 @@ void Customer::WorkOrder(int id) {
   arr[iter_search]->ChangeStatus(OrderStatus::WORK);
 }
 
-void Customer::CreateReview(int id, const int u_to, int order_id, std::string& description, int grade) {
-  auto review = std::make_unique<Review>(id, this->id_, u_to, order_id, description, grade);
-  Database& db = Database::getInstance();
-  db.CreateReview(std::move(review));
-}
-
 void Customer::SetPerformerRate(int id, int rate) {
     Database& db = Database::getInstance();
     auto& arr = db.GetPerformerArr();
@@ -210,20 +182,20 @@ void Customer::SetPerformerRate(int id, int rate) {
     arr[iter_search]->AddRate(rate);
 }
 
-  double Customer::FindAvgRate() {
-    if (rate_.empty()) {
-      return 0.0;
-    }
-
-    double sum = 0;
-    for (int r : rate_) {
-      sum += static_cast<double>(r);
-    }
-
-    return sum / static_cast<double>(rate_.size());
+double Customer::FindAvgRate() {
+  if (rate_.empty()) {
+    return 0.0;
   }
 
-  double Customer::GetRate() {
-    return this->FindAvgRate();
+  double sum = 0;
+  for (double r : rate_) {
+    sum += static_cast<double>(r);
   }
+
+  return sum / static_cast<double>(rate_.size());
+}
+
+double Customer::GetRate() {
+  return FindAvgRate();
+}
 } // namespace classes

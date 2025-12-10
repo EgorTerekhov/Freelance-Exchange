@@ -10,6 +10,7 @@ add_executable(freelance_exchange
   ./code/src/cli/SignIn.cpp
   ./code/src/cli/customercli.cpp
   ./code/src/cli/performercli.cpp
+  ./code/src/cli/admincli.cpp
   ./code/src/main.cpp
   ./code/src/admin.cpp
   ./code/src/customer.cpp

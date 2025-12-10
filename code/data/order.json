@@ -2,12 +2,21 @@
     "orders": [
         {
             "customer_id": 2,
-            "description": "TTest",
-            "id": 3,
-            "name": "Test",
-            "performer_id": -1,
-            "price": 100.0,
-            "status": "WAIT"
+            "description": "temp",
+            "id": 1,
+            "name": "Temp",
+            "performer_id": 3,
+            "price": 123.0,
+            "status": "DONE"
+        },
+        {
+            "customer_id": 2,
+            "description": "temp",
+            "id": 2,
+            "name": "Temp",
+            "performer_id": 3,
+            "price": 444.0,
+            "status": "DONE"
         }
     ],
     "type": "order"

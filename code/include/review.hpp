@@ -11,10 +11,10 @@ class Review {
   int u_from_;
   int order_id_;
   std::string description_;
-  int grade_;
+  double grade_;
 
  public:
-  Review(int id, int u_from, int u_to, int order_id, std::string d, int grade_);
+  Review(int id, int u_from, int u_to, int order_id, std::string d, double grade_);
 
   void ChangeId(int id) {
     id_ = id;
@@ -32,7 +32,7 @@ class Review {
   std::string& GetDescription() {
     return this->description_;
   };
-  int& GetGrade() {
+  double& GetGrade() {
     return this->grade_;
   };
 
