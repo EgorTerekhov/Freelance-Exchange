@@ -6,7 +6,6 @@ namespace classes {
     std::cout << "Available commands:" << std::endl;
     std::cout << "help  - show this help" << std::endl;
     std::cout << "orders - работа с заказами:" << std::endl;
-    std::cout << "rate - оценка customer" << std::endl;
     std::cout << "account - описание вашего аккаунта" << std::endl;
     std::cout << "allcustomers - выведет всех заказчиков с их id" << std::endl;
     std::cout << "exit  - выйти из программы" << std::endl;
@@ -17,7 +16,6 @@ namespace classes {
     std::cout << "work orders - покажет над какими заказами вы работаете" << std::endl;
     std::cout << "all orders - покажет какие заказы сейчас вы можете взять" << std::endl;
     std::cout << "work on \"id\" - взять потенциально (если вас примет заказчик) в работу заказ с выбранным id, который вы можете узнать через all orders" << std::endl;
-    std::cout << "review";
     std::cout << "stop - чтобы выйти из функции" << std::endl;
     std::cout << "exit - чтобы завершить программу" << std::endl;
   }
@@ -84,11 +82,11 @@ namespace classes {
     Database& db = Database::getInstance();
     std::vector<std::unique_ptr<Order>>& orders = db.GetOrderArr();
     size_t o = static_cast<size_t>(db.BinSearchDelete<Order>(id_order, orders));
-    if (o != static_cast<size_t>(-1)) {
+    if (o != static_cast<size_t>(-1) && orders[o]->GetStatus() == OrderStatus::WAIT) {
       orders[o]->Getarrperformer().push_back(id_performer);
       std::cout << "Успешно добавились в очередь к заявке" << std::endl;
     } else {
-      std::cout << "Такого заказа нет" << std::endl;
+      std::cout << "Такого заказа нет или он был уже завершен" << std::endl;
     }
   }
 
@@ -122,6 +120,7 @@ namespace classes {
     int i = 0;
     for (const auto& order : orders) {
       if (order->GetStatus() == OrderStatus::WAIT) {
+        ++i;
         std::cout << "id заказа : " << order->GetId() << std::endl;
         std::cout << "название : " << order->GetName() << std::endl;
         std::cout << "цена : " << order->GetPrice() << std::endl;
@@ -135,69 +134,11 @@ namespace classes {
     }
   }
 
-  bool RatePerformerCli(Performer* p) {
-    std::cout << "Вы можете оценить customer, чьи заказы вы выполняли" << std::endl;
-    std::string enter;
-    Database& db = Database::getInstance();
-    // int c_id = 0;
-    // while (true && enter != "stop" && enter != "exit") {
-    //   std::cout << "введите id customer (введите stop чтобы выйти из функции или exit, чтобы завершить программу): ";
-    //   std::getline(std::cin, enter);
-    //   if (enter == "exit") {
-    //     break;
-    //   } else if (enter == "stop") {
-    //     break;
-    //   } else if (!enter.empty() && std::all_of(enter.begin(), enter.end(), ::isdigit)) {
-    //     c_id = static_cast<size_t>(db.BinSearchDelete<Customer>(std::stoi(enter), db.GetCustomerArr()));
-    //     if (c_id == static_cast<size_t>(-1)) {
-    //       std::cout << "customer с таким id не существует";
-    //     }
-    //     break;
-    //   }
-    // }
-    // if (enter == "exit") {
-    //   return false;
-    // }
-    // if (enter == "stop") {
-    //   return true;
-    // }
-    while (true && enter != "stop" && enter != "exit") {
-      std::cout << "введите id customer (введите stop чтобы выйти из функции или exit, чтобы завершить программу): ";
-      std::getline(std::cin, enter);
-      if (enter == "exit") {
-        break;
-      } else if (enter == "stop") {
-        break;
-      } else if (!enter.empty() && std::all_of(enter.begin(), enter.end(), ::isdigit)) {
-        int customer_id = std::stoi(enter);
-        size_t c = static_cast<size_t>(db.BinSearchDelete<Customer>(customer_id, db.GetCustomerArr()));
-        if (c != static_cast<size_t>(-1)) {
-          Order* o = db.FindOrder(db.GetCustomerArr()[c]->GetId(), p->GetId());
-          if (o) {
-            int rate_customer = 0;
-            std::cout << "Введите оценку от 0 до 10 в целых числах : ";
-            std::cin >> rate_customer;
-            db.GetCustomerArr()[c]->AddRate(rate_customer);
-          } else {
-            std::cout << "Нет такого заказа, который вы выполняли, где заказчиком был customer с id " << customer_id << std::endl;
-          }
-        } else {
-          std::cout << "Нет customer с таким id" << std::endl;
-        }
-      } else {
-        std::cout << "Неизвестная команда, повторите ввод" << std::endl;
-      }
-    }
-    if (enter == "stop") {
-      return true;
-    }
-    return false;
-  }
-
   void performercli(Performer* p) {
-    std::cout << "Здравствуй performer, напиши help, если забыл или не знаешь команды, для выхода введи exit : ";
+    std::cout << "Здравствуй performer, напиши help, если забыл или не знаешь команды, для выхода введи exit" << std::endl;
     std::string enter;
     while (true && enter != "exit") {
+      std::cout << "Введите команду, напиши help, если забыл или не знаешь команды, для выхода введи exit : ";
       std::getline(std::cin, enter);
       if (enter == "exit") {
         break;
@@ -205,12 +146,6 @@ namespace classes {
         show_help_performer();
       } else if (enter == "orders") {
         bool what = PerformerOrders(p);
-        if (!what) {
-          enter = "exit";
-          break;
-        }
-      } else if (enter == "rate") {
-        bool what = RatePerformerCli(p);
         if (!what) {
           enter = "exit";
           break;

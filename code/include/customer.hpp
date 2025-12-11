@@ -16,11 +16,10 @@ class Customer : public User {
   std::string name_;
   std::string email_;
   std::string phone_;
-  std::vector<double> rate_;
 
  public:
   Customer(int id, std::string login, std::string password, std::string salt, std::string name, std::string email,
-           std::string phone, double rate = 0.0);
+           std::string phone);
   void CompleteOrder(int id);
   void WorkOrder(int id);
 
@@ -52,13 +51,8 @@ class Customer : public User {
   bool HandleOrder(int id);
 
   void SetPerformerRate(int id, int rate);
-  
-  double GetRate();
 
-  void AddRate(double rate) {
-    rate_.emplace_back(rate);
-  }
+  bool ChoisePerformer(int id, int order_id);
 
-  double FindAvgRate();
 };
 }  // namespace classes

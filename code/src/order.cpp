@@ -43,7 +43,8 @@ namespace classes {
       {"description", o.GetDescription()},
       {"customer_id", o.GetCustomerId()},
       {"status", status},
-      {"performer_id", o.GetPerformerId()}
+      {"performer_id", o.GetPerformerId()},
+      {"potential_performers", o.Getarrperformer()}
     };
 
     return j;

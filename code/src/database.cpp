@@ -11,8 +11,8 @@ namespace classes {
 // ====== Методы создания сущностей ======
 void Database::CreateCustomer(int id, std::string login, std::string password, std::string salt,
                    std::string name, std::string email,
-                   std::string phone, double rate) {
-  auto c = std::make_unique<Customer>(id, login, password, salt, name, email, phone, rate);
+                   std::string phone) {
+  auto c = std::make_unique<Customer>(id, login, password, salt, name, email, phone);
   customers_.push_back(std::move(c));
   SortById(customers_);
 }
@@ -27,7 +27,7 @@ void Database::CreatePerformer(int id, std::string login, std::string password, 
 
 void Database::CreateOrder(int id, std::string name,
                            double price, std::string description,
-                           int customer_id, int performer_id, std::string status) {
+                           int customer_id, int performer_id, std::string status, std::vector<int> vec) {
   OrderStatus status_obj = OrderStatus::REJECTED;
   if (status == "WAIT") {
     status_obj = OrderStatus::WAIT;
@@ -36,7 +36,7 @@ void Database::CreateOrder(int id, std::string name,
   } else if (status == "DONE") {
     status_obj = OrderStatus::DONE;
   }
-  auto order = std::make_unique<Order>(id, name, price, description, customer_id, performer_id, status_obj);
+  auto order = std::make_unique<Order>(id, name, price, description, customer_id, performer_id, status_obj, vec);
   orders_.push_back(std::move(order));
   SortById(orders_);
 }
@@ -113,7 +113,7 @@ json Database::ToJsonCustomer() {
   for (const auto& c : customers_) {
     if (c) {
       json k;
-      arr.push_back(ToJsonSinglePerformerCustomer(k, *c));
+      arr.push_back(ToJsonSingleCustomer(k, *c));
     }
   }
   if (arr.empty() || arr.is_null()) {
@@ -130,7 +130,7 @@ json Database::ToJsonPerformer() {
   for (const auto& p : performers_) {
     if (p) {
       json k;
-      arr.push_back(ToJsonSinglePerformerCustomer(k, *p));
+      arr.push_back(ToJsonSinglePerformer(k, *p));
     }
   }
   if (arr.empty() || arr.is_null()) {
@@ -220,12 +220,12 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
   }
     else if (type == "performer" && j.contains("performers") && j["performers"].is_array()) {
       for (const auto& item : j["performers"]) {
-        FromSingleJsonPerformerCustomer<Performer>(item);
+        FromSingleJsonPerformer(item);
       }
     }
     else if (type == "customer" && j.contains("customers") && j["customers"].is_array()) {
       for (const auto& item : j["customers"]) {
-        FromSingleJsonPerformerCustomer<Customer>(item);
+        FromSingleJsonCustomer(item);
       }
     }
     else {
@@ -250,6 +250,18 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
       }
     }
     return nullptr;
+  }
+
+  json Database::ToJsonSinglePerformer(json& j, Performer& temp) {
+    j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()}, {"salt", temp.GetSalt()},
+         {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}, {"rate", temp.GetRate()}};
+    return j;
+  }
+
+  json Database::ToJsonSingleCustomer(json& j, Customer& temp) {
+    j = {{"id", temp.GetId()},     {"login", temp.GetLogin()}, {"password", temp.GetPass()}, {"salt", temp.GetSalt()},
+         {"name", temp.GetName()}, {"email", temp.GetEmail()}, {"phone", temp.GetPhone()}};
+    return j;
   }
 
   void Database::initialize() {
@@ -297,7 +309,7 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
       if (!order_json.contains("id") || !order_json.contains("name") || 
         !order_json.contains("price") || !order_json.contains("customer_id") || 
         !order_json.contains("performer_id") || !order_json.contains("status") ||
-        !order_json.contains("description")) {
+        !order_json.contains("description") || !order_json.contains("potential_performers") || !order_json["potential_performers"].is_array()) {
         throw std::invalid_argument("Missing required fields in order JSON");
       }
 
@@ -307,7 +319,8 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
         order_json["description"].get<std::string>(),
         order_json["customer_id"].get<int>(),
         order_json["performer_id"].get<int>(),
-        order_json["status"].get<std::string>());
+        order_json["status"].get<std::string>(),
+        order_json["potential_performers"].get<std::vector<int>>());
     }
   }
 
@@ -349,5 +362,34 @@ void Database::FromJsonAdminPerformerCustomer(const json& j) {
       return found_order;
     }
     return nullptr;
+  }
+
+
+  void Database::FromSingleJsonPerformer(const json& j) {
+    if (j.is_null())
+      return;
+    // Проверка наличия всех ключей
+    if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("salt") ||
+        !j.contains("name") || !j.contains("email") || !j.contains("phone") || !j.contains("rate")) {
+      throw std::invalid_argument("Missing required fields in JSON");
+    }
+    Database& db = Database::getInstance();
+    db.CreatePerformer(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(),
+                               j["salt"].get<std::string>(), j["name"].get<std::string>(),
+                               j["email"].get<std::string>(), j["phone"].get<std::string>(), 0);
+  }
+
+  void Database::FromSingleJsonCustomer(const json& j) {
+    if (j.is_null())
+      return;
+    // Проверка наличия всех ключей
+    if (!j.contains("id") || !j.contains("login") || !j.contains("password") || !j.contains("salt") ||
+        !j.contains("name") || !j.contains("email") || !j.contains("phone")) {
+      throw std::invalid_argument("Missing required fields in JSON");
+    }
+    Database& db = Database::getInstance();
+    db.CreateCustomer(j["id"].get<int>(), j["login"].get<std::string>(), j["password"].get<std::string>(),
+                               j["salt"].get<std::string>(), j["name"].get<std::string>(),
+                               j["email"].get<std::string>(), j["phone"].get<std::string>());
   }
 }  // namespace classes

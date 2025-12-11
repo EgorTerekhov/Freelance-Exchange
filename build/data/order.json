@@ -1,0 +1,25 @@
+{
+    "orders": [
+        {
+            "customer_id": 2,
+            "description": "Temp",
+            "id": 1,
+            "name": "Temp",
+            "performer_id": 1,
+            "potential_performers": [],
+            "price": 123.0,
+            "status": "DONE"
+        },
+        {
+            "customer_id": 3,
+            "description": "xui pizda zalupa",
+            "id": 2,
+            "name": "Piska",
+            "performer_id": 1,
+            "potential_performers": [],
+            "price": 100.0,
+            "status": "WORK"
+        }
+    ],
+    "type": "order"
+}

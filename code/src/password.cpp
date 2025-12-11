@@ -57,14 +57,17 @@ bool PasswordAuth::SignInUser(std::string& login, std::string& password) {
   Database& db = Database::getInstance();
   Admin* ptr_1 = db.FindUserByLoginAs<Admin>(login);
   if (ptr_1) {
+    std::cout << "admin был найден" << std::endl;
     return PasswordAuth::checkPassword(password, ptr_1->GetSalt(), ptr_1->GetHash());
   }
   Performer* ptr_2 = db.FindUserByLoginAs<Performer>(login);
   if (ptr_2) {
+    std::cout << "perfomer был найден" << std::endl;
     return PasswordAuth::checkPassword(password, ptr_2->GetSalt(), ptr_2->GetHash());
   }
   Customer* ptr_3 = db.FindUserByLoginAs<Customer>(login);
   if (ptr_3) {
+    std::cout << "customer был найден" << std::endl;
     return PasswordAuth::checkPassword(password, ptr_3->GetSalt(), ptr_3->GetHash());
   }
   return false;

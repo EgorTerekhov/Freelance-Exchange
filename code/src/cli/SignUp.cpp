@@ -167,7 +167,7 @@ namespace classes {
 
     std::pair<std::string, std::string> vec = PasswordAuth::RegUser(login, pass);
     if (type == "customer") {
-      db.CreateCustomer(++db.GetMaxIdUser(), login, vec.first, vec.second, name, email, phone, 0);
+      db.CreateCustomer(++db.GetMaxIdUser(), login, vec.first, vec.second, name, email, phone);
     } else if (type == "performer") {
       db.CreatePerformer(++db.GetMaxIdUser(), login, vec.first, vec.second, name, email, phone, 0);
     }

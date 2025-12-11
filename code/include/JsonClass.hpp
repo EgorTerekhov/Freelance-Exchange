@@ -26,12 +26,12 @@ class JsonStruct {
   }
 
   void LoadFromAllFiles();
-  void loadAdmin(const std::string& filename = "./code/data/admin.json");
-  void loadCustomer(const std::string& filename = "./code/data/customer.json");
-  void loadOrder(const std::string& filename = "./code/data/order.json");
-  void loadReview(const std::string& filename = "./code/data/review.json");
-  void loadPerformer(const std::string& filename = "./code/data/performer.json");
-  void LoadMaxId(const std::string& filename = "./code/data/idjs.json");
+  void loadAdmin(const std::string& filename = "./data/admin.json");
+  void loadCustomer(const std::string& filename = "./data/customer.json");
+  void loadOrder(const std::string& filename = "./data/order.json");
+  void loadReview(const std::string& filename = "./data/review.json");
+  void loadPerformer(const std::string& filename = "./data/performer.json");
+  void LoadMaxId(const std::string& filename = "./data/idjs.json");
 
   json& getAdmin();
   json& getCustomer();
@@ -49,11 +49,11 @@ class JsonStruct {
   ~JsonStruct() = default;
 
   void saveAllToData();
-  void saveAdmin(const std::string& filename = "./code/data/admin.json");
-  void saveCustomer(const std::string& filename = "./code/data/customer.json");
-  void saveOrder(const std::string& filename = "./code/data/order.json");
-  void saveReview(const std::string& filename = "./code/data/review.json");
-  void savePerformer(const std::string& filename = "./code/data/performer.json");
-  void saveId(const std::string& filename = "./code/data/idjs.json");
+  void saveAdmin(const std::string& filename = "./data/admin.json");
+  void saveCustomer(const std::string& filename = "./data/customer.json");
+  void saveOrder(const std::string& filename = "./data/order.json");
+  void saveReview(const std::string& filename = "./data/review.json");
+  void savePerformer(const std::string& filename = "./data/performer.json");
+  void saveId(const std::string& filename = "./data/idjs.json");
 };
 }

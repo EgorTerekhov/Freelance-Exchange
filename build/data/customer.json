@@ -1,0 +1,23 @@
+{
+    "customers": [
+        {
+            "email": "egor@mail.ru",
+            "id": 2,
+            "login": "egor",
+            "name": "Egor",
+            "password": "93f199f8963b8d70e65ccba338a0631f6a7baf5817f3b95b0d50139b766befac",
+            "phone": "89174523333",
+            "salt": "4f016eca334f304c7395240ac7e48253"
+        },
+        {
+            "email": "ivan@mail.ru",
+            "id": 3,
+            "login": "ivan",
+            "name": "Ivan",
+            "password": "967741020e96659eb5d8a9b8d1ab467a61da9c50e0e8e1cbd720aa8a979a99e0",
+            "phone": "89174523333",
+            "salt": "e3fcc76e23e785ea99ab1f1a0fe50e04"
+        }
+    ],
+    "type": "customer"
+}

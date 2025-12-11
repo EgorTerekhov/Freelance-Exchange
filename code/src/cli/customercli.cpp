@@ -56,8 +56,7 @@ namespace classes {
     std::cout << "Логин: " << c->GetLogin() << std::endl;
     std::cout << "Имя: " << c->GetName() << std::endl;
     std::cout << "Email: " << c->GetEmail() << std::endl;
-    std::cout << "Телефон: " << c->GetPhone() << std::endl;
-    std::cout << "Рейтинг: " << c->GetRate() << std::endl;  
+    std::cout << "Телефон: " << c->GetPhone() << std::endl; 
   }
 
   void AllReviewCustomerCli(Customer* c) {
@@ -230,6 +229,7 @@ namespace classes {
     }
     orders[ord_id]->ChangePerformer(id_performer);
     orders[ord_id]->ChangeStatus(OrderStatus::WORK);
+    orders[ord_id]->Getarrperformer().clear();
     return true;
   }
 

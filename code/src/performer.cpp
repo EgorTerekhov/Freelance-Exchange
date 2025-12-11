@@ -85,14 +85,6 @@ double Performer::FindAvgRate() {
 
   return sum / static_cast<double>(rate_.size());
 }
-
-void Performer::SetCustomerRate(int id, double rate) {
-  Database& db = Database::getInstance();
-  auto& arr = db.GetCustomerArr();
-  size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
-  arr[iter_search]->AddRate(rate);
-}
-
 double Performer::GetRate() {
     return this->FindAvgRate();
   }

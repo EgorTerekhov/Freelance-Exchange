@@ -52,8 +52,6 @@ class Performer : public User {
 
   json& ToJson(json& j, const Performer& p);
 
-  void SetCustomerRate(int id, double rate);
-  
   void AddRate(double rate) {
     rate_.emplace_back(rate);
   }

@@ -15,12 +15,8 @@ namespace classes {
 
 Customer::Customer(int id, std::string login, std::string password, std::string salt,
                    std::string name, std::string email,
-                   std::string phone, double rate)
-    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)), rate_() {
-      if (rate != 0) {
-        rate_.push_back(rate);
-      }
-    }
+                   std::string phone)
+    : User(id, std::move(login), std::move(password), std::move(salt)), name_(std::move(name)), email_(std::move(email)), phone_(std::move(phone)){}
 
 bool Customer::HandleOrder(int id) {
   Database& db = Database::getInstance();
@@ -180,22 +176,5 @@ void Customer::SetPerformerRate(int id, int rate) {
     auto& arr = db.GetPerformerArr();
     size_t iter_search = static_cast<size_t>(db.BinSearchDelete(id, arr));
     arr[iter_search]->AddRate(rate);
-}
-
-double Customer::FindAvgRate() {
-  if (rate_.empty()) {
-    return 0.0;
-  }
-
-  double sum = 0;
-  for (double r : rate_) {
-    sum += static_cast<double>(r);
-  }
-
-  return sum / static_cast<double>(rate_.size());
-}
-
-double Customer::GetRate() {
-  return FindAvgRate();
 }
 } // namespace classes
