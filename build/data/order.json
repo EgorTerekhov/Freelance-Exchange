@@ -1,0 +1,15 @@
+{
+    "orders": [
+        {
+            "customer_id": 2,
+            "description": "qwerty",
+            "id": 1,
+            "name": "Cum",
+            "performer_id": -1,
+            "potential_performers": [],
+            "price": 1234.0,
+            "status": "WAIT"
+        }
+    ],
+    "type": "order"
+}

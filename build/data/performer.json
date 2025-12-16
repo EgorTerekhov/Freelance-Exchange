@@ -1,0 +1,15 @@
+{
+    "performers": [
+        {
+            "email": "email@egor.cum",
+            "id": 1,
+            "login": "egor",
+            "name": "Egor",
+            "password": "b24b41264fa29daa017f570bf859a6bc51c9381eabd7d95b02c1bae85201b356",
+            "phone": "89999999999",
+            "rate": 0.0,
+            "salt": "3e0d116d17d6730cda3a6b975ffaaf5c"
+        }
+    ],
+    "type": "performer"
+}

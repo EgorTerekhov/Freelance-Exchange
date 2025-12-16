@@ -1,0 +1,14 @@
+{
+    "customers": [
+        {
+            "email": "email@vlad.cum",
+            "id": 2,
+            "login": "vlad",
+            "name": "Vlad",
+            "password": "9d7bdcf49a0b3de150238998a1910be46ab94a4fc00e978e23ec2f4d3955d578",
+            "phone": "89999999999",
+            "salt": "2eac7b4a4949ede5c421e566c7fbc519"
+        }
+    ],
+    "type": "customer"
+}
