@@ -1,0 +1,5 @@
+services:
+  app:
+    image: fr-ex
+    volumes:
+      - ./code/data:/usr/src/app/data
